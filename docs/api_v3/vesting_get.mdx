@@ -1,0 +1,27 @@
+---
+title: "Get Vesting Contracts"
+openapi: "GET /api/v3/vesting"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+WALLET_ADDRESS = ["UQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxZR0"]
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v3.vesting.get_vesting_contracts(
+            wallet_address=WALLET_ADDRESS,
+        )
+        print(result.model_dump_json(indent=4))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

@@ -1,0 +1,29 @@
+---
+title: "Estimate Fee"
+openapi: "POST /api/v2/estimateFee"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+ADDRESS = "UQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxZR0"
+BODY = "te6ccgEBAQEAAgAAAA=="
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v2.send.estimate_fee(
+            ADDRESS,
+            BODY,
+        )
+        print(result.model_dump_json(indent=4))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

@@ -1,0 +1,27 @@
+---
+title: "Get Nft Transfers"
+openapi: "GET /api/v3/nft/transfers"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+COLLECTION_ADDRESS = "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v3.nfts.get_nft_transfers(
+            collection_address=COLLECTION_ADDRESS,
+        )
+        print(result.model_dump_json(indent=4))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

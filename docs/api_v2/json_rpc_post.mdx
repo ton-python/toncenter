@@ -1,0 +1,29 @@
+---
+title: "Json Rpc"
+openapi: "POST /api/v2/jsonRPC"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+METHOD = "getAddressInformation"
+PARAMS = {"address": "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"}
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v2.rpc.json_rpc(
+            METHOD,
+            params=PARAMS,
+        )
+        print(result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

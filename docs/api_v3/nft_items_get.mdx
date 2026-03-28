@@ -1,0 +1,27 @@
+---
+title: "Get Nft Items"
+openapi: "GET /api/v3/nft/items"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+ADDRESS = ["EQAMrsze7MaG_7P2ENd1eeT-S2VttJ1myT9sX5f-F1gY7xGx"]
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v3.nfts.get_nft_items(
+            address=ADDRESS,
+        )
+        print(result.model_dump_json(indent=4))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

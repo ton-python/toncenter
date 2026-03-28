@@ -1,0 +1,27 @@
+---
+title: "Get Dns Records"
+openapi: "GET /api/v3/dns/records"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+DOMAIN = "ness.ton"
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v3.dns.get_dns_records(
+            domain=DOMAIN,
+        )
+        print(result.model_dump_json(indent=4))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

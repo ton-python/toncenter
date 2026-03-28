@@ -1,0 +1,140 @@
+from __future__ import annotations
+
+import typing as t
+
+import aiohttp
+
+from toncenter.client import BaseClient
+from toncenter.rest.limiter import RateLimiter
+from toncenter.rest.v2.mixin import V2Mixin
+from toncenter.rest.v3.mixin import V3Mixin
+from toncenter.types import (
+    DEFAULT_RETRY_POLICY,
+    NETWORK_BASE_URLS,
+    Network,
+    RetryPolicy,
+)
+
+__all__ = ["ToncenterRestClient"]
+
+_T = t.TypeVar("_T")
+
+
+class ToncenterRestClient(BaseClient):
+    """Async client for the TON Center REST API (v2 and v3)."""
+
+    def __init__(
+        self,
+        api_key: str = "",
+        network: Network = Network.MAINNET,
+        *,
+        base_url: str | None = None,
+        timeout: float = 10.0,
+        session: aiohttp.ClientSession | None = None,
+        headers: dict[str, str] | None = None,
+        cookies: dict[str, str] | None = None,
+        rps_limit: int = 0,
+        rps_period: float = 1.0,
+        retry_policy: RetryPolicy | None = DEFAULT_RETRY_POLICY,
+    ) -> None:
+        """Initialize the TON Center client.
+
+        :param api_key: TON Center API key. Optional — without a key requests are
+            throttled to ~1 RPS. Get one via @toncenter bot on Telegram.
+        :param network: Target network (``Network.MAINNET`` or ``Network.TESTNET``).
+        :param base_url: Custom base URL (overrides ``network``).
+        :param timeout: Request timeout in seconds.
+        :param session: Optional external ``aiohttp.ClientSession``.
+            When provided, the client will not close it — the caller
+            is responsible for managing its lifecycle.
+        :param headers: Additional HTTP headers sent with every request.
+        :param cookies: Additional cookies sent with every request.
+        :param rps_limit: Maximum requests per second (``0`` disables limiting).
+        :param rps_period: Rate-limiter window in seconds.
+        :param retry_policy: Retry policy, or ``None`` to disable retries.
+        """
+        super().__init__(
+            api_key=api_key,
+            base_url=base_url or NETWORK_BASE_URLS[network],
+            timeout=timeout,
+            session=session,
+            headers=headers,
+            cookies=cookies,
+            retry_policy=retry_policy,
+        )
+        self._rate_limiter: RateLimiter | None = (
+            RateLimiter(rps=rps_limit, period=rps_period) if rps_limit > 0 else None
+        )
+        self._v2 = V2Mixin(self)
+        self._v3 = V3Mixin(self)
+
+    @property
+    def v2(self) -> V2Mixin:
+        """Access API v2 resource groups.
+
+        :return: ``V2Mixin`` instance with v2 resources.
+        """
+        return self._v2
+
+    @property
+    def v3(self) -> V3Mixin:
+        """Access API v3 resource groups.
+
+        :return: ``V3Mixin`` instance with v3 resources.
+        """
+        return self._v3
+
+    @t.overload
+    async def request(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: dict[str, t.Any] | None = None,
+        body: t.Any | None = None,
+        headers: dict[str, t.Any] | None = None,
+        response_model: type[_T],
+    ) -> _T: ...
+
+    @t.overload
+    async def request(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: dict[str, t.Any] | None = None,
+        body: t.Any | None = None,
+        headers: dict[str, t.Any] | None = None,
+        response_model: None = None,
+    ) -> t.Any: ...
+
+    async def request(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: dict[str, t.Any] | None = None,
+        body: t.Any | None = None,
+        headers: dict[str, t.Any] | None = None,
+        response_model: type[_T] | None = None,
+    ) -> _T | t.Any:
+        """Execute an HTTP request with retry and rate limiting.
+
+        :param method: HTTP method (``GET``, ``POST``, etc.).
+        :param path: API path.
+        :param params: Query parameters.
+        :param body: JSON request body.
+        :param headers: Additional request headers.
+        :param response_model: Pydantic model to parse response into.
+        :return: Parsed model instance, raw dict, or ``None``.
+        """
+        if self._rate_limiter:
+            await self._rate_limiter.acquire()
+        return await super().request(
+            method,
+            path,
+            params=params,
+            body=body,
+            headers=headers,
+            response_model=response_model,
+        )

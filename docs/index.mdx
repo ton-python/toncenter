@@ -1,0 +1,66 @@
+---
+title: Overview
+description: Python SDK for the TON Center API — read blockchain data, query smart contracts, send transactions, and subscribe to real-time events.
+---
+
+<CardGroup cols={2}>
+  <Card title="API V2" icon="bolt" href="/api_v2/overview">
+    Direct liteserver for balances, sending transactions, contract queries.
+  </Card>
+  <Card title="API V3" icon="database" href="/api_v3/overview">
+    Indexed database for traces, Jettons, NFTs, and historical queries.
+  </Card>
+  <Card title="Streaming" icon="satellite-dish" href="/streaming/overview">
+    Real-time blockchain events over SSE and WebSocket.
+  </Card>
+  <Card title="Claude Code Plugin" icon="wand-magic-sparkles" href="https://github.com/nessshon/toncenter/tree/main/skills/toncenter">
+    Install the AI plugin to query TON blockchain via Claude Code.
+  </Card>
+</CardGroup>
+
+## Quick start
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        info = await client.v2.accounts.get_address_information(
+            "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
+        )
+        print(info.balance)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Installation
+
+```bash
+pip install toncenter
+```
+
+Requires Python 3.10+. Dependencies: `aiohttp` 3.9+, `pydantic` 2.4+.
+
+## Networks
+
+| Network | Enum value        | Base URL                        |
+| ------- | ----------------- | ------------------------------- |
+| Mainnet | `Network.MAINNET` | `https://toncenter.com`         |
+| Testnet | `Network.TESTNET` | `https://testnet.toncenter.com` |
+
+## API Key
+
+An API key is **optional for REST** — requests without a key are throttled to **~1 RPS**. It is **required for streaming** (SSE/WebSocket). A key unlocks higher rate limits for production use. Get a key from the [@toncenter](https://t.me/toncenter) Telegram bot.
+
+| Plan       | RPS | Keys / network | Price           |
+| ---------- | --- | -------------- | --------------- |
+| Free       | 10  | 1              | Free            |
+| Plus       | 25  | 3              | 2.5 TON/mo      |
+| Advanced   | 100 | 10             | 25 TON/mo       |
+| Enterprise | --  | --             | Contact support |

@@ -1,0 +1,155 @@
+---
+title: Connection
+description: Connection state, reconnect policy, and dynamic subscription management.
+---
+
+## State
+
+| State          | Meaning                             |
+| -------------- | ----------------------------------- |
+| `IDLE`         | Not connected.                      |
+| `CONNECTING`   | Opening the connection.             |
+| `SUBSCRIBED`   | Connected, receiving notifications. |
+| `RECONNECTING` | Re-establishing after a drop.       |
+
+| Property          | Type              | Description                                |
+| ----------------- | ----------------- | ------------------------------------------ |
+| `state`           | `ConnectionState` | Current connection state.                  |
+| `is_subscribed`   | `bool`            | `True` when receiving notifications.       |
+| `is_connecting`   | `bool`            | `True` while opening the connection.       |
+| `is_reconnecting` | `bool`            | `True` while re-establishing after a drop. |
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    await sse.wait_subscribed(timeout=10.0)
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    await ws.wait_subscribed(timeout=10.0)
+    ```
+  </Tab>
+</Tabs>
+
+Monitor transitions via `on_state_change` callback (sync or async):
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    def on_state(state: ConnectionState) -> None:
+        print(state.value)
+
+    sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET, on_state_change=on_state)
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    def on_state(state: ConnectionState) -> None:
+        print(state.value)
+
+    ws = ToncenterWebSocket("YOUR_API_KEY", Network.MAINNET, on_state_change=on_state)
+    ```
+  </Tab>
+</Tabs>
+
+## Reconnect policy
+
+Automatic reconnection on transient failures (5xx, 429, streaming transport errors, heartbeat timeout). Fatal errors (401, 403) stop immediately.
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    from toncenter.types import ReconnectPolicy
+
+    policy = ReconnectPolicy(
+        max_reconnects=10,
+        delay=2.0,
+        max_delay=30.0,
+        backoff_factor=2.0,
+    )
+    sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET, reconnect_policy=policy)
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    from toncenter.types import ReconnectPolicy
+
+    policy = ReconnectPolicy(
+        max_reconnects=10,
+        delay=2.0,
+        max_delay=30.0,
+        backoff_factor=2.0,
+    )
+    ws = ToncenterWebSocket("YOUR_API_KEY", Network.MAINNET, reconnect_policy=policy)
+    ```
+  </Tab>
+</Tabs>
+
+| Parameter        | Default | Description                            |
+| ---------------- | ------- | -------------------------------------- |
+| `max_reconnects` | 10      | Maximum attempts (`-1` for unlimited). |
+| `delay`          | 2.0     | Initial delay in seconds.              |
+| `max_delay`      | 30.0    | Upper bound for backoff delay.         |
+| `backoff_factor` | 2.0     | Multiplier applied on each attempt.    |
+
+<Warning>
+  SSE: after a disconnect the server may hold the old session for up to a minute. An immediate reconnect can get 429.
+</Warning>
+
+## Dynamic subscription
+
+<Note>
+  WebSocket only. SSE does not support dynamic subscription changes.
+</Note>
+
+After `start()` establishes the initial connection, `ToncenterWebSocket` can modify subscriptions on the fly without reconnecting.
+
+### dynamic_subscribe
+
+Replace the current subscription (snapshot semantics). All previously watched addresses/traces are replaced by the new set.
+
+```python
+await ws.dynamic_subscribe(
+    addresses=["0:ed1691307050047117b998b561d8de82d31fbf84910ced6eb5fc92e7485ef8a7"],
+    min_finality=Finality.CONFIRMED,
+    include_metadata=True,
+)
+```
+
+| Parameter                   | Default              | Description                              |
+| --------------------------- | -------------------- | ---------------------------------------- |
+| `addresses`                 | Optional             | Addresses to watch (in any form).        |
+| `trace_external_hash_norms` | Optional             | Trace hashes to watch.                   |
+| `types`                     | Optional             | Event types to receive.                  |
+| `min_finality`              | `Finality.FINALIZED` | Minimum finality level.                  |
+| `include_address_book`      | `False`              | Include DNS-resolved names.              |
+| `include_metadata`          | `False`              | Include token metadata.                  |
+| `action_types`              | Optional             | Filter actions by type.                  |
+| `supported_action_types`    | Optional             | Advertise client-supported action types. |
+
+### dynamic_unsubscribe
+
+Remove addresses or trace hashes from the current subscription.
+
+```python
+await ws.dynamic_unsubscribe(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+```
+
+| Parameter                   | Default  | Description                    |
+| --------------------------- | -------- | ------------------------------ |
+| `addresses`                 | Optional | Addresses to stop watching.    |
+| `trace_external_hash_norms` | Optional | Trace hashes to stop watching. |
+
+Both methods raise `RuntimeError` if called without an active WebSocket connection, and `ToncenterStreamingError` if the server rejects the request.
+
+## Errors
+
+See [Reference](/reference#errors) for the full exception hierarchy. Streaming-specific exceptions:
+
+| Exception                      | When                                                 |
+| ------------------------------ | ---------------------------------------------------- |
+| `ToncenterStreamingError`      | Transport-level error during streaming.               |
+| `ToncenterConnectionLostError` | Reconnect limit exhausted. Exposes `.attempts` count. |
+
+`ToncenterUnauthorizedError` (401) and `ToncenterForbiddenError` (403) are fatal — no reconnect is attempted.

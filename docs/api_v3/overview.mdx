@@ -1,0 +1,49 @@
+---
+title: Overview
+description: Indexed PostgreSQL database for historical queries, traces, Jettons, NFTs, and batch lookups.
+---
+
+## Endpoints
+
+| Network | URL                                    |
+| ------- | -------------------------------------- |
+| Mainnet | `https://toncenter.com/api/v3`         |
+| Testnet | `https://testnet.toncenter.com/api/v3` |
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v3.accounts.get_wallet_states(address=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+        print(result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+| Resource group | Property                |
+| -------------- | ----------------------- |
+| Accounts       | `client.v3.accounts`    |
+| Actions        | `client.v3.actions`     |
+| Blockchain     | `client.v3.blockchain`  |
+| Jettons        | `client.v3.jettons`     |
+| NFTs           | `client.v3.nfts`        |
+| DNS            | `client.v3.dns`         |
+| Multisig       | `client.v3.multisig`    |
+| Vesting        | `client.v3.vesting`     |
+| Stats          | `client.v3.stats`       |
+| Utils          | `client.v3.utils`       |
+| API V2         | `client.v3.api_v2`      |
+
+Retries for `429` and `5xx` are enabled by default with exponential backoff. See [Reference](/reference#retries) for retry policy, rate limiting, and session management.
+
+## Errors
+
+V3 API typically returns status codes 401, 404, 409, 422, and 500. See [Reference](/reference#errors) for the full exception hierarchy, descriptions, and handling examples.

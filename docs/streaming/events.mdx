@@ -1,0 +1,139 @@
+---
+title: Events
+description: Finality levels, notification models, and action types for streaming events.
+---
+
+## Finality
+
+Every trace-based notification carries a `finality` field. The lifecycle is monotonic per trace: `pending` → `confirmed` → `finalized`. At any point before `finalized`, a `trace_invalidated` event may signal rollback.
+
+| Level                | Latency    | Guarantee                                     |
+| -------------------- | ---------- | --------------------------------------------- |
+| `Finality.PENDING`   | ~30-100 ms | Speculative / emulated. May be rolled back.   |
+| `Finality.CONFIRMED` | Seconds    | In a signed shard block. Small rollback risk.  |
+| `Finality.FINALIZED` | Seconds    | Committed in masterchain. Irreversible.        |
+
+`min_finality` sets the minimum level a handler accepts. Default: `Finality.FINALIZED`.
+
+| min_finality | Pending   | Confirmed | Finalized |
+| ------------ | --------- | --------- | --------- |
+| Pending      | Delivered | Delivered | Delivered |
+| Confirmed    | Skipped   | Delivered | Delivered |
+| Finalized    | Skipped   | Skipped   | Delivered |
+
+Convenience properties: `.is_pending`, `.is_confirmed`, `.is_finalized`.
+
+## Event types
+
+| Type                             | Finality                      | Description                                 |
+| -------------------------------- | ----------------------------- | ------------------------------------------- |
+| `EventType.TRANSACTIONS`         | Pending, Confirmed, Finalized | Transaction list per trace (LT descending). |
+| `EventType.ACTIONS`              | Pending, Confirmed, Finalized | Classified actions (transfers, swaps, etc.). |
+| `EventType.TRACE`                | Pending, Confirmed, Finalized | Full trace tree with transactions + actions. |
+| `EventType.ACCOUNT_STATE_CHANGE` | Confirmed, Finalized          | Balance, status, code/data hash changes.    |
+| `EventType.JETTONS_CHANGE`       | Confirmed, Finalized          | Jetton wallet balance updates.              |
+| `EventType.TRACE_INVALIDATED`    | n/a                           | Server-only. Cannot be subscribed directly. |
+
+## Models
+
+All models are Pydantic `BaseModel` subclasses from `toncenter.streaming`.
+
+<Accordion title="TransactionsNotification">
+| Field                      | Type                      | Description                               |
+| -------------------------- | ------------------------- | ----------------------------------------- |
+| `type`                     | `Literal["transactions"]` | Always `"transactions"`.                  |
+| `finality`                 | `str`                     | `"pending"`, `"confirmed"`, `"finalized"`.|
+| `trace_external_hash_norm` | `str`                     | Links related notifications for a trace.  |
+| `transactions`             | `list[dict]`              | Transaction objects (LT descending).      |
+| `address_book`             | `dict \| None`            | Address -> name mapping.                  |
+| `metadata`                 | `dict \| None`            | Token metadata.                           |
+</Accordion>
+
+<Accordion title="ActionsNotification">
+| Field                      | Type                    | Description                               |
+| -------------------------- | ----------------------- | ----------------------------------------- |
+| `type`                     | `Literal["actions"]`    | Always `"actions"`.                        |
+| `finality`                 | `str`                   | `"pending"`, `"confirmed"`, `"finalized"`.|
+| `trace_external_hash_norm` | `str`                   | Links related notifications for a trace.  |
+| `actions`                  | `list[dict]`            | Classified action objects.                |
+| `address_book`             | `dict \| None`          | Address -> name mapping.                  |
+| `metadata`                 | `dict \| None`          | Token metadata.                           |
+</Accordion>
+
+<Accordion title="TraceNotification">
+| Field                      | Type                 | Description                         |
+| -------------------------- | -------------------- | ----------------------------------- |
+| `type`                     | `Literal["trace"]`   | Always `"trace"`.                   |
+| `finality`                 | `str`                | Finality level.                     |
+| `trace_external_hash_norm` | `str`                | Trace identifier.                   |
+| `trace`                    | `dict \| None`       | Trace tree structure.               |
+| `transactions`             | `dict \| None`       | Hash -> transaction object map.     |
+| `actions`                  | `list[dict] \| None` | Classified actions for this trace.  |
+| `address_book`             | `dict \| None`       | Address -> name mapping.            |
+| `metadata`                 | `dict \| None`       | Token metadata.                     |
+</Accordion>
+
+<Accordion title="AccountStateNotification">
+| Field      | Type                              | Description                          |
+| ---------- | --------------------------------- | ------------------------------------ |
+| `type`     | `Literal["account_state_change"]` | Always `"account_state_change"`.     |
+| `finality` | `str`                             | `"confirmed"` or `"finalized"` only. |
+| `account`  | `str`                             | Address in raw format.               |
+| `state`    | `AccountState \| None`            | Account state snapshot.              |
+
+`AccountState` fields: `hash`, `balance`, `account_status`, `data_hash`, `code_hash`.
+</Accordion>
+
+<Accordion title="JettonsNotification">
+| Field          | Type                        | Description                          |
+| -------------- | --------------------------- | ------------------------------------ |
+| `type`         | `Literal["jettons_change"]` | Always `"jettons_change"`.           |
+| `finality`     | `str`                       | `"confirmed"` or `"finalized"` only. |
+| `jetton`       | `JettonWallet \| None`      | Jetton wallet snapshot.              |
+| `address_book` | `dict \| None`              | Address -> name mapping.             |
+| `metadata`     | `dict \| None`              | Token metadata.                      |
+
+`JettonWallet` fields: `address`, `balance`, `owner`, `jetton`, `last_transaction_lt`.
+</Accordion>
+
+<Accordion title="TraceInvalidatedNotification">
+| Field                      | Type                           | Description                    |
+| -------------------------- | ------------------------------ | ------------------------------ |
+| `type`                     | `Literal["trace_invalidated"]` | Always `"trace_invalidated"`.  |
+| `trace_external_hash_norm` | `str`                          | Hash of the invalidated trace. |
+
+Fires when a previously delivered pending or confirmed trace becomes invalid. Discard cached data for that `trace_external_hash_norm`. No invalidation after finalized.
+</Accordion>
+
+<Note>
+  No invalidation for `account_state_change` or `jettons_change`. Use `Finality.FINALIZED` for irreversible balance data.
+</Note>
+
+## Action types
+
+<Accordion title="All ActionType values (22)">
+| Enum member                           | Wire value                 |
+| ------------------------------------- | -------------------------- |
+| `ActionType.TON_TRANSFER`             | `ton_transfer`             |
+| `ActionType.JETTON_TRANSFER`          | `jetton_transfer`          |
+| `ActionType.JETTON_SWAP`              | `jetton_swap`              |
+| `ActionType.JETTON_BURN`              | `jetton_burn`              |
+| `ActionType.JETTON_MINT`              | `jetton_mint`              |
+| `ActionType.NFT_MINT`                 | `nft_mint`                 |
+| `ActionType.CALL_CONTRACT`            | `call_contract`            |
+| `ActionType.CONTRACT_DEPLOY`          | `contract_deploy`          |
+| `ActionType.STAKE_DEPOSIT`            | `stake_deposit`            |
+| `ActionType.STAKE_WITHDRAWAL`         | `stake_withdrawal`         |
+| `ActionType.STAKE_WITHDRAWAL_REQUEST` | `stake_withdrawal_request` |
+| `ActionType.DEX_DEPOSIT_LIQUIDITY`    | `dex_deposit_liquidity`    |
+| `ActionType.DEX_WITHDRAW_LIQUIDITY`   | `dex_withdraw_liquidity`   |
+| `ActionType.ELECTION_DEPOSIT`         | `election_deposit`         |
+| `ActionType.ELECTION_RECOVER`         | `election_recover`         |
+| `ActionType.AUCTION_BID`              | `auction_bid`              |
+| `ActionType.CHANGE_DNS`               | `change_dns`               |
+| `ActionType.DELETE_DNS`               | `delete_dns`               |
+| `ActionType.RENEW_DNS`                | `renew_dns`                |
+| `ActionType.TICK_TOCK`                | `tick_tock`                |
+| `ActionType.SUBSCRIBE`                | `subscribe`                |
+| `ActionType.UNSUBSCRIBE`              | `unsubscribe`              |
+</Accordion>

@@ -1,0 +1,13 @@
+{
+  "name": "toncenter",
+  "version": "0.2.0",
+  "description": "Claude Code plugin for TON Center — REST API and Streaming for TON blockchain.",
+  "author": {
+    "name": "nessshon"
+  },
+  "homepage": "https://toncenter.ness.su/",
+  "repository": "https://github.com/nessshon/toncenter/",
+  "skills": "./skills/",
+  "license": "MIT",
+  "keywords": ["TON", "blockchain", "toncenter", "SDK"]
+}

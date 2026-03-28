@@ -1,0 +1,100 @@
+---
+title: Overview
+description: Real-time blockchain events over SSE and WebSocket. Decorator-based handler API — both transports multiplex all subscriptions over a single connection.
+---
+
+For the raw wire protocol, see the [Streaming API v2 specification](https://gist.github.com/dungeon-master-666/98db8d73e9cd9a1b7802bc06ded5b155).
+
+| Transport            | Description                                                 |
+| -------------------- | ----------------------------------------------------------- |
+| `ToncenterSSE`       | One-way stream. Single POST request, server pushes events.  |
+| `ToncenterWebSocket` | Bidirectional. Dynamic subscribe/unsubscribe after connect. |
+
+## Endpoints
+
+<Tabs>
+  <Tab title="SSE">
+    | Network | URL                                                  |
+    | ------- | ---------------------------------------------------- |
+    | Mainnet | `https://toncenter.com/api/streaming/v2/sse`         |
+    | Testnet | `https://testnet.toncenter.com/api/streaming/v2/sse` |
+  </Tab>
+  <Tab title="WebSocket">
+    | Network | URL                                                  |
+    | ------- | ---------------------------------------------------- |
+    | Mainnet | `wss://toncenter.com/api/streaming/v2/ws`            |
+    | Testnet | `wss://testnet.toncenter.com/api/streaming/v2/ws`    |
+  </Tab>
+</Tabs>
+
+## SDK Usage
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    import asyncio
+
+    from toncenter.types import Network
+    from toncenter.streaming import Finality, ToncenterSSE, TransactionsNotification
+
+    sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET)
+
+
+    @sse.on_transactions(min_finality=Finality.FINALIZED)
+    async def on_tx(n: TransactionsNotification) -> None:
+        for tx in n.transactions:
+            print(tx.get("hash"))
+
+
+    async def main() -> None:
+        try:
+            await sse.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+        finally:
+            await sse.stop()
+
+
+    if __name__ == "__main__":
+        asyncio.run(main())
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    import asyncio
+
+    from toncenter.types import Network
+    from toncenter.streaming import Finality, ToncenterWebSocket, TransactionsNotification
+
+    ws = ToncenterWebSocket("YOUR_API_KEY", Network.MAINNET)
+
+
+    @ws.on_transactions(min_finality=Finality.FINALIZED)
+    async def on_tx(n: TransactionsNotification) -> None:
+        for tx in n.transactions:
+            print(tx.get("hash"))
+
+
+    async def main() -> None:
+        try:
+            await ws.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+        finally:
+            await ws.stop()
+
+
+    if __name__ == "__main__":
+        asyncio.run(main())
+    ```
+  </Tab>
+</Tabs>
+
+| Page                                | Content                                        |
+| ----------------------------------- | ---------------------------------------------- |
+| [Client](/streaming/client)         | Constructor parameters, `start`, `stop`.       |
+| [Handlers](/streaming/handlers)     | Decorator API and event registration.          |
+| [Events](/streaming/events)         | Finality, notification models, action types.   |
+| [Connection](/streaming/connection) | State, reconnect policy, dynamic subscription. |
+
+See [Reference](/reference#retries) for retry policy and session management.
+
+## Errors
+
+Streaming-specific exceptions: `ToncenterStreamingError` and `ToncenterConnectionLostError`. See [Connection](/streaming/connection#errors) for details and [Reference](/reference#errors) for the full exception hierarchy.

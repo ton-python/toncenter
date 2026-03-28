@@ -1,0 +1,46 @@
+---
+title: Overview
+description: Direct liteserver queries via tonlib for real-time account state, blocks, transactions, and contract execution.
+---
+
+## Endpoints
+
+| Network | URL                                    |
+| ------- | -------------------------------------- |
+| Mainnet | `https://toncenter.com/api/v2`         |
+| Testnet | `https://testnet.toncenter.com/api/v2` |
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v2.accounts.get_address_balance("EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2")
+        print(result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+| Resource group | Property                  |
+| -------------- | ------------------------- |
+| Accounts       | `client.v2.accounts`      |
+| Blocks         | `client.v2.blocks`        |
+| Transactions   | `client.v2.transactions`  |
+| Send           | `client.v2.send`          |
+| Run Method     | `client.v2.runmethod`     |
+| Configuration  | `client.v2.configuration` |
+| Utils          | `client.v2.utils`         |
+| RPC            | `client.v2.rpc`           |
+
+Retries for `429` and `5xx` are enabled by default with exponential backoff. See [Reference](/reference#retries) for retry policy, rate limiting, and session management.
+
+## Errors
+
+V2 API may return status codes 400, 401, 403, 404, 405, 409, 422, 429, 500, 504, and 542. See [Reference](/reference#errors) for the full exception hierarchy, descriptions, and handling examples.

@@ -1,0 +1,31 @@
+---
+title: "Try Locate Source Tx"
+openapi: "GET /api/v2/tryLocateSourceTx"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+SOURCE = "EQAe8YtZ_XIHYK2An1R9xXIKedq3ghag2nX3PFScxcZQ_xHV"
+DESTINATION = "EQBAjaOyi2wGWlk-EDkSabqqnF-MrrwMadnwqrurKpkla9nE"
+CREATED_LT = "68403494000002"
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v2.transactions.try_locate_source_tx(
+            SOURCE,
+            DESTINATION,
+            CREATED_LT,
+        )
+        print(result.model_dump_json(indent=4))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

@@ -1,0 +1,46 @@
+---
+title: "Run Get Method Std"
+openapi: "POST /api/v2/runGetMethodStd"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+ADDRESS = "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"
+METHOD = "dnsresolve"
+STACK = [
+    {
+        "@type": "tvm.stackEntrySlice",
+        "slice": {
+            "@type": "tvm.slice",
+            "bytes": "te6ccgEBAQEABwAACm5lc3MA",
+        },
+    },
+    {
+        "@type": "tvm.stackEntryNumber",
+        "number": {
+            "@type": "tvm.numberDecimal",
+            "number": "11610787539498642935599668790717661692618498088587845498754709837898668459007",
+        },
+    },
+]
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v2.runmethod.run_get_method_std(
+            ADDRESS,
+            METHOD,
+            STACK,
+        )
+        print(result.model_dump_json(indent=4))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

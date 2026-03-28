@@ -1,0 +1,27 @@
+---
+title: "Get Address Balance"
+openapi: "GET /api/v2/getAddressBalance"
+---
+
+## SDK Usage
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+
+ADDRESS = "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        result = await client.v2.accounts.get_address_balance(
+            ADDRESS,
+        )
+        print(result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

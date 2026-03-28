@@ -14,8 +14,7 @@ from toncenter.types import Network
 
 async def main() -> None:
     async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v2.blocks.get_out_msg_queue_size(
-        )
+        result = await client.v2.blocks.get_out_msg_queue_size()
         print(result.model_dump_json(indent=4))
 
 

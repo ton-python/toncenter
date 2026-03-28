@@ -14,8 +14,7 @@ from toncenter.types import Network
 
 async def main() -> None:
     async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v2.configuration.get_config_all(
-        )
+        result = await client.v2.configuration.get_config_all()
         print(result.model_dump_json(indent=4))
 
 

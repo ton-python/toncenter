@@ -120,6 +120,9 @@
   },
   "description": "Python SDK for TON Center — REST API and Streaming for TON blockchain.",
   "seo": {
-    "indexing": "navigable"
+    "indexing": "navigable",
+    "metatags": {
+      "google-site-verification": "DOi9QAXobYh7LlPn0WPn6gk2gwmAQShs8Dt4QHKZ6NY"
+    }
   }
 }

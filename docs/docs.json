@@ -2,6 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "maple",
   "name": "TON Center",
+  "description": "Python SDK for TON Center — REST API and Streaming for TON blockchain.",
   "logo": {
     "light": "/assets/logo/light.svg",
     "dark": "/assets/logo/dark.svg",
@@ -118,7 +119,6 @@
       }
     ]
   },
-  "description": "Python SDK for TON Center — REST API and Streaming for TON blockchain.",
   "seo": {
     "indexing": "navigable",
     "metatags": {

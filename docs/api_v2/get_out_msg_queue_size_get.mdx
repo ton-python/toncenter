@@ -3,6 +3,19 @@ title: "Get Out Msg Queue Size"
 openapi: "GET /api/v2/getOutMsgQueueSize"
 ---
 
+## Parameters
+
+No parameters.
+
+## Response
+
+Returns [`OutMsgQueueSizes`](/api_v2/models#outmsgqueuesizes).
+
+| Field                    | Type                   | Description                          |
+| ------------------------ | ---------------------- | ------------------------------------ |
+| `shards`                 | `list[OutMsgQueueSize]`| Queue size per shard.                |
+| `ext_msg_queue_size_limit`| `int`                 | External message queue size limit.   |
+
 ## SDK Usage
 
 ```python

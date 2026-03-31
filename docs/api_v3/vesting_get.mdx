@@ -3,6 +3,25 @@ title: "Get Vesting Contracts"
 openapi: "GET /api/v3/vesting"
 ---
 
+## Parameters
+
+| Parameter          | Required | Description                                                    |
+| ------------------ | -------- | -------------------------------------------------------------- |
+| `contract_address` | No       | List of vesting contract addresses in any form. Max 1000.      |
+| `wallet_address`   | No       | List of wallet addresses (owner/sender) in any form. Max 1000. |
+| `check_whitelist`  | No       | Check if wallet address is in whitelist (default `False`).     |
+| `limit`            | No       | Max rows to return (default 10).                               |
+| `offset`           | No       | Skip first N rows (default 0).                                 |
+
+## Response
+
+Returns [`VestingContractsResponse`](/api_v3/models#vestingcontractsresponse).
+
+| Field               | Type                               | Description                    |
+| ------------------- | ---------------------------------- | ------------------------------ |
+| `vesting_contracts` | `list[IndexVestingInfo] \| None`   | Vesting contract objects.      |
+| `address_book`      | `AddressBook \| None`              | Address book entries.          |
+
 ## SDK Usage
 
 ```python

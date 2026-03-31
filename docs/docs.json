@@ -46,10 +46,10 @@
     }
   },
   "feedback": {
-    "thumbsRating": false
+    "thumbsRating": true
   },
   "contextual": {
-    "options": ["copy"]
+    "options": ["copy", "claude","mcp"]
   },
   "navbar": {
     "primary": {
@@ -85,7 +85,8 @@
           { "group": "Run Method", "pages": ["api_v2/run_get_method_post", "api_v2/run_get_method_std_post"] },
           { "group": "Send", "pages": ["api_v2/send_boc_post", "api_v2/send_boc_return_hash_post", "api_v2/estimate_fee_post"] },
           { "group": "Utils", "pages": ["api_v2/detect_address_get", "api_v2/detect_hash_get", "api_v2/pack_address_get", "api_v2/unpack_address_get"] },
-          { "group": "RPC", "pages": ["api_v2/json_rpc_post"] }
+          { "group": "RPC", "pages": ["api_v2/json_rpc_post"] },
+          "api_v2/models"
         ]
       },
       {
@@ -103,7 +104,8 @@
           { "group": "Vesting", "pages": ["api_v3/vesting_get"] },
           { "group": "Stats", "pages": ["api_v3/top_accounts_by_balance_get"] },
           { "group": "Utils", "pages": ["api_v3/decode_get", "api_v3/decode_post"] },
-          { "group": "API v2", "pages": ["api_v3/address_information_get", "api_v3/wallet_information_get", "api_v3/estimate_fee_post", "api_v3/message_post", "api_v3/run_get_method_post"] }
+          { "group": "API v2", "pages": ["api_v3/address_information_get", "api_v3/wallet_information_get", "api_v3/estimate_fee_post", "api_v3/message_post", "api_v3/run_get_method_post"] },
+          "api_v3/models"
         ]
       },
       {

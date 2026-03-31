@@ -94,17 +94,72 @@ Three forms are supported:
 
 Fires when a previously delivered pending or confirmed trace becomes invalid. Discard cached data for that trace.
 
-```python
-from toncenter.streaming import TraceInvalidatedNotification
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    from toncenter.streaming import TraceInvalidatedNotification
 
 
-@sse.on_trace_invalidated
-async def on_invalidated(n: TraceInvalidatedNotification) -> None:
-    print(f"Trace invalidated: {n.trace_external_hash_norm}")
-```
+    @sse.on_trace_invalidated
+    async def on_invalidated(n: TraceInvalidatedNotification) -> None:
+        print(f"Trace invalidated: {n.trace_external_hash_norm}")
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    from toncenter.streaming import TraceInvalidatedNotification
+
+
+    @ws.on_trace_invalidated
+    async def on_invalidated(n: TraceInvalidatedNotification) -> None:
+        print(f"Trace invalidated: {n.trace_external_hash_norm}")
+    ```
+  </Tab>
+</Tabs>
 
 <Note>
   An exception inside a handler halts dispatch for that notification (fail-fast).
+</Note>
+
+## Filtering in handlers
+
+The streaming API delivers all transactions for the subscribed addresses. To filter by specific criteria (opcode, amount, source, etc.), apply the logic inside the handler:
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    JETTON_TRANSFER = "0x0f8a7ea5"
+    JETTON_TRANSFER_NOTIFICATION = "0x7362d09c"
+
+
+    @sse.on_transactions(min_finality=Finality.FINALIZED)
+    async def on_jetton_activity(n: TransactionsNotification) -> None:
+        for tx in n.transactions:
+            in_msg = tx.get("in_msg", {})
+            opcode = in_msg.get("opcode")
+            if opcode in (JETTON_TRANSFER, JETTON_TRANSFER_NOTIFICATION):
+                print(f"Jetton activity (opcode {opcode}): {tx.get('hash')}")
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    JETTON_TRANSFER = "0x0f8a7ea5"
+    JETTON_TRANSFER_NOTIFICATION = "0x7362d09c"
+
+
+    @ws.on_transactions(min_finality=Finality.FINALIZED)
+    async def on_jetton_activity(n: TransactionsNotification) -> None:
+        for tx in n.transactions:
+            in_msg = tx.get("in_msg", {})
+            opcode = in_msg.get("opcode")
+            if opcode in (JETTON_TRANSFER, JETTON_TRANSFER_NOTIFICATION):
+                print(f"Jetton activity (opcode {opcode}): {tx.get('hash')}")
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  Opcodes are hex strings (e.g. `"0x7362d09c"`).
 </Note>
 
 See [Events](/streaming/events) for finality levels, notification models, and action types.

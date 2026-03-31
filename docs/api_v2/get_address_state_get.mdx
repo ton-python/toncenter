@@ -3,6 +3,17 @@ title: "Get Address State"
 openapi: "GET /api/v2/getAddressState"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                                   |
+| --------- | -------- | --------------------------------------------- |
+| `address` | Yes      | Account address in any form.                  |
+| `seqno`   | No       | Masterchain block seqno for historical state.  |
+
+## Response
+
+Returns `str`. Account state: `"uninitialized"`, `"active"`, or `"frozen"`.
+
 ## SDK Usage
 
 ```python

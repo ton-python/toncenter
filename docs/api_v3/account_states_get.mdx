@@ -3,6 +3,23 @@ title: "Get Account States"
 openapi: "GET /api/v3/accountStates"
 ---
 
+## Parameters
+
+| Parameter     | Required | Description                                        |
+| ------------- | -------- | -------------------------------------------------- |
+| `address`     | Yes      | List of addresses in any form. Max 1000.           |
+| `include_boc` | No       | Include code and data BOCs (default `True`).       |
+
+## Response
+
+Returns [`AccountStatesResponse`](/api_v3/models#accountstatesresponse).
+
+| Field          | Type                         | Description                    |
+| -------------- | ---------------------------- | ------------------------------ |
+| `accounts`     | `list[AccountStateFull] \| None` | Account state objects.     |
+| `address_book` | `AddressBook \| None`        | Address book entries.          |
+| `metadata`     | `Metadata \| None`           | Address metadata.              |
+
 ## SDK Usage
 
 ```python

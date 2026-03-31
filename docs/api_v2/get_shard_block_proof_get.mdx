@@ -3,6 +3,26 @@ title: "Get Shard Block Proof"
 openapi: "GET /api/v2/getShardBlockProof"
 ---
 
+## Parameters
+
+| Parameter    | Required | Description                                     |
+| ------------ | -------- | ----------------------------------------------- |
+| `workchain`  | Yes      | Workchain ID.                                   |
+| `shard`      | Yes      | Shard ID.                                       |
+| `seqno`      | Yes      | Block sequence number.                          |
+| `from_seqno` | No       | Starting masterchain seqno for proof chain.     |
+
+## Response
+
+Returns [`ShardBlockProof`](/api_v2/models#shardblockproof).
+
+| Field        | Type                  | Description                             |
+| ------------ | --------------------- | --------------------------------------- |
+| `from_block` | `TonBlockIdExt`       | Source block (aliased from `from`).     |
+| `mc_id`      | `TonBlockIdExt`       | Masterchain block ID.                   |
+| `links`      | `list[ShardBlockLink]`| Shard block links in the proof chain.   |
+| `mc_proof`   | `list[BlockLinkBack]` | Masterchain proof links.               |
+
 ## SDK Usage
 
 ```python

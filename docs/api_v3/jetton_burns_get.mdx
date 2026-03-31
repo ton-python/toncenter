@@ -3,6 +3,31 @@ title: "Get Jetton Burns"
 openapi: "GET /api/v3/jetton/burns"
 ---
 
+## Parameters
+
+| Parameter       | Required | Description                                                   |
+| --------------- | -------- | ------------------------------------------------------------- |
+| `address`       | No       | List of jetton wallet owner addresses in any form. Max 1000.  |
+| `jetton_wallet` | No       | List of jetton wallet addresses in any form. Max 1000.        |
+| `jetton_master` | No       | Jetton master address in any form.                            |
+| `start_utime`   | No       | Filter: after given timestamp.                                |
+| `end_utime`     | No       | Filter: before given timestamp.                               |
+| `start_lt`      | No       | Filter: `lt >= start_lt`.                                      |
+| `end_lt`        | No       | Filter: `lt <= end_lt`.                                        |
+| `limit`         | No       | Max rows to return (default 10).                              |
+| `offset`        | No       | Skip first N rows (default 0).                                |
+| `sort`          | No       | Sort by lt (default `"desc"`).                                 |
+
+## Response
+
+Returns [`JettonBurnsResponse`](/api_v3/models#jettonburnsresponse).
+
+| Field          | Type                          | Description                    |
+| -------------- | ----------------------------- | ------------------------------ |
+| `jetton_burns` | `list[JettonBurn] \| None`    | Jetton burn records.           |
+| `address_book` | `AddressBook \| None`         | Address book entries.          |
+| `metadata`     | `Metadata \| None`            | Address metadata.              |
+
 ## SDK Usage
 
 ```python

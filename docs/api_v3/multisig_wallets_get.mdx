@@ -3,6 +3,26 @@ title: "Get Multisig Wallets"
 openapi: "GET /api/v3/multisig/wallets"
 ---
 
+## Parameters
+
+| Parameter        | Required | Description                                                        |
+| ---------------- | -------- | ------------------------------------------------------------------ |
+| `address`        | No       | List of multisig contract addresses in any form. Max 1024.         |
+| `wallet_address` | No       | List of signer/proposer wallet addresses in any form. Max 1024.    |
+| `limit`          | No       | Max rows to return (default 10).                                   |
+| `offset`         | No       | Skip first N rows (default 0).                                     |
+| `sort`           | No       | Sort by `last_transaction_lt` (default `"desc"`).                   |
+| `include_orders` | No       | Gather multisig orders (default `True`).                           |
+
+## Response
+
+Returns [`MultisigResponse`](/api_v3/models#multisigresponse).
+
+| Field          | Type                          | Description                    |
+| -------------- | ----------------------------- | ------------------------------ |
+| `multisigs`    | `list[Multisig] \| None`     | Multisig contract objects.     |
+| `address_book` | `AddressBook \| None`         | Address book entries.          |
+
 ## SDK Usage
 
 ```python

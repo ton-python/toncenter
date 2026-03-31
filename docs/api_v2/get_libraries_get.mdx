@@ -3,6 +3,20 @@ title: "Get Libraries"
 openapi: "GET /api/v2/getLibraries"
 ---
 
+## Parameters
+
+| Parameter   | Required | Description                    |
+| ----------- | -------- | ------------------------------ |
+| `libraries` | Yes      | List of library cell hashes.   |
+
+## Response
+
+Returns [`LibraryResult`](/api_v2/models#libraryresult).
+
+| Field    | Type                  | Description                    |
+| -------- | --------------------- | ------------------------------ |
+| `result` | `list[LibraryEntry]`  | Library entries (hash + data). |
+
 ## SDK Usage
 
 ```python

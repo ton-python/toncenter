@@ -3,6 +3,16 @@ title: "Get Token Data"
 openapi: "GET /api/v2/getTokenData"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                            |
+| --------- | -------- | -------------------------------------- |
+| `address` | Yes      | Token contract address in any form.    |
+
+## Response
+
+Returns [`TokenData`](/api_v2/models#tokendata) — discriminated union of [`JettonMasterData`](/api_v2/models#jettonmasterdata), [`JettonWalletData`](/api_v2/models#jettonwalletdata), [`NftCollectionData`](/api_v2/models#nftcollectiondata), or [`NftItemData`](/api_v2/models#nftitemdata) based on `contract_type`.
+
 ## SDK Usage
 
 ```python

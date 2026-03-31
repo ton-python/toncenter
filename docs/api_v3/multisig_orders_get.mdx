@@ -3,6 +3,26 @@ title: "Get Multisig Orders"
 openapi: "GET /api/v3/multisig/orders"
 ---
 
+## Parameters
+
+| Parameter          | Required | Description                                                |
+| ------------------ | -------- | ---------------------------------------------------------- |
+| `address`          | No       | List of order addresses in any form. Max 1024.             |
+| `multisig_address` | No       | List of multisig addresses in any form. Max 1024.          |
+| `parse_actions`    | No       | Parse order actions (default `False`).                     |
+| `limit`            | No       | Max rows to return (default 10).                           |
+| `offset`           | No       | Skip first N rows (default 0).                             |
+| `sort`             | No       | Sort by `last_transaction_lt` (default `"desc"`).           |
+
+## Response
+
+Returns [`MultisigOrderResponse`](/api_v3/models#multisigorderresponse).
+
+| Field          | Type                             | Description                    |
+| -------------- | -------------------------------- | ------------------------------ |
+| `orders`       | `list[MultisigOrder] \| None`    | Multisig order objects.        |
+| `address_book` | `AddressBook \| None`            | Address book entries.          |
+
 ## SDK Usage
 
 ```python

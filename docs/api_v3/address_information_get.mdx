@@ -3,6 +3,27 @@ title: "Get Address Information"
 openapi: "GET /api/v3/addressInformation"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                                       |
+| --------- | -------- | ------------------------------------------------- |
+| `address` | Yes      | Account address in any form.                      |
+| `use_v2`  | No       | Use method from api/v2 (default `True`). Not recommended. |
+
+## Response
+
+Returns [`V2AddressInformation`](/api_v3/models#v2addressinformation).
+
+| Field                   | Type           | Description                           |
+| ----------------------- | -------------- | ------------------------------------- |
+| `balance`               | `str \| None`  | Account balance in nanotons.          |
+| `code`                  | `str \| None`  | Base64-encoded contract code.         |
+| `data`                  | `str \| None`  | Base64-encoded contract data.         |
+| `frozen_hash`           | `str \| None`  | Hash of frozen state.                 |
+| `last_transaction_hash` | `str \| None`  | Last transaction hash.                |
+| `last_transaction_lt`   | `str \| None`  | Last transaction logical time.        |
+| `status`                | `str \| None`  | Account status.                       |
+
 ## SDK Usage
 
 ```python

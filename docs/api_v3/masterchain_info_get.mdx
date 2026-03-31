@@ -3,6 +3,19 @@ title: "Get Masterchain Info"
 openapi: "GET /api/v3/masterchainInfo"
 ---
 
+## Parameters
+
+No parameters.
+
+## Response
+
+Returns [`MasterchainInfo`](/api_v3/models#masterchaininfo).
+
+| Field   | Type             | Description                    |
+| ------- | ---------------- | ------------------------------ |
+| `first` | `Block \| None`  | First indexed block.           |
+| `last`  | `Block \| None`  | Last indexed block.            |
+
 ## SDK Usage
 
 ```python

@@ -39,7 +39,11 @@ if __name__ == "__main__":
 | Utils          | `client.v2.utils`         |
 | RPC            | `client.v2.rpc`           |
 
-Retries for `429` and `5xx` are enabled by default with exponential backoff. See [Reference](/reference#retries) for retry policy, rate limiting, and session management.
+Retries for `429` and server errors are enabled by default with exponential backoff. See [Reference](/reference#retries) for retry policy, rate limiting, and session management.
+
+<Note>
+  V2 responses include a `@type` field (e.g. `raw.fullAccountState`, `smc.runResult`) from the underlying tonlib schema. The SDK maps these into typed Pydantic models automatically.
+</Note>
 
 ## Errors
 

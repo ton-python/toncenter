@@ -3,6 +3,29 @@ title: "Get Nft Items"
 openapi: "GET /api/v3/nft/items"
 ---
 
+## Parameters
+
+| Parameter                     | Required | Description                                                              |
+| ----------------------------- | -------- | ------------------------------------------------------------------------ |
+| `address`                     | No       | List of NFT item addresses in any form. Max 1000.                        |
+| `owner_address`               | No       | List of NFT item owner addresses in any form. Max 1000.                  |
+| `collection_address`          | No       | List of collection addresses in any form.                                |
+| `index`                       | No       | List of item indices for given collection. Max 1000.                     |
+| `include_on_sale`             | No       | Include NFTs on sales/auctions (default `False`). Used with `owner_address`. |
+| `sort_by_last_transaction_lt` | No       | Sort by last transaction lt descending. May be inconsistent during pagination. |
+| `limit`                       | No       | Max rows to return (default 10).                                         |
+| `offset`                      | No       | Skip first N rows (default 0).                                           |
+
+## Response
+
+Returns [`NFTItemsResponse`](/api_v3/models#nftitemsresponse).
+
+| Field          | Type                        | Description                    |
+| -------------- | --------------------------- | ------------------------------ |
+| `nft_items`    | `list[NFTItem] \| None`     | NFT item objects.              |
+| `address_book` | `AddressBook \| None`       | Address book entries.          |
+| `metadata`     | `Metadata \| None`          | Address metadata.              |
+
 ## SDK Usage
 
 ```python

@@ -3,6 +3,25 @@ title: "Get Pending Actions"
 openapi: "GET /api/v3/pendingActions"
 ---
 
+## Parameters
+
+| Parameter                | Required | Description                                               |
+| ------------------------ | -------- | --------------------------------------------------------- |
+| `account`                | No       | Account address in any form.                              |
+| `ext_msg_hash`           | No       | List of trace external hashes.                            |
+| `supported_action_types` | No       | Supported action types.                                   |
+| `include_transactions`   | No       | Include `transactions_full` array (default `False`).      |
+
+## Response
+
+Returns [`ActionsResponse`](/api_v3/models#actionsresponse).
+
+| Field          | Type                       | Description                    |
+| -------------- | -------------------------- | ------------------------------ |
+| `actions`      | `list[Action] \| None`     | Pending action objects.        |
+| `address_book` | `AddressBook \| None`      | Address book entries.          |
+| `metadata`     | `Metadata \| None`         | Address metadata.              |
+
 ## SDK Usage
 
 ```python

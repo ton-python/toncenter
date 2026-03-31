@@ -3,6 +3,26 @@ title: "Get Transactions Std"
 openapi: "GET /api/v2/getTransactionsStd"
 ---
 
+## Parameters
+
+| Parameter  | Required | Description                                    |
+| ---------- | -------- | ---------------------------------------------- |
+| `address`  | Yes      | Account address in any form.                   |
+| `limit`    | No       | Maximum number of transactions (default 10).   |
+| `lt`       | No       | Start from this logical time (pagination).     |
+| `hash`     | No       | Start from this transaction hash (pagination). |
+| `to_lt`    | No       | Return transactions up to this logical time.   |
+| `archival` | No       | Use archival node for old transactions.        |
+
+## Response
+
+Returns [`TransactionsStd`](/api_v2/models#transactionsstd).
+
+| Field                     | Type                    | Description                              |
+| ------------------------- | ----------------------- | ---------------------------------------- |
+| `transactions`            | `list[TransactionStd]`  | Transactions in standardized format.     |
+| `previous_transaction_id` | `InternalTransactionId` | ID for paginating to older transactions. |
+
 ## SDK Usage
 
 ```python

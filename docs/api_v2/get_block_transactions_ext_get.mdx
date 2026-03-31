@@ -3,6 +3,30 @@ title: "Get Block Transactions Ext"
 openapi: "GET /api/v2/getBlockTransactionsExt"
 ---
 
+## Parameters
+
+| Parameter    | Required | Description                                              |
+| ------------ | -------- | -------------------------------------------------------- |
+| `workchain`  | Yes      | Workchain ID.                                            |
+| `shard`      | Yes      | Shard ID.                                                |
+| `seqno`      | Yes      | Block sequence number.                                   |
+| `root_hash`  | No       | Root hash for verification.                              |
+| `file_hash`  | No       | File hash for verification.                              |
+| `after_lt`   | No       | Return transactions after this logical time.             |
+| `after_hash` | No       | Account hash (hex or base64) to read transactions after. |
+| `count`      | No       | Maximum number of transactions to return.                |
+
+## Response
+
+Returns [`BlockTransactionsExt`](/api_v2/models#blocktransactionsext).
+
+| Field          | Type                    | Description                                |
+| -------------- | ----------------------- | ------------------------------------------ |
+| `id`           | `TonBlockIdExt`         | Block identifier.                          |
+| `req_count`    | `int`                   | Requested transaction count.               |
+| `incomplete`   | `bool`                  | Whether more transactions are available.   |
+| `transactions` | `list[TransactionExt]`  | Full transaction objects.                  |
+
 ## SDK Usage
 
 ```python

@@ -3,6 +3,20 @@ title: "Get Config All"
 openapi: "GET /api/v2/getConfigAll"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                                       |
+| --------- | -------- | ------------------------------------------------- |
+| `seqno`   | No       | Masterchain block seqno for historical values.     |
+
+## Response
+
+Returns [`ConfigInfo`](/api_v2/models#configinfo).
+
+| Field    | Type      | Description                                  |
+| -------- | --------- | -------------------------------------------- |
+| `config` | `TvmCell` | All configuration parameters as TVM cell.    |
+
 ## SDK Usage
 
 ```python

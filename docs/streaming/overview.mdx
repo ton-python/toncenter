@@ -36,6 +36,7 @@ For the raw wire protocol, see the [Streaming API v2 specification](https://gist
 
     from toncenter.types import Network
     from toncenter.streaming import Finality, ToncenterSSE, TransactionsNotification
+    from toncenter.exceptions import ToncenterConnectionLostError
 
     sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET)
 
@@ -49,6 +50,8 @@ For the raw wire protocol, see the [Streaming API v2 specification](https://gist
     async def main() -> None:
         try:
             await sse.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+        except ToncenterConnectionLostError as e:
+            print(f"Connection lost after {e.attempts} reconnect attempts")
         finally:
             await sse.stop()
 
@@ -63,6 +66,7 @@ For the raw wire protocol, see the [Streaming API v2 specification](https://gist
 
     from toncenter.types import Network
     from toncenter.streaming import Finality, ToncenterWebSocket, TransactionsNotification
+    from toncenter.exceptions import ToncenterConnectionLostError
 
     ws = ToncenterWebSocket("YOUR_API_KEY", Network.MAINNET)
 
@@ -76,6 +80,8 @@ For the raw wire protocol, see the [Streaming API v2 specification](https://gist
     async def main() -> None:
         try:
             await ws.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+        except ToncenterConnectionLostError as e:
+            print(f"Connection lost after {e.attempts} reconnect attempts")
         finally:
             await ws.stop()
 
@@ -95,6 +101,10 @@ For the raw wire protocol, see the [Streaming API v2 specification](https://gist
 
 See [Reference](/reference#retries) for retry policy and session management.
 
+<Note>
+  An API key is **required** for streaming — unlike REST, unauthenticated connections are rejected. Free plans allow up to **2 concurrent streaming connections**; paid plans provide higher limits.
+</Note>
+
 ## Errors
 
-Streaming-specific exceptions: `ToncenterStreamingError` and `ToncenterConnectionLostError`. See [Connection](/streaming/connection#errors) for details and [Reference](/reference#errors) for the full exception hierarchy.
+Streaming-specific exceptions: `ToncenterConnectionLimitError` (connection limit reached — auto-rotates with multiple keys, fatal with single key), `ToncenterStreamingError` (transport error), and `ToncenterConnectionLostError` (reconnect limit exhausted). See [Connection](/streaming/connection#errors) for details and [Reference](/reference#errors) for the full exception hierarchy.

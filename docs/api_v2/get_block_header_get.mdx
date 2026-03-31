@@ -3,6 +3,40 @@ title: "Get Block Header"
 openapi: "GET /api/v2/getBlockHeader"
 ---
 
+## Parameters
+
+| Parameter   | Required | Description                          |
+| ----------- | -------- | ------------------------------------ |
+| `workchain` | Yes      | Workchain ID.                        |
+| `shard`     | Yes      | Shard ID.                            |
+| `seqno`     | Yes      | Block sequence number.               |
+| `root_hash` | No       | Root hash for verification.          |
+| `file_hash` | No       | File hash for verification.          |
+
+## Response
+
+Returns [`BlockHeader`](/api_v2/models#blockheader).
+
+| Field                        | Type                  | Description                              |
+| ---------------------------- | --------------------- | ---------------------------------------- |
+| `id`                         | `TonBlockIdExt`       | Block identifier.                        |
+| `global_id`                  | `int`                 | Network global ID.                       |
+| `version`                    | `int`                 | Block version.                           |
+| `after_merge`                | `bool`                | Block follows a merge.                   |
+| `after_split`                | `bool`                | Block follows a split.                   |
+| `before_split`               | `bool`                | Block precedes a split.                  |
+| `want_merge`                 | `bool`                | Shard wants to merge.                    |
+| `want_split`                 | `bool`                | Shard wants to split.                    |
+| `validator_list_hash_short`  | `int`                 | Short hash of validator list.            |
+| `catchain_seqno`             | `int`                 | Catchain sequence number.                |
+| `min_ref_mc_seqno`           | `int`                 | Minimum referenced masterchain seqno.    |
+| `is_key_block`               | `bool`                | Whether this is a key block.             |
+| `prev_key_block_seqno`       | `int`                 | Previous key block seqno.                |
+| `start_lt`                   | `str`                 | Start logical time.                      |
+| `end_lt`                     | `str`                 | End logical time.                        |
+| `gen_utime`                  | `int`                 | Block generation UNIX time.              |
+| `prev_blocks`                | `list[TonBlockIdExt]` | Previous block identifiers.              |
+
 ## SDK Usage
 
 ```python

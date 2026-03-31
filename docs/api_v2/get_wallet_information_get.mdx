@@ -3,6 +3,28 @@ title: "Get Wallet Information"
 openapi: "GET /api/v2/getWalletInformation"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                                   |
+| --------- | -------- | --------------------------------------------- |
+| `address` | Yes      | Account address in any form.                  |
+| `seqno`   | No       | Masterchain block seqno for historical state.  |
+
+## Response
+
+Returns [`WalletInformation`](/api_v2/models#walletinformation).
+
+| Field                  | Type                    | Description                                          |
+| ---------------------- | ----------------------- | ---------------------------------------------------- |
+| `wallet`               | `bool`                  | Whether the account is a wallet contract.             |
+| `balance`              | `str`                   | Account balance in nanotons.                          |
+| `account_state`        | `AccountStateEnum`      | `"active"`, `"uninitialized"`, or `"frozen"`.         |
+| `last_transaction_id`  | `InternalTransactionId` | Last transaction LT and hash.                         |
+| `wallet_type`          | `str \| None`           | Wallet contract type name.                            |
+| `seqno`                | `int \| None`           | Current wallet seqno.                                 |
+| `wallet_id`            | `int \| None`           | Wallet ID (subwallet ID).                             |
+| `is_signature_allowed` | `bool \| None`          | Whether external signatures are allowed.              |
+
 ## SDK Usage
 
 ```python

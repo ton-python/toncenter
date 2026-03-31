@@ -3,6 +3,19 @@ title: "Json Rpc"
 openapi: "POST /api/v2/jsonRPC"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                        |
+| --------- | -------- | ---------------------------------- |
+| `method`  | Yes      | JSON-RPC method name.              |
+| `params`  | No       | Method parameters.                 |
+| `id`      | No       | Request identifier (default `"1"`).|
+| `jsonrpc` | No       | JSON-RPC version (default `"2.0"`).|
+
+## Response
+
+Returns raw JSON-RPC response (untyped).
+
 ## SDK Usage
 
 ```python

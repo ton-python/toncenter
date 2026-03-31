@@ -3,6 +3,21 @@ title: "Post Decode"
 openapi: "POST /api/v3/decode"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                                                                |
+| --------- | -------- | -------------------------------------------------------------------------- |
+| `body`    | Yes      | `DecodeRequest` with `opcodes` and/or `bodies` fields. Use POST for long values. |
+
+## Response
+
+Returns [`DecodeResponse`](/api_v3/models#decoderesponse).
+
+| Field     | Type                              | Description                    |
+| --------- | --------------------------------- | ------------------------------ |
+| `opcodes` | `list[str] \| None`               | Decoded opcode names.          |
+| `bodies`  | `list[dict[str, Any]] \| None`    | Decoded message bodies.        |
+
 ## SDK Usage
 
 ```python

@@ -3,6 +3,25 @@ title: "Estimate Fee"
 openapi: "POST /api/v2/estimateFee"
 ---
 
+## Parameters
+
+| Parameter       | Required | Description                                    |
+| --------------- | -------- | ---------------------------------------------- |
+| `address`       | Yes      | Destination address in any form.               |
+| `body`          | Yes      | Base64-encoded message body BoC.               |
+| `init_code`     | No       | Base64-encoded init code (for deploy).         |
+| `init_data`     | No       | Base64-encoded init data (for deploy).         |
+| `ignore_chksig` | No       | Skip signature check (default `True`).         |
+
+## Response
+
+Returns [`QueryFees`](/api_v2/models#queryfees).
+
+| Field              | Type          | Description                      |
+| ------------------ | ------------- | -------------------------------- |
+| `source_fees`      | `Fees`        | Fees charged at source.          |
+| `destination_fees` | `list[Fees]`  | Fees charged at destinations.    |
+
 ## SDK Usage
 
 ```python

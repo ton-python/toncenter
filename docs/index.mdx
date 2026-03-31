@@ -47,6 +47,15 @@ pip install toncenter
 
 Requires Python 3.10+. Dependencies: `aiohttp` 3.9+, `pydantic` 2.4+.
 
+**Claude Code Plugin**
+
+Install the [AI plugin](https://github.com/nessshon/toncenter/tree/main/skills/toncenter) to query TON blockchain through natural language:
+
+```
+/plugin marketplace add nessshon/claude-plugins
+/plugin install toncenter@nessshon-plugins
+```
+
 ## Networks
 
 | Network | Enum value        | Base URL                        |
@@ -64,3 +73,29 @@ An API key is **optional for REST** — requests without a key are throttled to 
 | Plus       | 25  | 3              | 2.5 TON/mo      |
 | Advanced   | 100 | 10             | 25 TON/mo       |
 | Enterprise | --  | --             | Contact support |
+
+<Note>
+  Multiple keys on the same plan share a combined RPS limit — for example, three Plus keys total 25 RPS, not 25 each. The SDK supports [key rotation](/reference#key-rotation) with per-key rate limits for REST and automatic reconnection on connection limit for streaming.
+</Note>
+
+For general support contact [@toncenter_help_bot](https://t.me/toncenter_help_bot). Enterprise inquiries: [@toncenter_support](https://t.me/toncenter_support).
+
+## API V2 or V3
+
+The SDK exposes two REST API versions. They query the same blockchain but serve different purposes.
+
+| | API V2 | API V3 |
+| ------------ | ---------------------------------------------- | ------------------------------------------------- |
+| **Backend** | Direct liteserver queries via tonlib | Indexed PostgreSQL database |
+| **Latency** | Real-time (latest block) | Near real-time (indexer delay) |
+| **Best for** | Current state, sending transactions, get-methods | Historical data, search, filters, pagination |
+| **Pagination** | No (fixed result sets) | Yes (`limit`, `offset`, `sort`) |
+| **Jettons/NFTs** | `get_token_data` (single item) | Full query API with filters |
+| **Metadata** | Not available | Token metadata, address book, DNS records |
+| **Traces/Actions** | Not available | Full trace trees and parsed actions |
+
+**Use V2 when** you need the latest account state, want to send a transaction, run a smart contract get-method, or work with blocks and shards.
+
+**Use V3 when** you need historical transactions, Jetton/NFT analytics, address book lookups, action traces, or paginated batch queries.
+
+Both versions share the same client and session — switch freely between `client.v2` and `client.v3` within the same request flow.

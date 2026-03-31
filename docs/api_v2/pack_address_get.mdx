@@ -3,6 +3,16 @@ title: "Pack Address"
 openapi: "GET /api/v2/packAddress"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                    |
+| --------- | -------- | ------------------------------ |
+| `address` | Yes      | Raw address string.            |
+
+## Response
+
+Returns `str`. Packed user-friendly base64 address.
+
 ## SDK Usage
 
 ```python

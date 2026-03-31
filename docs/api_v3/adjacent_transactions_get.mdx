@@ -3,6 +3,22 @@ title: "Get Adjacent Transactions"
 openapi: "GET /api/v3/adjacentTransactions"
 ---
 
+## Parameters
+
+| Parameter   | Required | Description                    |
+| ----------- | -------- | ------------------------------ |
+| `hash`      | No       | Transaction hash.              |
+| `direction` | No       | Direction of message.          |
+
+## Response
+
+Returns [`TransactionsResponse`](/api_v3/models#transactionsresponse).
+
+| Field          | Type                            | Description                    |
+| -------------- | ------------------------------- | ------------------------------ |
+| `transactions` | `list[Transaction] \| None`     | Parent and/or child transactions. |
+| `address_book` | `AddressBook \| None`           | Address book entries.          |
+
 ## SDK Usage
 
 ```python

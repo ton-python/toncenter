@@ -9,8 +9,8 @@ Pass these parameters when creating `ToncenterRestClient`:
 
 | Parameter      | Default    | Description                                               |
 | -------------- | ---------- | --------------------------------------------------------- |
-| `api_key`      | `""`       | API key from [@toncenter](https://t.me/toncenter) bot. Optional for REST; required for streaming. |
-| `network`      | Required   | `Network.MAINNET` or `Network.TESTNET`.                   |
+| `api_key`      | `""`       | API key (`str`), `ApiKey`, or `list[ApiKey]` for [rotation](/reference#key-rotation). Optional for REST. |
+| `network`      | `Network.MAINNET` | `Network.MAINNET` or `Network.TESTNET`.                   |
 | `base_url`     | Optional   | Custom base URL (overrides `network`).                    |
 | `timeout`      | 10 seconds | Request timeout.                                          |
 | `session`      | Optional   | External `aiohttp.ClientSession`.                         |
@@ -74,12 +74,16 @@ async with aiohttp.ClientSession() as session:
 
 ## Retries
 
-Rate-limited (`429`) and server-error (`5xx`) responses are retried automatically with exponential backoff.
+Rate-limited (`429`) and server-error responses are retried automatically with exponential backoff.
 
-| Status codes | Max retries | Base delay | Max delay | Backoff |
-| ------------ | ----------- | ---------- | --------- | ------- |
-| 429          | 5           | 0.3 s      | 3 s       | 2x      |
-| 5xx          | 3           | 0.5 s      | 5 s       | 2x      |
+| Status codes         | Max retries | Base delay | Max delay | Backoff |
+| -------------------- | ----------- | ---------- | --------- | ------- |
+| 429                  | 5           | 0.3 s      | 3 s       | 2x      |
+| 500, 502, 503, 504   | 3           | 0.5 s      | 5 s       | 2x      |
+
+<Note>
+  `542` (liteserver error) is not retried — these errors are usually deterministic.
+</Note>
 
 Custom policy:
 
@@ -108,7 +112,49 @@ client = ToncenterRestClient(
 | `max_delay`     | 30 seconds | Upper bound after backoff.            |
 | `backoff_factor`| 2.0        | Multiplier per attempt.               |
 
+The defaults above apply when creating a custom `RetryRule`. The SDK's built-in policy uses tuned values shown in the table above.
+
 Pass `retry_policy=None` to disable retries entirely.
+
+## Key Rotation
+
+### REST
+
+Pass a list of `ApiKey` objects to rotate between keys on rate-limit errors (`429`). Each key carries its own client-side rate limit.
+
+```python
+from toncenter.types import ApiKey
+
+client = ToncenterRestClient(
+    api_key=[
+        ApiKey("free-key", rps_limit=10),
+        ApiKey("plus-key", rps_limit=25),
+    ],
+    network=Network.MAINNET,
+)
+```
+
+A single `ApiKey` also works — rate limit is taken from the object instead of the constructor `rps_limit` parameter:
+
+```python
+client = ToncenterRestClient(api_key=ApiKey("my-key", rps_limit=10))
+```
+
+On `429`, the SDK exhausts all retry attempts for the current key (with backoff), then rotates to the next key and retries with a fresh cycle. Each key uses its own `RateLimiter`.
+
+### Streaming
+
+Pass a list of key strings to rotate on connection limit errors. No rate limiters — streaming is connection-based.
+
+```python
+ws = ToncenterWebSocket(["key-1", "key-2"], Network.MAINNET)
+```
+
+If the server rejects a connection with `connection limit reached`, the SDK rotates to the next key, recreates the session, and reconnects. With a single key, `ToncenterConnectionLimitError` is raised immediately.
+
+<Note>
+  Keys on the same plan share a combined server-side RPS limit — rotation helps when keys have independent limits (different plans). The `rps_limit` constructor parameter applies when `api_key` is a plain string; it is ignored when `ApiKey` or `list[ApiKey]` is used.
+</Note>
 
 ## Utilities
 
@@ -141,7 +187,7 @@ raw_to_userfriendly(raw, is_test_only=True, is_bounceable=True)
 | Parameter       | Default  | Description                             |
 | --------------- | -------- | --------------------------------------- |
 | `address`       | Required | Raw address in `workchain:hex` form.    |
-| `is_bounceable` | `False`  | Bounceable flag (tag `0x11` vs `0x51`). |
+| `is_bounceable` | `False`  | Bounceable flag (`0x11` when `True`, `0x51` when `False`). |
 | `is_url_safe`   | `True`   | Use URL-safe base64 encoding.           |
 | `is_test_only`  | `False`  | Mark as test-only address.              |
 
@@ -233,6 +279,7 @@ from toncenter.exceptions import ToncenterError
 | `ToncenterConnectionError`       | DNS failure, TCP timeout, or refused connection — before any HTTP response.|
 | `ToncenterValidationError`       | Response body did not match the expected Pydantic model.                   |
 | `ToncenterSessionError`          | Request made before client session was initialized.                        |
+| `ToncenterConnectionLimitError`  | Streaming connection limit reached. Auto-rotates with multiple keys; fatal with single key. |
 | `ToncenterStreamingError`        | Transport-level error during streaming.                                    |
 | `ToncenterConnectionLostError`   | Reconnect limit exhausted during streaming.                                |
 | `ToncenterRetryError`       | All retry attempts exhausted.                                              |

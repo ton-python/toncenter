@@ -9,7 +9,7 @@ description: Constructor parameters, start, and stop methods for SSE and WebSock
   <Tab title="SSE">
     | Parameter           | Default    | Description                                      |
     | ------------------- | ---------- | ------------------------------------------------ |
-    | `api_key`           | Required   | API key.                                         |
+    | `api_key`           | Required   | API key (`str`) or list of keys (`list[str]`) for [rotation](/reference#key-rotation). |
     | `network`           | Required   | `Network.MAINNET` or `Network.TESTNET`.          |
     | `base_url`          | Optional   | Override the default URL.                        |
     | `session`           | Optional   | External `aiohttp.ClientSession`.                |
@@ -21,7 +21,7 @@ description: Constructor parameters, start, and stop methods for SSE and WebSock
   <Tab title="WebSocket">
     | Parameter           | Default    | Description                                        |
     | ------------------- | ---------- | -------------------------------------------------- |
-    | `api_key`           | Required   | API key.                                           |
+    | `api_key`           | Required   | API key (`str`) or list of keys (`list[str]`) for [rotation](/reference#key-rotation). |
     | `network`           | Required   | `Network.MAINNET` or `Network.TESTNET`.            |
     | `base_url`          | Optional   | Override the default URL.                          |
     | `session`           | Optional   | External `aiohttp.ClientSession`.                  |

@@ -3,6 +3,22 @@ title: "Get Wallet States"
 openapi: "GET /api/v3/walletStates"
 ---
 
+## Parameters
+
+| Parameter | Required | Description                                        |
+| --------- | -------- | -------------------------------------------------- |
+| `address` | Yes      | List of addresses in any form. Max 1000.           |
+
+## Response
+
+Returns [`WalletStatesResponse`](/api_v3/models#walletstatesresponse).
+
+| Field          | Type                        | Description                    |
+| -------------- | --------------------------- | ------------------------------ |
+| `wallets`      | `list[WalletState] \| None` | Wallet state objects.          |
+| `address_book` | `AddressBook \| None`       | Address book entries.          |
+| `metadata`     | `Metadata \| None`          | Address metadata.              |
+
 ## SDK Usage
 
 ```python

@@ -3,6 +3,18 @@ title: "Try Locate Tx"
 openapi: "GET /api/v2/tryLocateTx"
 ---
 
+## Parameters
+
+| Parameter     | Required | Description                                |
+| ------------- | -------- | ------------------------------------------ |
+| `source`      | Yes      | Source address in any form.                |
+| `destination` | Yes      | Destination address in any form.           |
+| `created_lt`  | Yes      | Creation logical time of the message.      |
+
+## Response
+
+Returns [`Transaction`](/api_v2/models#transaction). See [Get Transactions](/api_v2/get_transactions_get) for field details.
+
 ## SDK Usage
 
 ```python

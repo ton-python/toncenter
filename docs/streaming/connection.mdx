@@ -55,7 +55,7 @@ Monitor transitions via `on_state_change` callback (sync or async):
 
 ## Reconnect policy
 
-Automatic reconnection on transient failures (5xx, 429, streaming transport errors, heartbeat timeout). Fatal errors (401, 403) stop immediately.
+Automatic reconnection on transient failures (5xx, 429, streaming transport errors, heartbeat timeout). All other client errors (400, 401, 403, 404, 405, 409, 422) are fatal and stop immediately.
 
 <Tabs>
   <Tab title="SSE">
@@ -94,7 +94,7 @@ Automatic reconnection on transient failures (5xx, 429, streaming transport erro
 | `backoff_factor` | 2.0     | Multiplier applied on each attempt.    |
 
 <Warning>
-  SSE: after a disconnect the server may hold the old session for up to a minute. An immediate reconnect can get 429.
+  After an ungraceful disconnect (crash, network drop, killed process) the server may hold the old session open for an extended period. This counts against your connection limit — new connections will fail with `connection limit reached` until the server releases the ghost session. Always call `stop()` in a `finally` block to close the connection cleanly.
 </Warning>
 
 ## Dynamic subscription
@@ -111,7 +111,7 @@ Replace the current subscription (snapshot semantics). All previously watched ad
 
 ```python
 await ws.dynamic_subscribe(
-    addresses=["0:ed1691307050047117b998b561d8de82d31fbf84910ced6eb5fc92e7485ef8a7"],
+    addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"],
     min_finality=Finality.CONFIRMED,
     include_metadata=True,
 )
@@ -147,9 +147,58 @@ Both methods raise `RuntimeError` if called without an active WebSocket connecti
 
 See [Reference](/reference#errors) for the full exception hierarchy. Streaming-specific exceptions:
 
-| Exception                      | When                                                 |
-| ------------------------------ | ---------------------------------------------------- |
-| `ToncenterStreamingError`      | Transport-level error during streaming.               |
-| `ToncenterConnectionLostError` | Reconnect limit exhausted. Exposes `.attempts` count. |
+| Exception                       | When                                                 |
+| ------------------------------- | ---------------------------------------------------- |
+| `ToncenterConnectionLimitError` | Connection limit reached. With multiple keys, rotates automatically. With a single key, fails immediately. |
+| `ToncenterStreamingError`       | Transport-level error during streaming.               |
+| `ToncenterConnectionLostError`  | Reconnect limit exhausted. Exposes `.attempts` count. |
 
-`ToncenterUnauthorizedError` (401) and `ToncenterForbiddenError` (403) are fatal — no reconnect is attempted.
+All client errors except 429 are fatal — no reconnect is attempted (400, 401, 403, 404, 405, 409, 422). `ToncenterConnectionLimitError` is fatal with a single key; with multiple keys, the SDK rotates to the next key and reconnects.
+
+### Handling connection limit
+
+With multiple keys, connection limit triggers automatic key rotation:
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    sse = ToncenterSSE(["key-1", "key-2"], Network.MAINNET)
+    # If key-1 hits connection limit → rotates to key-2 automatically
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    ws = ToncenterWebSocket(["key-1", "key-2"], Network.MAINNET)
+    # If key-1 hits connection limit → rotates to key-2 automatically
+    ```
+  </Tab>
+</Tabs>
+
+With a single key, catch the error manually:
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    from toncenter.exceptions import ToncenterConnectionLimitError
+
+    try:
+        await sse.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+    except ToncenterConnectionLimitError:
+        print("Connection limit reached — close other connections or upgrade plan")
+    finally:
+        await sse.stop()
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    from toncenter.exceptions import ToncenterConnectionLimitError
+
+    try:
+        await ws.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+    except ToncenterConnectionLimitError:
+        print("Connection limit reached — close other connections or upgrade plan")
+    finally:
+        await ws.stop()
+    ```
+  </Tab>
+</Tabs>

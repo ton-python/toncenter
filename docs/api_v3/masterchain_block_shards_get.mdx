@@ -3,22 +3,6 @@ title: "Get Masterchain Block Shards"
 openapi: "GET /api/v3/masterchainBlockShards"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                 |
-| --------- | -------- | ------------------------------------------- |
-| `seqno`   | Yes      | Masterchain block seqno.                    |
-| `limit`   | No       | Max rows to return (default 10).            |
-| `offset`  | No       | Skip first N rows (default 0).              |
-
-## Response
-
-Returns [`BlocksResponse`](/api_v3/models#blocksresponse).
-
-| Field    | Type                     | Description                                               |
-| -------- | ------------------------ | --------------------------------------------------------- |
-| `blocks` | `list[Block] \| None`    | Workchain blocks after the previous masterchain block.    |
-
 ## SDK Usage
 
 ```python

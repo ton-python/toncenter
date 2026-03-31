@@ -3,35 +3,6 @@ title: "Get Transactions"
 openapi: "GET /api/v3/transactions"
 ---
 
-## Parameters
-
-| Parameter         | Required | Description                                                     |
-| ----------------- | -------- | --------------------------------------------------------------- |
-| `workchain`       | No       | Block workchain.                                                |
-| `shard`           | No       | Block shard ID. Must be sent with `workchain`.                  |
-| `seqno`           | No       | Block seqno. Must be sent with `workchain` and `shard`.         |
-| `mc_seqno`        | No       | Masterchain block seqno.                                        |
-| `account`         | No       | List of account addresses in any form.                          |
-| `exclude_account` | No       | List of account addresses to exclude.                           |
-| `hash`            | No       | Transaction hash.                                               |
-| `lt`              | No       | Transaction lt.                                                 |
-| `start_utime`     | No       | Filter: transactions after given timestamp.                     |
-| `end_utime`       | No       | Filter: transactions before given timestamp.                    |
-| `start_lt`        | No       | Filter: `lt >= start_lt`.                                        |
-| `end_lt`          | No       | Filter: `lt <= end_lt`.                                          |
-| `limit`           | No       | Max rows to return (default 10).                                |
-| `offset`          | No       | Skip first N rows (default 0).                                  |
-| `sort`            | No       | Sort by lt (default `"desc"`).                                   |
-
-## Response
-
-Returns [`TransactionsResponse`](/api_v3/models#transactionsresponse).
-
-| Field          | Type                            | Description                    |
-| -------------- | ------------------------------- | ------------------------------ |
-| `transactions` | `list[Transaction] \| None`     | Transaction objects.           |
-| `address_book` | `AddressBook \| None`           | Address book entries.          |
-
 ## SDK Usage
 
 ```python

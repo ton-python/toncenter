@@ -3,21 +3,6 @@ title: "Send Message"
 openapi: "POST /api/v3/message"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                          |
-| --------- | -------- | ---------------------------------------------------- |
-| `body`    | Yes      | `V2SendMessageRequest` with `boc` field.             |
-
-## Response
-
-Returns [`V2SendMessageResult`](/api_v3/models#v2sendmessageresult).
-
-| Field               | Type           | Description                          |
-| ------------------- | -------------- | ------------------------------------ |
-| `message_hash`      | `str \| None`  | External message hash.               |
-| `message_hash_norm` | `str \| None`  | Normalized external message hash.    |
-
 ## SDK Usage
 
 ```python

@@ -3,32 +3,6 @@ title: "Get Jetton Transfers"
 openapi: "GET /api/v3/jetton/transfers"
 ---
 
-## Parameters
-
-| Parameter       | Required | Description                                                           |
-| --------------- | -------- | --------------------------------------------------------------------- |
-| `owner_address` | No       | List of jetton wallet owner addresses in any form. Max 1000.          |
-| `jetton_wallet` | No       | List of jetton wallet addresses in any form. Max 1000.                |
-| `jetton_master` | No       | Jetton master address in any form.                                    |
-| `direction`     | No       | Direction of transfer. Applied only with `owner_address`.             |
-| `start_utime`   | No       | Filter: after given timestamp.                                        |
-| `end_utime`     | No       | Filter: before given timestamp.                                       |
-| `start_lt`      | No       | Filter: `lt >= start_lt`.                                              |
-| `end_lt`        | No       | Filter: `lt <= end_lt`.                                                |
-| `limit`         | No       | Max rows to return (default 10).                                      |
-| `offset`        | No       | Skip first N rows (default 0).                                        |
-| `sort`          | No       | Sort by lt (default `"desc"`).                                         |
-
-## Response
-
-Returns [`JettonTransfersResponse`](/api_v3/models#jettontransfersresponse).
-
-| Field              | Type                              | Description                    |
-| ------------------ | --------------------------------- | ------------------------------ |
-| `jetton_transfers` | `list[JettonTransfer] \| None`    | Jetton transfer records.       |
-| `address_book`     | `AddressBook \| None`             | Address book entries.          |
-| `metadata`         | `Metadata \| None`                | Address metadata.              |
-
 ## SDK Usage
 
 ```python

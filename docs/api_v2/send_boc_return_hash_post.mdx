@@ -3,21 +3,6 @@ title: "Send Boc Return Hash"
 openapi: "POST /api/v2/sendBocReturnHash"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                        |
-| --------- | -------- | ---------------------------------- |
-| `boc`     | Yes      | Base64-encoded serialized BoC.     |
-
-## Response
-
-Returns [`ExtMessageInfo`](/api_v2/models#extmessageinfo).
-
-| Field       | Type  | Description                          |
-| ----------- | ----- | ------------------------------------ |
-| `hash`      | `str` | External message hash.               |
-| `hash_norm` | `str` | Normalized external message hash.    |
-
 ## SDK Usage
 
 ```python

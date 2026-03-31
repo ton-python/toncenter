@@ -3,35 +3,6 @@ title: "Get Traces"
 openapi: "GET /api/v3/traces"
 ---
 
-## Parameters
-
-| Parameter                | Required | Description                                                 |
-| ------------------------ | -------- | ----------------------------------------------------------- |
-| `account`                | No       | Account address in any form.                                |
-| `trace_id`               | No       | List of trace IDs.                                          |
-| `tx_hash`                | No       | List of transaction hashes.                                 |
-| `msg_hash`               | No       | List of message hashes.                                     |
-| `mc_seqno`               | No       | Masterchain block seqno.                                    |
-| `start_utime`            | No       | Filter: traces finished after given timestamp.              |
-| `end_utime`              | No       | Filter: traces finished before given timestamp.             |
-| `start_lt`               | No       | Filter: `end_lt >= start_lt`.                                |
-| `end_lt`                 | No       | Filter: `end_lt <= end_lt`.                                  |
-| `include_actions`        | No       | Include trace actions (default `False`).                    |
-| `supported_action_types` | No       | Supported action types.                                     |
-| `limit`                  | No       | Max rows to return (default 10).                            |
-| `offset`                 | No       | Skip first N rows (default 0).                              |
-| `sort`                   | No       | Sort by lt (default `"desc"`).                               |
-
-## Response
-
-Returns [`TracesResponse`](/api_v3/models#tracesresponse).
-
-| Field          | Type                       | Description                    |
-| -------------- | -------------------------- | ------------------------------ |
-| `traces`       | `list[Trace] \| None`      | Trace objects.                 |
-| `address_book` | `AddressBook \| None`      | Address book entries.          |
-| `metadata`     | `Metadata \| None`         | Address metadata.              |
-
 ## SDK Usage
 
 ```python

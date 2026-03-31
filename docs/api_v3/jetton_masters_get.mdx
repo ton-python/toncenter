@@ -3,25 +3,6 @@ title: "Get Jetton Masters"
 openapi: "GET /api/v3/jetton/masters"
 ---
 
-## Parameters
-
-| Parameter       | Required | Description                                                |
-| --------------- | -------- | ---------------------------------------------------------- |
-| `address`       | No       | List of Jetton Master addresses in any form. Max 1024.     |
-| `admin_address` | No       | List of admin addresses in any form. Max 1024.             |
-| `limit`         | No       | Max rows to return (default 10).                           |
-| `offset`        | No       | Skip first N rows (default 0).                             |
-
-## Response
-
-Returns [`JettonMastersResponse`](/api_v3/models#jettonmastersresponse).
-
-| Field            | Type                            | Description                    |
-| ---------------- | ------------------------------- | ------------------------------ |
-| `jetton_masters` | `list[JettonMaster] \| None`    | Jetton master objects.         |
-| `address_book`   | `AddressBook \| None`           | Address book entries.          |
-| `metadata`       | `Metadata \| None`              | Address metadata.              |
-
 ## SDK Usage
 
 ```python

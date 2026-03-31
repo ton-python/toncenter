@@ -3,26 +3,6 @@ title: "Get Transactions By Message"
 openapi: "GET /api/v3/transactionsByMessage"
 ---
 
-## Parameters
-
-| Parameter   | Required | Description                                                 |
-| ----------- | -------- | ----------------------------------------------------------- |
-| `msg_hash`  | No       | Message hash (hex, base64, base64url).                      |
-| `body_hash` | No       | Hash of message body.                                       |
-| `opcode`    | No       | Opcode in hex or signed 32-bit decimal form.                |
-| `direction` | No       | Direction of message.                                       |
-| `limit`     | No       | Max rows to return (default 10).                            |
-| `offset`    | No       | Skip first N rows (default 0).                              |
-
-## Response
-
-Returns [`TransactionsResponse`](/api_v3/models#transactionsresponse).
-
-| Field          | Type                            | Description                    |
-| -------------- | ------------------------------- | ------------------------------ |
-| `transactions` | `list[Transaction] \| None`     | Matching transactions.         |
-| `address_book` | `AddressBook \| None`           | Address book entries.          |
-
 ## SDK Usage
 
 ```python

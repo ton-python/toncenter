@@ -3,23 +3,6 @@ title: "Get Pending Traces"
 openapi: "GET /api/v3/pendingTraces"
 ---
 
-## Parameters
-
-| Parameter      | Required | Description                                        |
-| -------------- | -------- | -------------------------------------------------- |
-| `account`      | No       | Account address in any form.                       |
-| `ext_msg_hash` | No       | List of trace external hashes.                     |
-
-## Response
-
-Returns [`TracesResponse`](/api_v3/models#tracesresponse).
-
-| Field          | Type                       | Description                    |
-| -------------- | -------------------------- | ------------------------------ |
-| `traces`       | `list[Trace] \| None`      | Pending trace objects.         |
-| `address_book` | `AddressBook \| None`      | Address book entries.          |
-| `metadata`     | `Metadata \| None`         | Address metadata.              |
-
 ## SDK Usage
 
 ```python

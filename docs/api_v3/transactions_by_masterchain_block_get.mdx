@@ -3,24 +3,6 @@ title: "Get Transactions By Masterchain Block"
 openapi: "GET /api/v3/transactionsByMasterchainBlock"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                 |
-| --------- | -------- | ------------------------------------------- |
-| `seqno`   | Yes      | Masterchain block seqno.                    |
-| `limit`   | No       | Max rows to return (default 10).            |
-| `offset`  | No       | Skip first N rows (default 0).              |
-| `sort`    | No       | Sort by lt (default `"desc"`).               |
-
-## Response
-
-Returns [`TransactionsResponse`](/api_v3/models#transactionsresponse).
-
-| Field          | Type                            | Description                                          |
-| -------------- | ------------------------------- | ---------------------------------------------------- |
-| `transactions` | `list[Transaction] \| None`     | Transactions from masterchain block and all shards.  |
-| `address_book` | `AddressBook \| None`           | Address book entries.                                |
-
 ## SDK Usage
 
 ```python

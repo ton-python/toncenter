@@ -3,22 +3,6 @@ title: "Get Decode"
 openapi: "GET /api/v3/decode"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                                   |
-| --------- | -------- | ------------------------------------------------------------- |
-| `opcodes` | No       | List of opcodes to decode (hex or decimal).                   |
-| `bodies`  | No       | List of message bodies to decode (base64 or hex).             |
-
-## Response
-
-Returns [`DecodeResponse`](/api_v3/models#decoderesponse).
-
-| Field     | Type                              | Description                    |
-| --------- | --------------------------------- | ------------------------------ |
-| `opcodes` | `list[str] \| None`               | Decoded opcode names.          |
-| `bodies`  | `list[dict[str, Any]] \| None`    | Decoded message bodies.        |
-
 ## SDK Usage
 
 ```python

@@ -3,22 +3,6 @@ title: "Get Top Accounts By Balance"
 openapi: "GET /api/v3/topAccountsByBalance"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                 |
-| --------- | -------- | ------------------------------------------- |
-| `limit`   | No       | Max rows to return (default 10).            |
-| `offset`  | No       | Skip first N rows (default 0).              |
-
-## Response
-
-Returns `list[`[`AccountBalance`](/api_v3/models#accountbalance)`]`. Each entry contains:
-
-| Field     | Type             | Description                    |
-| --------- | ---------------- | ------------------------------ |
-| `account` | `str \| None`    | Account address.               |
-| `balance` | `str \| None`    | Account balance in nanotons.   |
-
 ## SDK Usage
 
 ```python

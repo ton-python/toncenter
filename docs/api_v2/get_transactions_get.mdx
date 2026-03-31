@@ -3,34 +3,6 @@ title: "Get Transactions"
 openapi: "GET /api/v2/getTransactions"
 ---
 
-## Parameters
-
-| Parameter  | Required | Description                                    |
-| ---------- | -------- | ---------------------------------------------- |
-| `address`  | Yes      | Account address in any form.                   |
-| `limit`    | No       | Maximum number of transactions (default 10).   |
-| `lt`       | No       | Start from this logical time (pagination).     |
-| `hash`     | No       | Start from this transaction hash (pagination). |
-| `to_lt`    | No       | Return transactions up to this logical time.   |
-| `archival` | No       | Use archival node for old transactions.        |
-
-## Response
-
-Returns `list[`[`Transaction`](/api_v2/models#transaction)`]`. Each [`Transaction`](/api_v2/models#transaction) contains:
-
-| Field             | Type                    | Description                           |
-| ----------------- | ----------------------- | ------------------------------------- |
-| `address`         | `AccountAddress`        | Account address object.               |
-| `account`         | `str`                   | Account address string.               |
-| `utime`           | `int`                   | Transaction UNIX time.                |
-| `data`            | `str`                   | Raw transaction data.                 |
-| `transaction_id`  | `InternalTransactionId` | Transaction LT and hash.             |
-| `fee`             | `str`                   | Total fee in nanotons.                |
-| `storage_fee`     | `str`                   | Storage fee in nanotons.              |
-| `other_fee`       | `str`                   | Other fees in nanotons.               |
-| `in_msg`          | `Message \| None`       | Incoming message.                     |
-| `out_msgs`        | `list[Message]`         | Outgoing messages.                    |
-
 ## SDK Usage
 
 ```python

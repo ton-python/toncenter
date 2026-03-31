@@ -3,21 +3,6 @@ title: "Estimate Fee"
 openapi: "POST /api/v3/estimateFee"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                                                           |
-| --------- | -------- | ------------------------------------------------------------------------------------- |
-| `body`    | Yes      | `V2EstimateFeeRequest` with `address`, `body`, `init_code`, `init_data`, `ignore_chksig`. |
-
-## Response
-
-Returns [`V2EstimateFeeResult`](/api_v3/models#v2estimatefeeresult).
-
-| Field              | Type                              | Description                    |
-| ------------------ | --------------------------------- | ------------------------------ |
-| `source_fees`      | `V2EstimatedFee \| None`          | Fees charged at source.        |
-| `destination_fees` | `list[V2EstimatedFee] \| None`    | Fees charged at destinations.  |
-
 ## SDK Usage
 
 ```python

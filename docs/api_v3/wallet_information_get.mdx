@@ -3,27 +3,6 @@ title: "Get Wallet Information"
 openapi: "GET /api/v3/walletInformation"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                       |
-| --------- | -------- | ------------------------------------------------- |
-| `address` | Yes      | Account address in any form.                      |
-| `use_v2`  | No       | Use method from api/v2 (default `True`). Not recommended. |
-
-## Response
-
-Returns [`V2WalletInformation`](/api_v3/models#v2walletinformation).
-
-| Field                   | Type           | Description                           |
-| ----------------------- | -------------- | ------------------------------------- |
-| `balance`               | `str \| None`  | Account balance in nanotons.          |
-| `last_transaction_hash` | `str \| None`  | Last transaction hash.                |
-| `last_transaction_lt`   | `str \| None`  | Last transaction logical time.        |
-| `seqno`                 | `int \| None`  | Current wallet seqno.                 |
-| `status`                | `str \| None`  | Account status.                       |
-| `wallet_id`             | `int \| None`  | Wallet ID (subwallet ID).             |
-| `wallet_type`           | `str \| None`  | Wallet contract type name.            |
-
 ## SDK Usage
 
 ```python

@@ -3,36 +3,6 @@ title: "Get Messages"
 openapi: "GET /api/v3/messages"
 ---
 
-## Parameters
-
-| Parameter            | Required | Description                                                           |
-| -------------------- | -------- | --------------------------------------------------------------------- |
-| `msg_hash`           | No       | List of message hashes (hex, base64, base64url).                      |
-| `body_hash`          | No       | Hash of message body.                                                 |
-| `source`             | No       | Source address in any form. Use `"null"` for external messages.        |
-| `destination`        | No       | Destination address in any form. Use `"null"` for log messages.       |
-| `opcode`             | No       | Opcode in hex or signed 32-bit decimal form.                          |
-| `start_utime`        | No       | Filter: `created_at >= start_utime`.                                   |
-| `end_utime`          | No       | Filter: `created_at <= end_utime`.                                     |
-| `start_lt`           | No       | Filter: `created_lt >= start_lt`.                                      |
-| `end_lt`             | No       | Filter: `created_lt <= end_lt`.                                        |
-| `direction`          | No       | Direction of message.                                                 |
-| `exclude_externals`  | No       | Exclude external messages.                                            |
-| `only_externals`     | No       | Return only external messages.                                        |
-| `limit`              | No       | Max rows to return (default 10).                                      |
-| `offset`             | No       | Skip first N rows (default 0).                                        |
-| `sort`               | No       | Sort by lt (default `"desc"`).                                         |
-
-## Response
-
-Returns [`MessagesResponse`](/api_v3/models#messagesresponse).
-
-| Field          | Type                       | Description                    |
-| -------------- | -------------------------- | ------------------------------ |
-| `messages`     | `list[Message] \| None`    | Message objects.               |
-| `address_book` | `AddressBook \| None`      | Address book entries.          |
-| `metadata`     | `Metadata \| None`         | Address metadata.              |
-
 ## SDK Usage
 
 ```python

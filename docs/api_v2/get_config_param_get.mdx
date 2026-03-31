@@ -3,21 +3,6 @@ title: "Get Config Param"
 openapi: "GET /api/v2/getConfigParam"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                       |
-| --------- | -------- | ------------------------------------------------- |
-| `param`   | Yes      | Configuration parameter number.                   |
-| `seqno`   | No       | Masterchain block seqno for historical value.      |
-
-## Response
-
-Returns [`ConfigInfo`](/api_v2/models#configinfo).
-
-| Field    | Type      | Description                            |
-| -------- | --------- | -------------------------------------- |
-| `config` | `TvmCell` | Configuration parameter as TVM cell.   |
-
 ## SDK Usage
 
 ```python

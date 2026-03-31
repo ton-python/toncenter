@@ -3,32 +3,6 @@ title: "Get Blocks"
 openapi: "GET /api/v3/blocks"
 ---
 
-## Parameters
-
-| Parameter    | Required | Description                                                     |
-| ------------ | -------- | --------------------------------------------------------------- |
-| `workchain`  | No       | Block workchain.                                                |
-| `shard`      | No       | Block shard ID. Must be sent with `workchain`.                  |
-| `seqno`      | No       | Block seqno. Must be sent with `workchain` and `shard`.         |
-| `root_hash`  | No       | Block root hash.                                                |
-| `file_hash`  | No       | Block file hash.                                                |
-| `mc_seqno`   | No       | Masterchain block seqno.                                        |
-| `start_utime`| No       | Filter: blocks after given timestamp.                           |
-| `end_utime`  | No       | Filter: blocks before given timestamp.                          |
-| `start_lt`   | No       | Filter: `lt >= start_lt`.                                        |
-| `end_lt`     | No       | Filter: `lt <= end_lt`.                                          |
-| `limit`      | No       | Max rows to return (default 10).                                |
-| `offset`     | No       | Skip first N rows (default 0).                                  |
-| `sort`       | No       | Sort by timestamp (default `"desc"`).                           |
-
-## Response
-
-Returns [`BlocksResponse`](/api_v3/models#blocksresponse).
-
-| Field    | Type                     | Description         |
-| -------- | ------------------------ | ------------------- |
-| `blocks` | `list[Block] \| None`    | Block objects.      |
-
 ## SDK Usage
 
 ```python

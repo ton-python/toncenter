@@ -3,39 +3,6 @@ title: "Get Actions"
 openapi: "GET /api/v3/actions"
 ---
 
-## Parameters
-
-| Parameter                | Required | Description                                                         |
-| ------------------------ | -------- | ------------------------------------------------------------------- |
-| `account`                | No       | Account address in any form.                                        |
-| `tx_hash`                | No       | List of transaction hashes.                                         |
-| `msg_hash`               | No       | List of message hashes.                                             |
-| `action_id`              | No       | List of action IDs.                                                 |
-| `trace_id`               | No       | List of trace IDs.                                                  |
-| `mc_seqno`               | No       | Masterchain block seqno.                                            |
-| `start_utime`            | No       | Filter: `trace_end_utime >= start_utime`.                           |
-| `end_utime`              | No       | Filter: `trace_end_utime <= end_utime`.                             |
-| `start_lt`               | No       | Filter: `trace_end_lt >= start_lt`.                                  |
-| `end_lt`                 | No       | Filter: `trace_end_lt <= end_lt`.                                    |
-| `action_type`            | No       | Include action types.                                               |
-| `exclude_action_type`    | No       | Exclude action types.                                               |
-| `supported_action_types` | No       | Supported action types.                                             |
-| `include_accounts`       | No       | Include accounts array for each action (default `False`).           |
-| `include_transactions`   | No       | Include `transactions_full` array (default `False`).                |
-| `limit`                  | No       | Max rows to return (default 10).                                    |
-| `offset`                 | No       | Skip first N rows (default 0).                                     |
-| `sort`                   | No       | Sort by lt (default `"desc"`).                                      |
-
-## Response
-
-Returns [`ActionsResponse`](/api_v3/models#actionsresponse).
-
-| Field          | Type                       | Description                    |
-| -------------- | -------------------------- | ------------------------------ |
-| `actions`      | `list[Action] \| None`     | Parsed action objects.         |
-| `address_book` | `AddressBook \| None`      | Address book entries.          |
-| `metadata`     | `Metadata \| None`         | Address metadata.              |
-
 ## SDK Usage
 
 ```python

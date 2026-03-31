@@ -34,7 +34,6 @@ from toncenter.exceptions import ToncenterError
 Direct liteserver queries — real-time account state, blocks, transactions, contract execution.
 
 - [API V2 Overview](https://toncenter.ness.su/api_v2/overview.md): Resource groups, SDK usage, endpoints.
-- [API V2 Models](https://toncenter.ness.su/api_v2/models.md): Pydantic model reference for all V2 response types.
 - [Get Address Information](https://toncenter.ness.su/api_v2/get_address_information_get.md): Full account state including balance, code, and data.
 - [Get Extended Address Information](https://toncenter.ness.su/api_v2/get_extended_address_information_get.md): Extended account state with last transaction info.
 - [Get Wallet Information](https://toncenter.ness.su/api_v2/get_wallet_information_get.md): Wallet-specific state — type, seqno, balance.
@@ -75,7 +74,6 @@ Direct liteserver queries — real-time account state, blocks, transactions, con
 Indexed database queries — historical data, traces, Jettons, NFTs, batch lookups.
 
 - [API V3 Overview](https://toncenter.ness.su/api_v3/overview.md): Resource groups, SDK usage, endpoints.
-- [API V3 Models](https://toncenter.ness.su/api_v3/models.md): Pydantic model reference for all V3 response types.
 - [Get Account States](https://toncenter.ness.su/api_v3/account_states_get.md): Historical account states with filters.
 - [Get Address Book](https://toncenter.ness.su/api_v3/address_book_get.md): Address book entries for known contracts.
 - [Get Metadata](https://toncenter.ness.su/api_v3/metadata_get.md): On-chain metadata for accounts.

@@ -3,25 +3,6 @@ title: "Get Nft Collections"
 openapi: "GET /api/v3/nft/collections"
 ---
 
-## Parameters
-
-| Parameter            | Required | Description                                            |
-| -------------------- | -------- | ------------------------------------------------------ |
-| `collection_address` | No       | List of collection addresses in any form. Max 1024.    |
-| `owner_address`      | No       | List of collection owner addresses in any form. Max 1024. |
-| `limit`              | No       | Max rows to return (default 10).                       |
-| `offset`             | No       | Skip first N rows (default 0).                         |
-
-## Response
-
-Returns [`NFTCollectionsResponse`](/api_v3/models#nftcollectionsresponse).
-
-| Field              | Type                             | Description                    |
-| ------------------ | -------------------------------- | ------------------------------ |
-| `nft_collections`  | `list[NFTCollection] \| None`    | NFT collection objects.        |
-| `address_book`     | `AddressBook \| None`            | Address book entries.          |
-| `metadata`         | `Metadata \| None`               | Address metadata.              |
-
 ## SDK Usage
 
 ```python

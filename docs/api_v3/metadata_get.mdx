@@ -3,16 +3,6 @@ title: "Get Metadata"
 openapi: "GET /api/v3/metadata"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                        |
-| --------- | -------- | -------------------------------------------------- |
-| `address` | Yes      | List of addresses in any form. Max 1024.           |
-
-## Response
-
-Returns [`Metadata`](/api_v3/models#metadata) — a mapping of raw address to [`AddressMetadata`](/api_v3/models#addressmetadata) with fields `is_indexed` and `token_info`.
-
 ## SDK Usage
 
 ```python

@@ -3,22 +3,6 @@ title: "Get Nft Sales"
 openapi: "GET /api/v3/nft/sales"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                                    |
-| --------- | -------- | -------------------------------------------------------------- |
-| `address` | Yes      | List of sale/auction contract addresses in any form. Max 1000. |
-
-## Response
-
-Returns [`NFTSalesResponse`](/api_v3/models#nftsalesresponse).
-
-| Field          | Type                        | Description                    |
-| -------------- | --------------------------- | ------------------------------ |
-| `nft_sales`    | `list[NFTSale] \| None`     | NFT sale/auction objects.      |
-| `address_book` | `AddressBook \| None`       | Address book entries.          |
-| `metadata`     | `Metadata \| None`          | Address metadata.              |
-
 ## SDK Usage
 
 ```python

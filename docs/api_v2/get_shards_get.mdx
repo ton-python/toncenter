@@ -3,20 +3,6 @@ title: "Get Shards"
 openapi: "GET /api/v2/getShards"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                            |
-| --------- | -------- | -------------------------------------- |
-| `seqno`   | Yes      | Masterchain block sequence number.     |
-
-## Response
-
-Returns [`Shards`](/api_v2/models#shards).
-
-| Field    | Type                  | Description                   |
-| -------- | --------------------- | ----------------------------- |
-| `shards` | `list[TonBlockIdExt]` | Shard block descriptors.      |
-
 ## SDK Usage
 
 ```python

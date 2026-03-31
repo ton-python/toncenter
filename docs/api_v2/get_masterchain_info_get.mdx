@@ -3,20 +3,6 @@ title: "Get Masterchain Info"
 openapi: "GET /api/v2/getMasterchainInfo"
 ---
 
-## Parameters
-
-No parameters.
-
-## Response
-
-Returns [`MasterchainInfo`](/api_v2/models#masterchaininfo).
-
-| Field             | Type            | Description                            |
-| ----------------- | --------------- | -------------------------------------- |
-| `last`            | `TonBlockIdExt` | Last known masterchain block.          |
-| `state_root_hash` | `str`           | State root hash.                       |
-| `init`            | `TonBlockIdExt` | Initial masterchain block.             |
-
 ## SDK Usage
 
 ```python

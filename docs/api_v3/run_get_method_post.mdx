@@ -3,22 +3,6 @@ title: "Run Get Method"
 openapi: "POST /api/v3/runGetMethod"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                                              |
-| --------- | -------- | ------------------------------------------------------------------------ |
-| `body`    | Yes      | `V2RunGetMethodRequest` with `address`, `method`, and optional `stack`.  |
-
-## Response
-
-Returns [`V2RunGetMethodResult`](/api_v3/models#v2rungetmethodresult).
-
-| Field       | Type                           | Description                    |
-| ----------- | ------------------------------ | ------------------------------ |
-| `gas_used`  | `int \| None`                  | Gas consumed by execution.     |
-| `exit_code` | `int \| None`                  | TVM exit code.                 |
-| `stack`     | `list[V2StackEntity] \| None`  | Output stack entries.          |
-
 ## SDK Usage
 
 ```python

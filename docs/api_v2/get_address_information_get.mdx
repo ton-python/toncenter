@@ -3,30 +3,6 @@ title: "Get Address Information"
 openapi: "GET /api/v2/getAddressInformation"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                   |
-| --------- | -------- | --------------------------------------------- |
-| `address` | Yes      | Account address in any form.                  |
-| `seqno`   | No       | Masterchain block seqno for historical state.  |
-
-## Response
-
-Returns [`AddressInformation`](/api_v2/models#addressinformation).
-
-| Field                 | Type                       | Description                                       |
-| --------------------- | -------------------------- | ------------------------------------------------- |
-| `balance`             | `str`                      | Account balance in nanotons.                       |
-| `extra_currencies`    | `list[ExtraCurrencyBalance]` | Extra currency balances.                         |
-| `last_transaction_id` | `InternalTransactionId`    | Last transaction LT and hash.                     |
-| `block_id`            | `TonBlockIdExt`            | Block in which the state was retrieved.            |
-| `code`                | `str`                      | Base64-encoded contract code, or empty.            |
-| `data`                | `str`                      | Base64-encoded contract data, or empty.            |
-| `frozen_hash`         | `str`                      | Hash of frozen state, or empty.                    |
-| `sync_utime`          | `int`                      | Timestamp of last synchronization.                 |
-| `state`               | `AccountStateEnum`         | `"active"`, `"uninitialized"`, or `"frozen"`.      |
-| `suspended`           | `bool \| None`             | Whether the account is suspended.                  |
-
 ## SDK Usage
 
 ```python

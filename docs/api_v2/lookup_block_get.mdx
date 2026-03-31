@@ -3,28 +3,6 @@ title: "Lookup Block"
 openapi: "GET /api/v2/lookupBlock"
 ---
 
-## Parameters
-
-| Parameter   | Required | Description                                            |
-| ----------- | -------- | ------------------------------------------------------ |
-| `workchain` | Yes      | Workchain ID.                                          |
-| `shard`     | Yes      | Shard ID.                                              |
-| `seqno`     | No       | Block sequence number. One of `seqno`, `lt`, or `unixtime` must be provided. |
-| `lt`        | No       | Logical time.                                          |
-| `unixtime`  | No       | UNIX timestamp.                                        |
-
-## Response
-
-Returns [`TonBlockIdExt`](/api_v2/models#tonblockidext).
-
-| Field       | Type  | Description                |
-| ----------- | ----- | -------------------------- |
-| `workchain` | `int` | Workchain ID.              |
-| `shard`     | `str` | Shard ID.                  |
-| `seqno`     | `int` | Block sequence number.     |
-| `root_hash` | `str` | Block root hash.           |
-| `file_hash` | `str` | Block file hash.           |
-
 ## SDK Usage
 
 ```python

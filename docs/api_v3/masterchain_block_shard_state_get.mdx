@@ -3,20 +3,6 @@ title: "Get Masterchain Block Shard State"
 openapi: "GET /api/v3/masterchainBlockShardState"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                    |
-| --------- | -------- | ------------------------------ |
-| `seqno`   | Yes      | Masterchain block seqno.       |
-
-## Response
-
-Returns [`BlocksResponse`](/api_v3/models#blocksresponse).
-
-| Field    | Type                     | Description                    |
-| -------- | ------------------------ | ------------------------------ |
-| `blocks` | `list[Block] \| None`    | Shard state blocks.            |
-
 ## SDK Usage
 
 ```python

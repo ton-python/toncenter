@@ -3,24 +3,6 @@ title: "Get Dns Records"
 openapi: "GET /api/v3/dns/records"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                                              |
-| --------- | -------- | ------------------------------------------------------------------------ |
-| `wallet`  | No       | Wallet address in any form. Returns DNS records containing this address. |
-| `domain`  | No       | Exact domain name to search for.                                         |
-| `limit`   | No       | Max rows to return (default 100).                                        |
-| `offset`  | No       | Skip first N rows (default 0).                                           |
-
-## Response
-
-Returns [`DNSRecordsResponse`](/api_v3/models#dnsrecordsresponse).
-
-| Field          | Type                        | Description                    |
-| -------------- | --------------------------- | ------------------------------ |
-| `records`      | `list[DNSRecord] \| None`   | DNS record objects.            |
-| `address_book` | `AddressBook \| None`       | Address book entries.          |
-
 ## SDK Usage
 
 ```python

@@ -3,25 +3,6 @@ title: "Run Get Method Std"
 openapi: "POST /api/v2/runGetMethodStd"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                       |
-| --------- | -------- | ------------------------------------------------- |
-| `address` | Yes      | Smart contract address in any form.                |
-| `method`  | Yes      | Method name or numeric ID.                         |
-| `stack`   | No       | Input TVM stack entries.                            |
-| `seqno`   | No       | Masterchain block seqno.                            |
-
-## Response
-
-Returns [`RunGetMethodStdResult`](/api_v2/models#rungetmethodstdresult).
-
-| Field       | Type                | Description                         |
-| ----------- | ------------------- | ----------------------------------- |
-| `gas_used`  | `int`               | Gas consumed by execution.          |
-| `stack`     | `list[TvmStackEntry]`| Output TVM stack (typed format).   |
-| `exit_code` | `int`               | TVM exit code.                      |
-
 ## SDK Usage
 
 ```python

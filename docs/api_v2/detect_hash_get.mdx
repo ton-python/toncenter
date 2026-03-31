@@ -3,22 +3,6 @@ title: "Detect Hash"
 openapi: "GET /api/v2/detectHash"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                    |
-| --------- | -------- | ------------------------------ |
-| `hash`    | Yes      | Hash in any form.              |
-
-## Response
-
-Returns [`DetectHash`](/api_v2/models#detecthash).
-
-| Field    | Type  | Description              |
-| -------- | ----- | ------------------------ |
-| `b64`    | `str` | Base64 representation.   |
-| `b64url` | `str` | Base64url representation.|
-| `hex`    | `str` | Hex representation.      |
-
 ## SDK Usage
 
 ```python

@@ -3,16 +3,6 @@ title: "Get Address Book"
 openapi: "GET /api/v3/addressBook"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                                        |
-| --------- | -------- | -------------------------------------------------- |
-| `address` | Yes      | List of addresses in any form. Max 1024.           |
-
-## Response
-
-Returns [`AddressBook`](/api_v3/models#addressbook) — a mapping of raw address to [`AddressBookRow`](/api_v3/models#addressbookrow) with fields `user_friendly`, `domain`, and `interfaces`.
-
 ## SDK Usage
 
 ```python

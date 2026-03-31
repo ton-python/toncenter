@@ -3,21 +3,6 @@ title: "Get Masterchain Block Signatures"
 openapi: "GET /api/v2/getMasterchainBlockSignatures"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                            |
-| --------- | -------- | -------------------------------------- |
-| `seqno`   | Yes      | Masterchain block sequence number.     |
-
-## Response
-
-Returns [`BlockSignatures`](/api_v2/models#blocksignatures).
-
-| Field        | Type                   | Description                    |
-| ------------ | ---------------------- | ------------------------------ |
-| `id`         | `TonBlockIdExt`        | Block identifier.              |
-| `signatures` | `list[BlockSignature]` | Validator signatures.          |
-
 ## SDK Usage
 
 ```python

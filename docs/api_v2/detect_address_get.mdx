@@ -3,24 +3,6 @@ title: "Detect Address"
 openapi: "GET /api/v2/detectAddress"
 ---
 
-## Parameters
-
-| Parameter | Required | Description                    |
-| --------- | -------- | ------------------------------ |
-| `address` | Yes      | Address in any form.           |
-
-## Response
-
-Returns [`DetectAddress`](/api_v2/models#detectaddress).
-
-| Field           | Type                         | Description                          |
-| --------------- | ---------------------------- | ------------------------------------ |
-| `raw_form`      | `str`                        | Raw address form.                    |
-| `bounceable`    | `DetectAddressBase64Variant` | Bounceable base64/base64url forms.   |
-| `non_bounceable`| `DetectAddressBase64Variant` | Non-bounceable base64/base64url forms.|
-| `given_type`    | `str`                        | Type of the given address.           |
-| `test_only`     | `bool`                       | Whether address is testnet-only.     |
-
 ## SDK Usage
 
 ```python

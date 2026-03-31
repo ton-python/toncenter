@@ -3,28 +3,6 @@ title: "Get Jetton Wallets"
 openapi: "GET /api/v3/jetton/wallets"
 ---
 
-## Parameters
-
-| Parameter              | Required | Description                                                            |
-| ---------------------- | -------- | ---------------------------------------------------------------------- |
-| `address`              | No       | List of jetton wallet addresses in any form. Max 1000.                 |
-| `owner_address`        | No       | List of owner addresses in any form. Max 1000.                         |
-| `jetton_address`       | No       | List of Jetton Master addresses in any form.                           |
-| `exclude_zero_balance` | No       | Exclude jetton wallets with 0 balance.                                 |
-| `limit`                | No       | Max rows to return (default 10).                                       |
-| `offset`               | No       | Skip first N rows (default 0).                                         |
-| `sort`                 | No       | Sort by balance. Results may be inconsistent during pagination.        |
-
-## Response
-
-Returns [`JettonWalletsResponse`](/api_v3/models#jettonwalletsresponse).
-
-| Field            | Type                            | Description                    |
-| ---------------- | ------------------------------- | ------------------------------ |
-| `jetton_wallets` | `list[JettonWallet] \| None`    | Jetton wallet objects.         |
-| `address_book`   | `AddressBook \| None`           | Address book entries.          |
-| `metadata`       | `Metadata \| None`              | Address metadata.              |
-
 ## SDK Usage
 
 ```python

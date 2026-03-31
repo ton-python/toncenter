@@ -18,6 +18,7 @@ from toncenter.exceptions import (
     ToncenterValidationError,
     raise_for_status,
 )
+from toncenter.rotator import KeyRotator
 from toncenter.types import (
     DEFAULT_RETRY_POLICY,
     RetryPolicy,
@@ -45,7 +46,7 @@ class BaseClient:
 
     def __init__(
         self,
-        api_key: str = "",
+        api_key: str | list[str] = "",
         base_url: str = "",
         *,
         timeout: float = 10.0,
@@ -56,8 +57,9 @@ class BaseClient:
     ) -> None:
         """Initialize the base HTTP client.
 
-        :param api_key: TON Center API key. Optional for REST — without a key requests
-            are throttled to ~1 RPS. Get one via @toncenter bot on Telegram.
+        :param api_key: TON Center API key or a list of keys for automatic rotation
+            on HTTP 429. Optional for REST — without a key requests are throttled
+            to ~1 RPS. Get one via @toncenter bot on Telegram.
         :param base_url: Base URL for all requests.
         :param timeout: Request timeout in seconds.
         :param session: Optional external ``aiohttp.ClientSession``.
@@ -67,7 +69,12 @@ class BaseClient:
         :param cookies: Additional cookies sent with every request.
         :param retry_policy: Retry policy, or ``None`` to disable retries.
         """
-        self._api_key = api_key
+        if isinstance(api_key, list):
+            self._key_rotator: KeyRotator | None = KeyRotator(api_key) if api_key else None
+            self._api_key = api_key[0] if api_key else ""
+        else:
+            self._key_rotator = None
+            self._api_key = api_key
         self._base_url = base_url.rstrip("/")
 
         self._headers = headers or {}
@@ -218,13 +225,17 @@ class BaseClient:
             max_attempts = max_rule_retries + 1
 
         for attempt in range(max_attempts):
+            req_headers = headers
+            if self._key_rotator is not None:
+                req_headers = {**(headers or {}), "X-API-Key": self._key_rotator.current}
+
             try:
                 async with session.request(
                     method=method,
                     url=url,
                     params=params,
                     json=body,
-                    headers=headers,
+                    headers=req_headers,
                 ) as response:
                     if 200 <= response.status < 300:
                         return await self._handle_success(
@@ -239,6 +250,8 @@ class BaseClient:
                         if rule and attempt < rule.max_retries:
                             delay = rule.delay_for_attempt(attempt)
                             await response.read()
+                            if response.status == 429 and self._key_rotator is not None:
+                                self._api_key = self._key_rotator.rotate()
                             await asyncio.sleep(delay)
                             continue
 

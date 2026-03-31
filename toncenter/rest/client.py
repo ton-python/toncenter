@@ -25,7 +25,7 @@ class ToncenterRestClient(BaseClient):
 
     def __init__(
         self,
-        api_key: str = "",
+        api_key: str | list[str] = "",
         network: Network = Network.MAINNET,
         *,
         base_url: str | None = None,
@@ -39,8 +39,9 @@ class ToncenterRestClient(BaseClient):
     ) -> None:
         """Initialize the TON Center client.
 
-        :param api_key: TON Center API key. Optional — without a key requests are
-            throttled to ~1 RPS. Get one via @toncenter bot on Telegram.
+        :param api_key: TON Center API key or a list of keys for automatic rotation
+            on HTTP 429. Optional — without a key requests are throttled to ~1 RPS.
+            Get one via @toncenter bot on Telegram.
         :param network: Target network (``Network.MAINNET`` or ``Network.TESTNET``).
         :param base_url: Custom base URL (overrides ``network``).
         :param timeout: Request timeout in seconds.
@@ -83,30 +84,6 @@ class ToncenterRestClient(BaseClient):
         :return: ``V3Mixin`` instance with v3 resources.
         """
         return self._v3
-
-    @t.overload
-    async def request(
-        self,
-        method: str,
-        path: str,
-        *,
-        params: dict[str, t.Any] | None = None,
-        body: t.Any | None = None,
-        headers: dict[str, t.Any] | None = None,
-        response_model: type[_T],
-    ) -> _T: ...
-
-    @t.overload
-    async def request(
-        self,
-        method: str,
-        path: str,
-        *,
-        params: dict[str, t.Any] | None = None,
-        body: t.Any | None = None,
-        headers: dict[str, t.Any] | None = None,
-        response_model: None = None,
-    ) -> t.Any: ...
 
     async def request(
         self,

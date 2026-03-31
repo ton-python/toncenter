@@ -36,7 +36,7 @@ class ToncenterWebSocket(StreamingBase):
 
     def __init__(
         self,
-        api_key: str,
+        api_key: str | list[str],
         network: Network,
         *,
         base_url: str | None = None,

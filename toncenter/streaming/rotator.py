@@ -6,13 +6,12 @@ if t.TYPE_CHECKING:
     from collections.abc import Sequence
 
 
-class KeyRotator:
-    """Round-robin API key rotator.
+class StreamingKeyRotator:
+    """Round-robin key rotator for streaming transports.
 
-    Cycles through a list of API keys, advancing to the next one
-    on each ``rotate()`` call.
+    Stores plain key strings — no rate limiters.
 
-    :param keys: Sequence of API keys to rotate through.
+    :param keys: Sequence of API key strings.
     """
 
     def __init__(self, keys: Sequence[str]) -> None:
@@ -21,10 +20,7 @@ class KeyRotator:
 
     @property
     def current(self) -> str:
-        """Return the active API key without advancing.
-
-        :return: Current API key.
-        """
+        """Return the active API key without advancing."""
         return self._keys[self._index]
 
     def rotate(self) -> str:
@@ -36,3 +32,6 @@ class KeyRotator:
         """
         self._index = (self._index + 1) % len(self._keys)
         return self._keys[self._index]
+
+    def __len__(self) -> int:
+        return len(self._keys)

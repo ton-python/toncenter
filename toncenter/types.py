@@ -6,6 +6,7 @@ __all__ = [
     "DEFAULT_RECONNECT_POLICY",
     "DEFAULT_RETRY_POLICY",
     "NETWORK_BASE_URLS",
+    "ApiKey",
     "Network",
     "ReconnectPolicy",
     "RetryPolicy",
@@ -26,6 +27,22 @@ class Workchain(int, Enum):
 
     MASTERCHAIN = -1
     BASECHAIN = 0
+
+
+@dataclass(slots=True, frozen=True)
+class ApiKey:
+    """API key with optional client-side rate limiting.
+
+    Attributes:
+        key: TON Center API key string.
+        rps_limit: Maximum requests per second for this key (``0`` disables).
+        rps_period: Rate-limiter window in seconds.
+
+    """
+
+    key: str
+    rps_limit: int = 0
+    rps_period: float = 1.0
 
 
 NETWORK_BASE_URLS: t.Final[dict[Network, str]] = {

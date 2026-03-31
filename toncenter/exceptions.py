@@ -165,7 +165,7 @@ class ToncenterConnectionLimitError(ToncenterError):
     hint: t.ClassVar[str] = "close other streaming connections or upgrade your plan"
 
     def __init__(self, message: str) -> None:
-        super().__init__(f"Connection limit reached: {message}")
+        super().__init__(message)
 
 
 class ToncenterConnectionLostError(ToncenterStreamingError):

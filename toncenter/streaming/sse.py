@@ -10,6 +10,7 @@ import aiohttp
 from toncenter.exceptions import (
     ToncenterConnectionLimitError,
     ToncenterStreamingError,
+    extract_error_message,
     raise_for_status,
 )
 from toncenter.streaming.base import StreamingBase
@@ -32,7 +33,7 @@ class ToncenterSSE(StreamingBase):
 
     def __init__(
         self,
-        api_key: str,
+        api_key: str | list[str],
         network: Network,
         *,
         base_url: str | None = None,
@@ -66,7 +67,7 @@ class ToncenterSSE(StreamingBase):
             if response.status != 200:
                 text = await response.text()
                 if "connection limit" in text.lower():
-                    raise ToncenterConnectionLimitError(text)
+                    raise ToncenterConnectionLimitError(extract_error_message(text))
                 content_type = response.headers.get("Content-Type", "")
                 raise_for_status(response.status, text, content_type)
             async for data in self._read_notifications(response, stop):

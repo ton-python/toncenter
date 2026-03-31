@@ -11,6 +11,7 @@ import aiohttp
 from toncenter.client import BaseClient
 from toncenter.exceptions import (
     STREAMING_RECOVERABLE,
+    ToncenterConnectionLimitError,
     ToncenterConnectionLostError,
     ToncenterError,
 )
@@ -23,6 +24,7 @@ from toncenter.streaming.models import (
     StreamNotification,
     _FinalityMixin,
 )
+from toncenter.streaming.rotator import StreamingKeyRotator
 from toncenter.types import (
     DEFAULT_RECONNECT_POLICY,
     NETWORK_BASE_URLS,
@@ -61,7 +63,7 @@ class StreamingBase(BaseClient, abc.ABC):
 
     def __init__(
         self,
-        api_key: str,
+        api_key: str | list[str],
         network: Network,
         *,
         base_url: str | None = None,
@@ -70,8 +72,15 @@ class StreamingBase(BaseClient, abc.ABC):
         reconnect_policy: ReconnectPolicy | None = None,
         on_state_change: t.Callable[[ConnectionState], t.Any] | None = None,
     ) -> None:
+        if isinstance(api_key, list):
+            self._streaming_rotator: StreamingKeyRotator | None = StreamingKeyRotator(api_key) if api_key else None
+            initial_key = api_key[0] if api_key else ""
+        else:
+            self._streaming_rotator = None
+            initial_key = api_key
+
         super().__init__(
-            api_key=api_key,
+            api_key=initial_key,
             base_url=base_url or NETWORK_BASE_URLS[network],
             session=session,
             headers=headers,
@@ -400,6 +409,14 @@ class StreamingBase(BaseClient, abc.ABC):
                 async for data in self._open_stream(params, stop):
                     attempt = 0
                     yield data
+            except ToncenterConnectionLimitError:
+                if self._streaming_rotator is not None and len(self._streaming_rotator) > 1:
+                    self._api_key = self._streaming_rotator.rotate()
+                    await self.close_session()
+                    await self.create_session()
+                else:
+                    await self._set_state(ConnectionState.IDLE)
+                    raise
             except ToncenterError as exc:
                 if not isinstance(exc, STREAMING_RECOVERABLE):
                     await self._set_state(ConnectionState.IDLE)

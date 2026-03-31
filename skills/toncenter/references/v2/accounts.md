@@ -11,7 +11,7 @@ Get full account information including balance, code, and data.
 | address | str | yes | — | Account address in any form |
 | seqno | int \| None | no | None | Masterchain block seqno for historical state |
 
-Returns: ``AddressInformation``
+Returns: `AddressInformation`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 accounts get_address_information --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -30,7 +30,7 @@ Get extended account information with detailed account state.
 | address | str | yes | — | Account address in any form |
 | seqno | int \| None | no | None | Masterchain block seqno for historical state |
 
-Returns: ``ExtendedAddressInformation``
+Returns: `ExtendedAddressInformation`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 accounts get_extended_address_information --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -49,7 +49,7 @@ Get wallet-specific information (type, seqno, wallet_id).
 | address | str | yes | — | Account address in any form |
 | seqno | int \| None | no | None | Masterchain block seqno for historical state |
 
-Returns: ``WalletInformation``
+Returns: `WalletInformation`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 accounts get_wallet_information --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -105,7 +105,7 @@ Get token contract data (jetton master/wallet, NFT collection/item).
 |-------|------|----------|---------|-------------|
 | address | str | yes | — | Token contract address in any form |
 
-Returns: ``TokenData`` (discriminated union: ``JettonMasterData`` | ``JettonWalletData`` | ``NftCollectionData`` | ``NftItemData``)
+Returns: `TokenData` (discriminated union: `JettonMasterData` | `JettonWalletData` | `NftCollectionData` | `NftItemData`)
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 accounts get_token_data --address EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs

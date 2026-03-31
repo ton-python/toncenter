@@ -17,7 +17,7 @@ Get short transaction IDs from a specific block.
 | after_hash | str \| None | no | None | Account hash (hex or base64) to read after |
 | count | int \| None | no | None | Maximum number of transactions |
 
-Returns: ``BlockTransactions``
+Returns: `BlockTransactions`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 transactions get_block_transactions --workchain 0 --shard -9223372036854775808 --seqno 47000000
@@ -42,7 +42,7 @@ Get full transaction data from a specific block.
 | after_hash | str \| None | no | None | Account hash (hex or base64) to read after |
 | count | int \| None | no | None | Maximum number of transactions |
 
-Returns: ``BlockTransactionsExt``
+Returns: `BlockTransactionsExt`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 transactions get_block_transactions_ext --workchain 0 --shard -9223372036854775808 --seqno 47000000
@@ -91,7 +91,7 @@ Get transactions in a standardized format.
 | to_lt | str \| None | no | None | Return transactions up to this logical time |
 | archival | bool \| None | no | None | Use archival node for old transactions |
 
-Returns: ``TransactionsStd``
+Returns: `TransactionsStd`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 transactions get_transactions_std --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5
@@ -114,7 +114,7 @@ Locate a transaction by source, destination, and created_lt.
 | destination | str | yes | — | Destination address in any form |
 | created_lt | str | yes | — | Creation logical time of the message |
 
-Returns: ``Transaction``
+Returns: `Transaction`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 transactions try_locate_tx --source 0:... --destination 0:... --created-lt 12345678
@@ -134,7 +134,7 @@ Locate the result transaction by source, destination, and created_lt.
 | destination | str | yes | — | Destination address in any form |
 | created_lt | str | yes | — | Creation logical time of the message |
 
-Returns: ``Transaction``
+Returns: `Transaction`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 transactions try_locate_result_tx --source 0:... --destination 0:... --created-lt 12345678
@@ -154,7 +154,7 @@ Locate the source transaction by source, destination, and created_lt.
 | destination | str | yes | — | Destination address in any form |
 | created_lt | str | yes | — | Creation logical time of the message |
 
-Returns: ``Transaction``
+Returns: `Transaction`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 transactions try_locate_source_tx --source 0:... --destination 0:... --created-lt 12345678

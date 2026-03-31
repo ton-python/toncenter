@@ -13,7 +13,7 @@ Execute a get-method on a smart contract. Stack uses legacy 2-tuple format: `[["
 | stack | list[Any] \| None | no | None | Input stack entries in [type, value] format |
 | seqno | int \| None | no | None | Masterchain block seqno for historical state |
 
-Returns: ``RunGetMethodResult``
+Returns: `RunGetMethodResult`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 runmethod run_get_method --address EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs --method get_jetton_data
@@ -51,7 +51,7 @@ Execute a get-method with standardized TVM stack entries in the response.
 | stack | list[Any] \| None | no | None | Input TVM stack entries |
 | seqno | int \| None | no | None | Masterchain block seqno for historical state |
 
-Returns: ``RunGetMethodStdResult``
+Returns: `RunGetMethodStdResult`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 runmethod run_get_method_std --address EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs --method get_jetton_data

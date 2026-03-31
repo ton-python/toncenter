@@ -11,7 +11,7 @@ Get a specific blockchain configuration parameter.
 | param | int | yes | — | Configuration parameter number |
 | seqno | int \| None | no | None | Masterchain block seqno for historical value |
 
-Returns: ``ConfigInfo``
+Returns: `ConfigInfo`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 configuration get_config_param --param 34
@@ -29,7 +29,7 @@ Get all blockchain configuration parameters.
 |-------|------|----------|---------|-------------|
 | seqno | int \| None | no | None | Masterchain block seqno for historical values |
 
-Returns: ``ConfigInfo``
+Returns: `ConfigInfo`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 configuration get_config_all
@@ -47,7 +47,7 @@ Get library cells by their hashes.
 |-------|------|----------|---------|-------------|
 | libraries | list[str] | yes | — | List of library cell hashes |
 
-Returns: ``LibraryResult``
+Returns: `LibraryResult`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 configuration get_libraries --libraries a1b2c3...

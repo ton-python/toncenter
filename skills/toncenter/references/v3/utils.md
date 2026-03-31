@@ -11,7 +11,7 @@ Decode opcodes and message bodies via GET.
 | opcodes | list[str] \| None | no | None | Opcodes to decode (hex with/without 0x prefix, or decimal) |
 | bodies | list[str] \| None | no | None | Message bodies to decode (base64 or hex) |
 
-Returns: ``DecodeResponse``
+Returns: `DecodeResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 utils get_decode --opcodes 0x0f8a7ea5
@@ -27,9 +27,9 @@ Decode opcodes and message bodies via POST. Use for long parameters that may be 
 
 | Param | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| body | ``DecodeRequest`` | yes | — | Request body with `bodies: list[str] \| None` and `opcodes: list[str] \| None` |
+| body | `DecodeRequest` | yes | — | Request body with `bodies: list[str] \| None` and `opcodes: list[str] \| None` |
 
-Returns: ``DecodeResponse``
+Returns: `DecodeResponse`
 
 ```python
 from toncenter.rest.v3.models import DecodeRequest

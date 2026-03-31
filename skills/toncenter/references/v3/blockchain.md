@@ -11,7 +11,7 @@ Get transactions adjacent to a given transaction by message direction.
 | hash | str \| None | no | None | Transaction hash |
 | direction | str \| None | no | None | Direction of message |
 
-Returns: ``TransactionsResponse``
+Returns: `TransactionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_adjacent_transactions --hash abc123... --direction in
@@ -41,7 +41,7 @@ Get blocks with filtering and pagination.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort by UTC timestamp: "asc" or "desc" |
 
-Returns: ``BlocksResponse``
+Returns: `BlocksResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_blocks --workchain -1 --limit 5
@@ -59,7 +59,7 @@ Get shard state for a masterchain block.
 |-------|------|----------|---------|-------------|
 | seqno | int | yes | — | Masterchain block seqno |
 
-Returns: ``BlocksResponse``
+Returns: `BlocksResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_masterchain_block_shard_state --seqno 40000000
@@ -79,7 +79,7 @@ Get shard blocks for a masterchain block.
 | limit | int | no | 10 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``BlocksResponse``
+Returns: `BlocksResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_masterchain_block_shards --seqno 40000000
@@ -95,7 +95,7 @@ Get first and last masterchain blocks.
 
 (no params)
 
-Returns: ``MasterchainInfo``
+Returns: `MasterchainInfo`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_masterchain_info
@@ -127,7 +127,7 @@ Get messages with filtering and pagination.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort by lt: "asc" or "desc" |
 
-Returns: ``MessagesResponse``
+Returns: `MessagesResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_messages --source EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5
@@ -149,7 +149,7 @@ Get pending (unfinalized) transactions.
 | account | list[str] \| None | no | None | List of account addresses (hex/base64/base64url) |
 | trace_id | list[str] \| None | no | None | Find transactions by trace id |
 
-Returns: ``TransactionsResponse``
+Returns: `TransactionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_pending_transactions --account EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -183,7 +183,7 @@ Get indexed transactions with extensive filtering.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort by lt: "asc" or "desc" |
 
-Returns: ``TransactionsResponse``
+Returns: `TransactionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_transactions --account EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5
@@ -207,7 +207,7 @@ Get transactions from a specific masterchain block.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort: "asc" or "desc" |
 
-Returns: ``TransactionsResponse``
+Returns: `TransactionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_transactions_by_masterchain_block --seqno 40000000
@@ -230,7 +230,7 @@ Get transactions associated with a message.
 | limit | int | no | 10 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``TransactionsResponse``
+Returns: `TransactionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 blockchain get_transactions_by_message --msg-hash abc123...

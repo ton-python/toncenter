@@ -10,7 +10,7 @@ Detect and parse an address, returning all format variants.
 |-------|------|----------|---------|-------------|
 | address | str | yes | — | Address in any form |
 
-Returns: ``DetectAddress``
+Returns: `DetectAddress`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 utils detect_address --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -28,7 +28,7 @@ Detect and parse a hash, returning base64, base64url, and hex forms.
 |-------|------|----------|---------|-------------|
 | hash | str | yes | — | Hash in any form |
 
-Returns: ``DetectHash``
+Returns: `DetectHash`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 utils detect_hash --hash abc123...

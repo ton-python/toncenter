@@ -1,6 +1,6 @@
 # Streaming
 
-Real-time event subscriptions via SSE or WebSocket. Both transports share the decorator-based handler API from ``StreamingBase``.
+Real-time event subscriptions via SSE or WebSocket. Both transports share the decorator-based handler API from `StreamingBase`.
 
 ## SSE Constructor
 
@@ -9,7 +9,7 @@ from toncenter.streaming import ToncenterSSE
 from toncenter.types import Network
 
 client = ToncenterSSE(
-    api_key: str,
+    api_key: str | list[str],
     network: Network,
     *,
     base_url: str | None = None,
@@ -23,12 +23,12 @@ client = ToncenterSSE(
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| api_key | str | — | API key (required) |
-| network | ``Network`` | — | ``Network.MAINNET`` or ``Network.TESTNET`` |
+| api_key | str \| list[str] | — | API key or list of keys for rotation on connection limit |
+| network | `Network` | — | `Network.MAINNET` or `Network.TESTNET` |
 | base_url | str \| None | None | Custom base URL (overrides network) |
 | session | aiohttp.ClientSession \| None | None | External session (not closed by client) |
 | headers | dict[str, str] \| None | None | Additional HTTP headers |
-| reconnect_policy | ``ReconnectPolicy`` \| None | None | Custom reconnect policy (default: max 10, 2s delay, 2x backoff) |
+| reconnect_policy | `ReconnectPolicy` \| None | None | Custom reconnect policy (default: max 10, 2s delay, 2x backoff) |
 | on_state_change | Callable \| None | None | Callback on connection state changes |
 | heartbeat_timeout | float | 30.0 | Seconds before considering connection dead |
 
@@ -41,7 +41,7 @@ from toncenter.streaming import ToncenterWebSocket
 from toncenter.types import Network
 
 client = ToncenterWebSocket(
-    api_key: str,
+    api_key: str | list[str],
     network: Network,
     *,
     base_url: str | None = None,
@@ -56,12 +56,12 @@ client = ToncenterWebSocket(
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| api_key | str | — | API key (required) |
-| network | ``Network`` | — | ``Network.MAINNET`` or ``Network.TESTNET`` |
+| api_key | str \| list[str] | — | API key or list of keys for rotation on connection limit |
+| network | `Network` | — | `Network.MAINNET` or `Network.TESTNET` |
 | base_url | str \| None | None | Custom base URL (overrides network) |
 | session | aiohttp.ClientSession \| None | None | External session (not closed by client) |
 | headers | dict[str, str] \| None | None | Additional HTTP headers |
-| reconnect_policy | ``ReconnectPolicy`` \| None | None | Custom reconnect policy |
+| reconnect_policy | `ReconnectPolicy` \| None | None | Custom reconnect policy |
 | on_state_change | Callable \| None | None | Callback on connection state changes |
 | ping_interval | float | 15.0 | Seconds between ping messages (API recommends 15s) |
 | subscribe_timeout | float | 30.0 | Seconds to wait for subscribe response |
@@ -114,7 +114,7 @@ async def handle(event: TransactionsNotification) -> None:
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| min_finality | ``Finality`` \| str \| None | None | Minimum finality level filter |
+| min_finality | `Finality` \| str \| None | None | Minimum finality level filter |
 
 ### on_actions
 
@@ -127,7 +127,7 @@ async def handle(event: ActionsNotification) -> None:
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| min_finality | ``Finality`` \| str \| None | None | Minimum finality level filter |
+| min_finality | `Finality` \| str \| None | None | Minimum finality level filter |
 | action_types | list[str] \| None | None | Filter by action types |
 
 ### on_traces
@@ -140,7 +140,7 @@ async def handle(event: TraceNotification) -> None:
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| min_finality | ``Finality`` \| str \| None | None | Minimum finality level filter |
+| min_finality | `Finality` \| str \| None | None | Minimum finality level filter |
 
 ### on_account_states
 
@@ -152,7 +152,7 @@ async def handle(event: AccountStateNotification) -> None:
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| min_finality | ``Finality`` \| str \| None | None | Minimum finality (PENDING not supported, raises ValueError) |
+| min_finality | `Finality` \| str \| None | None | Minimum finality (PENDING not supported, raises ValueError) |
 
 ### on_jettons
 
@@ -164,7 +164,7 @@ async def handle(event: JettonsNotification) -> None:
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| min_finality | ``Finality`` \| str \| None | None | Minimum finality (PENDING not supported, raises ValueError) |
+| min_finality | `Finality` \| str \| None | None | Minimum finality (PENDING not supported, raises ValueError) |
 
 ### on_trace_invalidated
 
@@ -190,16 +190,16 @@ No parameters.
 
 | Model | Type field | Key fields |
 |-------|-----------|------------|
-| ``TransactionsNotification`` | "transactions" | `finality`, `trace_external_hash_norm`, `transactions`, `address_book`, `metadata` |
-| ``ActionsNotification`` | "actions" | `finality`, `trace_external_hash_norm`, `actions`, `address_book`, `metadata` |
-| ``TraceNotification`` | "trace" | `finality`, `trace_external_hash_norm`, `trace`, `transactions`, `actions`, `address_book`, `metadata` |
-| ``AccountStateNotification`` | "account_state_change" | `finality`, `account`, `state` |
-| ``JettonsNotification`` | "jettons_change" | `finality`, `jetton`, `address_book`, `metadata` |
-| ``TraceInvalidatedNotification`` | "trace_invalidated" | `trace_external_hash_norm` |
+| `TransactionsNotification` | "transactions" | `finality`, `trace_external_hash_norm`, `transactions`, `address_book`, `metadata` |
+| `ActionsNotification` | "actions" | `finality`, `trace_external_hash_norm`, `actions`, `address_book`, `metadata` |
+| `TraceNotification` | "trace" | `finality`, `trace_external_hash_norm`, `trace`, `transactions`, `actions`, `address_book`, `metadata` |
+| `AccountStateNotification` | "account_state_change" | `finality`, `account`, `state` |
+| `JettonsNotification` | "jettons_change" | `finality`, `jetton`, `address_book`, `metadata` |
+| `TraceInvalidatedNotification` | "trace_invalidated" | `trace_external_hash_norm` |
 
 All notification models with finality have properties: `is_pending`, `is_confirmed`, `is_finalized`.
 
-``StreamNotification`` is a union type alias of all notification models.
+`StreamNotification` is a union type alias of all notification models.
 
 ## Dynamic Subscription (WebSocket Only)
 
@@ -221,7 +221,7 @@ await client.dynamic_subscribe(
 )
 ```
 
-Raises `RuntimeError` if no active connection. Raises ``ToncenterStreamingError`` if server rejects.
+Raises `RuntimeError` if no active connection. Raises `ToncenterStreamingError` if server rejects.
 
 ### dynamic_unsubscribe
 
@@ -274,6 +274,56 @@ policy = ReconnectPolicy(
 ```
 
 Default: `max_reconnects=10, delay=2.0, max_delay=30.0, backoff_factor=2.0`.
+
+## Fatal Errors
+
+These errors stop the connection immediately without reconnect attempts:
+
+- All client errors except 429 (400, 401, 403, 404, 405, 409, 422)
+- `ToncenterConnectionLimitError` — connection limit reached. With multiple keys (`list[str]`), auto-rotates to the next key and reconnects. With a single key, fatal.
+
+Only `ToncenterServerError` (5xx), `ToncenterTooManyRequestsError` (429), and `ToncenterStreamingError` trigger automatic reconnection.
+
+After an ungraceful disconnect (crash, killed process) the server may hold ghost sessions for an extended period. Always call `stop()` in a `finally` block.
+
+Multi-key — automatic rotation:
+
+```python
+client = ToncenterWebSocket(["key-1", "key-2"], Network.MAINNET)
+# On connection limit → rotates to next key automatically
+```
+
+Single key — catch manually:
+
+```python
+from toncenter.exceptions import ToncenterConnectionLimitError
+
+try:
+    await client.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+except ToncenterConnectionLimitError:
+    print("Connection limit — close other connections or upgrade plan")
+finally:
+    await client.stop()
+```
+
+## Opcode Filtering
+
+The streaming API delivers all transactions for subscribed addresses. Filter by opcode inside the handler:
+
+```python
+JETTON_TRANSFER = "0x0f8a7ea5"
+JETTON_TRANSFER_NOTIFICATION = "0x7362d09c"
+
+@client.on_transactions(min_finality=Finality.FINALIZED)
+async def on_jetton_activity(event: TransactionsNotification) -> None:
+    for tx in event.transactions:
+        in_msg = tx.get("in_msg", {})
+        opcode = in_msg.get("opcode")
+        if opcode in (JETTON_TRANSFER, JETTON_TRANSFER_NOTIFICATION):
+            print(f"Jetton activity (opcode {opcode}): {tx.get('hash')}")
+```
+
+Opcodes are hex strings (e.g. `"0x7362d09c"`).
 
 ## Runner Example
 

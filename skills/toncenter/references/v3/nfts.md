@@ -13,7 +13,7 @@ Get NFT collections.
 | limit | int | no | 10 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``NFTCollectionsResponse``
+Returns: `NFTCollectionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 nfts get_nft_collections --limit 5
@@ -38,7 +38,7 @@ Get NFT items with filtering.
 | limit | int | no | 10 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``NFTItemsResponse``
+Returns: `NFTItemsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 nfts get_nft_items --owner-address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5
@@ -59,7 +59,7 @@ Get NFT sale/auction contracts.
 |-------|------|----------|---------|-------------|
 | address | list[str] | yes | — | Sale or auction contract address in any form (max 1000) |
 
-Returns: ``NFTSalesResponse``
+Returns: `NFTSalesResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 nfts get_nft_sales --address EQ...
@@ -87,7 +87,7 @@ Get NFT transfer history.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort: "asc" or "desc" |
 
-Returns: ``NFTTransfersResponse``
+Returns: `NFTTransfersResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 nfts get_nft_transfers --owner-address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5

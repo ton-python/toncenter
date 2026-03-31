@@ -8,7 +8,7 @@ Get current masterchain block info.
 
 (no params)
 
-Returns: ``MasterchainInfo``
+Returns: `MasterchainInfo`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks get_masterchain_info
@@ -26,7 +26,7 @@ Get signatures for a masterchain block.
 |-------|------|----------|---------|-------------|
 | seqno | int | yes | — | Masterchain block sequence number |
 
-Returns: ``BlockSignatures``
+Returns: `BlockSignatures`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks get_masterchain_block_signatures --seqno 40000000
@@ -47,7 +47,7 @@ Get proof chain for a shard block.
 | seqno | int | yes | — | Block sequence number |
 | from_seqno | int \| None | no | None | Starting masterchain seqno for proof chain |
 
-Returns: ``ShardBlockProof``
+Returns: `ShardBlockProof`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks get_shard_block_proof --workchain 0 --shard -9223372036854775808 --seqno 47000000
@@ -63,7 +63,7 @@ Get the current consensus block seqno and timestamp.
 
 (no params)
 
-Returns: ``ConsensusBlock``
+Returns: `ConsensusBlock`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks get_consensus_block
@@ -85,7 +85,7 @@ Look up a block by workchain, shard, and one of: seqno, lt, or unixtime.
 | lt | str \| None | no | None | Logical time |
 | unixtime | int \| None | no | None | UNIX timestamp |
 
-Returns: ``TonBlockIdExt``
+Returns: `TonBlockIdExt`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks lookup_block --workchain 0 --shard -9223372036854775808 --seqno 47000000
@@ -103,7 +103,7 @@ Get shard blocks for a given masterchain seqno.
 |-------|------|----------|---------|-------------|
 | seqno | int | yes | — | Masterchain block sequence number |
 
-Returns: ``Shards``
+Returns: `Shards`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks get_shards --seqno 40000000
@@ -125,7 +125,7 @@ Get block header information.
 | root_hash | str \| None | no | None | Optional root hash for verification |
 | file_hash | str \| None | no | None | Optional file hash for verification |
 
-Returns: ``BlockHeader``
+Returns: `BlockHeader`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks get_block_header --workchain 0 --shard -9223372036854775808 --seqno 47000000
@@ -141,7 +141,7 @@ Get outbound message queue sizes for all shards.
 
 (no params)
 
-Returns: ``OutMsgQueueSizes``
+Returns: `OutMsgQueueSizes`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 blocks get_out_msg_queue_size

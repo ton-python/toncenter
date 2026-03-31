@@ -19,7 +19,7 @@ Get jetton burn history.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort: "asc" or "desc" |
 
-Returns: ``JettonBurnsResponse``
+Returns: `JettonBurnsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 jettons get_jetton_burns --jetton-master EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs --limit 5
@@ -43,7 +43,7 @@ Get jetton master contracts.
 | limit | int | no | 10 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``JettonMastersResponse``
+Returns: `JettonMastersResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 jettons get_jetton_masters --address EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
@@ -73,7 +73,7 @@ Get jetton transfer history.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort: "asc" or "desc" |
 
-Returns: ``JettonTransfersResponse``
+Returns: `JettonTransfersResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 jettons get_jetton_transfers --jetton-master EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs --limit 5
@@ -100,7 +100,7 @@ Get jetton wallet accounts.
 | offset | int | no | 0 | Pagination offset |
 | sort | str \| None | no | None | Sort by balance (may be inconsistent during pagination) |
 
-Returns: ``JettonWalletsResponse``
+Returns: `JettonWalletsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 jettons get_jetton_wallets --owner-address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5

@@ -11,7 +11,7 @@ Get full account states for multiple addresses.
 | address | list[str] | yes | — | List of addresses in any form (max 1000) |
 | include_boc | bool | no | True | Include code and data BOCs |
 
-Returns: ``AccountStatesResponse``
+Returns: `AccountStatesResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 accounts get_account_states --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -33,7 +33,7 @@ Get address book entries (DNS names, interfaces) for addresses.
 |-------|------|----------|---------|-------------|
 | address | list[str] | yes | — | List of addresses in any form (max 1024) |
 
-Returns: ``AddressBook``
+Returns: `AddressBook`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 accounts get_address_book --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -53,7 +53,7 @@ Get address metadata (token info, indexing status).
 |-------|------|----------|---------|-------------|
 | address | list[str] | yes | — | List of addresses in any form (max 1024) |
 
-Returns: ``Metadata``
+Returns: `Metadata`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 accounts get_metadata --address EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
@@ -73,7 +73,7 @@ Get wallet states (balance, seqno, type) for multiple addresses.
 |-------|------|----------|---------|-------------|
 | address | list[str] | yes | — | List of addresses in any form (max 1000) |
 
-Returns: ``WalletStatesResponse``
+Returns: `WalletStatesResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 accounts get_wallet_states --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2

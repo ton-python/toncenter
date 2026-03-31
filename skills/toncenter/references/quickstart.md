@@ -39,14 +39,29 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-With API key and rate limit:
+With API key, rate limit, and custom timeout:
 
 ```python
 async with ToncenterRestClient(
     api_key="your_key",
     network=Network.MAINNET,
     rps_limit=10,
-    rps_period=1.0,
+    timeout=30.0,  # seconds, default 10.0
+) as client:
+    ...
+```
+
+With multiple keys and per-key rate limits (rotation on 429):
+
+```python
+from toncenter.types import ApiKey
+
+async with ToncenterRestClient(
+    api_key=[
+        ApiKey("free-key", rps_limit=10),
+        ApiKey("plus-key", rps_limit=25),
+    ],
+    network=Network.MAINNET,
 ) as client:
     ...
 ```
@@ -65,9 +80,15 @@ async def handle_tx(event: TransactionsNotification) -> None:
     for tx in event.transactions:
         print(tx)
 
-asyncio.run(client.start(
-    addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"],
-))
+async def main() -> None:
+    try:
+        await client.start(
+            addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"],
+        )
+    finally:
+        await client.stop()
+
+asyncio.run(main())
 ```
 
 ## Custom Endpoint
@@ -89,7 +110,7 @@ from toncenter.utils import raw_to_userfriendly, userfriendly_to_raw, to_nano, t
 
 ### `raw_to_userfriendly`
 
-Convert raw address (`workchain_id:key`) to user-friendly base64 format.
+Convert raw address (`workchain:hex`) to user-friendly base64 format.
 
 ```python
 raw_to_userfriendly(
@@ -147,7 +168,9 @@ All SDK exceptions inherit from `ToncenterError`:
 - `ToncenterServerError` — 5xx HTTP (internal error, gateway timeout, liteserver error)
 - `ToncenterValidationError` — response didn't match expected Pydantic model
 - `ToncenterSessionError` — session not created before request
+- `ToncenterConnectionLimitError` — streaming connection limit reached (not retried)
 - `ToncenterStreamingError` — streaming transport error
+- `ToncenterConnectionLostError` — reconnect limit exhausted during streaming
 - `ToncenterRetryError` — all retry attempts exhausted
 
 ```python

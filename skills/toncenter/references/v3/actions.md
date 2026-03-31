@@ -27,7 +27,7 @@ Get parsed actions with extensive filtering options.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort by lt: "asc" or "desc" |
 
-Returns: ``ActionsResponse``
+Returns: `ActionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 actions get_actions --account EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5
@@ -51,7 +51,7 @@ Get pending (unfinalized) actions.
 | supported_action_types | list[str] \| None | no | None | Supported action types |
 | include_transactions | bool | no | False | Include transactions_full array |
 
-Returns: ``ActionsResponse``
+Returns: `ActionsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 actions get_pending_actions --account EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -72,7 +72,7 @@ Get pending (unfinalized) traces.
 | account | str \| None | no | None | Account address (hex/base64/base64url) |
 | ext_msg_hash | list[str] \| None | no | None | Find trace by external hash |
 
-Returns: ``TracesResponse``
+Returns: `TracesResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 actions get_pending_traces --account EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2
@@ -105,7 +105,7 @@ Get traces with filtering options.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort by lt: "asc" or "desc" |
 
-Returns: ``TracesResponse``
+Returns: `TracesResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 actions get_traces --account EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --limit 5

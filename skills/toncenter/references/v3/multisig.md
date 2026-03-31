@@ -15,7 +15,7 @@ Get multisig orders.
 | offset | int | no | 0 | Pagination offset |
 | sort | str | no | "desc" | Sort by last_transaction_lt: "asc" or "desc" |
 
-Returns: ``MultisigOrderResponse``
+Returns: `MultisigOrderResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 multisig get_multisig_orders --multisig-address EQ...
@@ -41,7 +41,7 @@ Get multisig wallets.
 | sort | str | no | "desc" | Sort by last_transaction_lt: "asc" or "desc" |
 | include_orders | bool | no | True | Gather multisig orders |
 
-Returns: ``MultisigResponse``
+Returns: `MultisigResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 multisig get_multisig_wallets --wallet-address EQ...

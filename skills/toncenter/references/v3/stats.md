@@ -11,7 +11,7 @@ Get top accounts ranked by balance.
 | limit | int | no | 10 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``list[AccountBalance]``
+Returns: `list[AccountBalance]`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 stats get_top_accounts_by_balance --limit 10

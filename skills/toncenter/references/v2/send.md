@@ -10,7 +10,7 @@ Send a serialized bag-of-cells to the network.
 |-------|------|----------|---------|-------------|
 | boc | str | yes | — | Base64-encoded serialized BoC |
 
-Returns: ``ResultOk``
+Returns: `ResultOk`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 send send_boc --boc te6cckEBAQEA...
@@ -28,7 +28,7 @@ Send a serialized bag-of-cells and return the message hash.
 |-------|------|----------|---------|-------------|
 | boc | str | yes | — | Base64-encoded serialized BoC |
 
-Returns: ``ExtMessageInfo``
+Returns: `ExtMessageInfo`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 send send_boc_return_hash --boc te6cckEBAQEA...
@@ -50,7 +50,7 @@ Estimate transaction fees for a message.
 | init_data | str | no | "" | Base64-encoded init data (for deploy) |
 | ignore_chksig | bool | no | True | Skip signature check |
 
-Returns: ``QueryFees``
+Returns: `QueryFees`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v2 send estimate_fee --address EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2 --body te6cckEBAQEA...

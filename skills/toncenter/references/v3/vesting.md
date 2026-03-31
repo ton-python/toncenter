@@ -14,7 +14,7 @@ Get vesting contracts.
 | limit | int | no | 10 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``VestingContractsResponse``
+Returns: `VestingContractsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 vesting get_vesting_contracts --wallet-address EQ...

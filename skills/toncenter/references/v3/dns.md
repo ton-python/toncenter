@@ -13,7 +13,7 @@ Get TON DNS records.
 | limit | int | no | 100 | Max results |
 | offset | int | no | 0 | Pagination offset |
 
-Returns: ``DNSRecordsResponse``
+Returns: `DNSRecordsResponse`
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/run.py v3 dns get_dns_records --domain ton.org

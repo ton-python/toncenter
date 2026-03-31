@@ -8,6 +8,7 @@ import typing as t
 import aiohttp
 
 from toncenter.exceptions import (
+    ToncenterConnectionLimitError,
     ToncenterError,
     ToncenterStreamingError,
     raise_for_status,
@@ -278,9 +279,7 @@ class ToncenterWebSocket(StreamingBase):
         if response.get("status") != "subscribed":
             error_msg = str(response.get("error", response))
             if "connection limit" in error_msg.lower():
-                raise ToncenterStreamingError(
-                    f"WebSocket subscribe failed: {error_msg}",
-                )
+                raise ToncenterConnectionLimitError(error_msg)
             raise ToncenterError(
                 f"WebSocket subscribe failed: {error_msg}",
             )

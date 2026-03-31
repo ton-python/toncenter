@@ -8,6 +8,7 @@ import typing as t
 import aiohttp
 
 from toncenter.exceptions import (
+    ToncenterConnectionLimitError,
     ToncenterStreamingError,
     raise_for_status,
 )
@@ -64,6 +65,8 @@ class ToncenterSSE(StreamingBase):
         async with self._session.post(url, json=params, headers=headers) as response:
             if response.status != 200:
                 text = await response.text()
+                if "connection limit" in text.lower():
+                    raise ToncenterConnectionLimitError(text)
                 content_type = response.headers.get("Content-Type", "")
                 raise_for_status(response.status, text, content_type)
             async for data in self._read_notifications(response, stop):

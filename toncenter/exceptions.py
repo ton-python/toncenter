@@ -8,6 +8,7 @@ __all__ = [
     "ToncenterClientError",
     "ToncenterConflictError",
     "ToncenterConnectionError",
+    "ToncenterConnectionLimitError",
     "ToncenterConnectionLostError",
     "ToncenterError",
     "ToncenterForbiddenError",
@@ -151,6 +152,20 @@ class ToncenterSessionError(ToncenterError):
 
 class ToncenterStreamingError(ToncenterError):
     """Streaming transport error."""
+
+
+class ToncenterConnectionLimitError(ToncenterError):
+    """Connection limit reached — too many active streaming sessions.
+
+    Raised when the server rejects a new streaming connection because the
+    maximum number of concurrent sessions for the API key has been reached.
+    This is not retried automatically; close other connections or upgrade your plan.
+    """
+
+    hint: t.ClassVar[str] = "close other streaming connections or upgrade your plan"
+
+    def __init__(self, message: str) -> None:
+        super().__init__(f"Connection limit reached: {message}")
 
 
 class ToncenterConnectionLostError(ToncenterStreamingError):

@@ -8,6 +8,7 @@ env = Env()
 env.read_env()
 
 API_KEY = env.str("TONCENTER_API_KEY")
+API_KEY_2 = env.str("TONCENTER_API_KEY_2", "")
 NETWORK = Network[env.str("TONCENTER_NETWORK", "mainnet").upper()]
 RPS_LIMIT = env.int("TONCENTER_RPS_LIMIT")
 RPS_PERIOD = env.float("TONCENTER_RPS_PERIOD")

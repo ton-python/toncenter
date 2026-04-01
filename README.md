@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/github/license/nessshon/toncenter)](https://github.com/nessshon/toncenter/blob/main/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-TON-blue)](https://tonviewer.com/UQCZq3_Vd21-4y4m7Wc-ej9NFOhh_qvdfAkAYAOHoQ__Ness)
 
-![Image](https://raw.githubusercontent.com/nessshon/toncenter/main/assets/banner.png)
+![Image](https://raw.githubusercontent.com/nessshon/toncenter/main/banner.png)
 
 ![Downloads](https://pepy.tech/badge/toncenter)
 ![Downloads](https://pepy.tech/badge/toncenter/month)

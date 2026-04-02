@@ -72,7 +72,7 @@
   "navigation": {
     "pages": [
       "index",
-      "reference",
+      "guide",
       {
         "group": "API V2",
         "expanded": false,

@@ -39,7 +39,7 @@ if __name__ == "__main__":
 | Utils          | `client.v2.utils`         |
 | RPC            | `client.v2.rpc`           |
 
-Retries for `429` and server errors are enabled by default with exponential backoff. See [Reference](/reference#retries) for retry policy, rate limiting, and session management.
+Retries for `429` and server errors are enabled by default with exponential backoff. See [Guide](/guide#retries) for retry policy, rate limiting, and session management.
 
 <Note>
   V2 responses include a `@type` field (e.g. `raw.fullAccountState`, `smc.runResult`) from the underlying tonlib schema. The SDK maps these into typed Pydantic models automatically.
@@ -47,4 +47,4 @@ Retries for `429` and server errors are enabled by default with exponential back
 
 ## Errors
 
-V2 API may return status codes 400, 401, 403, 404, 405, 409, 422, 429, 500, 504, and 542. See [Reference](/reference#errors) for the full exception hierarchy, descriptions, and handling examples.
+V2 API may return status codes 400, 401, 403, 404, 405, 409, 422, 429, 500, 504, and 542. See [Guide](/guide#errors) for the full exception hierarchy, descriptions, and handling examples.

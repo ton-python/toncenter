@@ -27,7 +27,7 @@ from toncenter.exceptions import ToncenterError
 ## Docs
 
 - [Overview](https://toncenter.ness.su/index.md): Installation, quick start, networks, API key plans.
-- [Reference](https://toncenter.ness.su/reference.md): Client configuration, sessions, retries, utilities, error handling.
+- [Guide](https://toncenter.ness.su/guide.md): Client configuration, sessions, retries, utilities, error handling.
 
 ## API V2
 

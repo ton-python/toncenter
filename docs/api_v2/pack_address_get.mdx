@@ -2,26 +2,3 @@
 title: "Pack Address"
 openapi: "GET /api/v2/packAddress"
 ---
-
-## SDK Usage
-
-```python
-import asyncio
-
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
-
-ADDRESS = "0:ed169130705004711b9b98b561d8de82d31fbf84910ced6eb5fc92e7485ef8a7"
-
-
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v2.utils.pack_address(
-            ADDRESS,
-        )
-        print(result)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```

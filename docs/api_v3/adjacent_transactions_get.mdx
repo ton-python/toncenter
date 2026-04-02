@@ -2,26 +2,3 @@
 title: "Get Adjacent Transactions"
 openapi: "GET /api/v3/adjacentTransactions"
 ---
-
-## SDK Usage
-
-```python
-import asyncio
-
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
-
-HASH = "8085186e2c707c0de954e5456f065965988a01f7069bef6a6db32325af0e0d53"
-
-
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v3.blockchain.get_adjacent_transactions(
-            hash=HASH,
-        )
-        print(result.model_dump_json(indent=4))
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```

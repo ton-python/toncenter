@@ -2,27 +2,3 @@
 title: "Send Message"
 openapi: "POST /api/v3/message"
 ---
-
-## SDK Usage
-
-```python
-import asyncio
-
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
-from toncenter.rest.v3.models import V2SendMessageRequest
-
-BOC = "te6ccgEBAQEAAgAAAA=="
-
-
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v3.api_v2.send_message(
-            body=V2SendMessageRequest(boc=BOC),
-        )
-        print(result.model_dump_json(indent=4))
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```

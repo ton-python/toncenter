@@ -2,26 +2,3 @@
 title: "Get Masterchain Block Signatures"
 openapi: "GET /api/v2/getMasterchainBlockSignatures"
 ---
-
-## SDK Usage
-
-```python
-import asyncio
-
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
-
-SEQNO = 57981181
-
-
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v2.blocks.get_masterchain_block_signatures(
-            SEQNO,
-        )
-        print(result.model_dump_json(indent=4))
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```

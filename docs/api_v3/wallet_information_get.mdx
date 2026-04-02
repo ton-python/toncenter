@@ -2,26 +2,3 @@
 title: "Get Wallet Information"
 openapi: "GET /api/v3/walletInformation"
 ---
-
-## SDK Usage
-
-```python
-import asyncio
-
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
-
-ADDRESS = "UQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxZR0"
-
-
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v3.api_v2.get_wallet_information(
-            address=ADDRESS,
-        )
-        print(result.model_dump_json(indent=4))
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```

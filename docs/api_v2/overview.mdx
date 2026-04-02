@@ -10,34 +10,81 @@ description: Direct liteserver queries via tonlib for real-time account state, b
 | Mainnet | `https://toncenter.com/api/v2`         |
 | Testnet | `https://testnet.toncenter.com/api/v2` |
 
-## SDK Usage
+## Methods
 
-```python
-import asyncio
+### Accounts — `client.v2.accounts`
 
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
+| API                            | Method                                                                              |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| GET /getAddressInformation     | [`get_address_information`](/api_v2/get_address_information_get)                     |
+| GET /getExtendedAddressInformation | [`get_extended_address_information`](/api_v2/get_extended_address_information_get) |
+| GET /getWalletInformation      | [`get_wallet_information`](/api_v2/get_wallet_information_get)                       |
+| GET /getAddressBalance         | [`get_address_balance`](/api_v2/get_address_balance_get)                             |
+| GET /getAddressState           | [`get_address_state`](/api_v2/get_address_state_get)                                 |
+| GET /getTokenData              | [`get_token_data`](/api_v2/get_token_data_get)                                       |
 
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v2.accounts.get_address_balance("EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2")
-        print(result)
+### Blocks — `client.v2.blocks`
 
+| API                              | Method                                                                              |
+| -------------------------------- | ----------------------------------------------------------------------------------- |
+| GET /getMasterchainInfo          | [`get_masterchain_info`](/api_v2/get_masterchain_info_get)                           |
+| GET /getMasterchainBlockSignatures | [`get_masterchain_block_signatures`](/api_v2/get_masterchain_block_signatures_get) |
+| GET /getShardBlockProof          | [`get_shard_block_proof`](/api_v2/get_shard_block_proof_get)                         |
+| GET /getConsensusBlock           | [`get_consensus_block`](/api_v2/get_consensus_block_get)                             |
+| GET /lookupBlock                 | [`lookup_block`](/api_v2/lookup_block_get)                                           |
+| GET /getShards                   | [`get_shards`](/api_v2/get_shards_get)                                               |
+| GET /getBlockHeader              | [`get_block_header`](/api_v2/get_block_header_get)                                   |
+| GET /getOutMsgQueueSize          | [`get_out_msg_queue_size`](/api_v2/get_out_msg_queue_size_get)                       |
 
-if __name__ == "__main__":
-    asyncio.run(main())
-```
+### Transactions — `client.v2.transactions`
 
-| Resource group | Property                  |
-| -------------- | ------------------------- |
-| Accounts       | `client.v2.accounts`      |
-| Blocks         | `client.v2.blocks`        |
-| Transactions   | `client.v2.transactions`  |
-| Send           | `client.v2.send`          |
-| Run Method     | `client.v2.runmethod`     |
-| Configuration  | `client.v2.configuration` |
-| Utils          | `client.v2.utils`         |
-| RPC            | `client.v2.rpc`           |
+| API                          | Method                                                                    |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| GET /getBlockTransactions    | [`get_block_transactions`](/api_v2/get_block_transactions_get)             |
+| GET /getBlockTransactionsExt | [`get_block_transactions_ext`](/api_v2/get_block_transactions_ext_get)     |
+| GET /getTransactions         | [`get_transactions`](/api_v2/get_transactions_get)                         |
+| GET /getTransactionsStd      | [`get_transactions_std`](/api_v2/get_transactions_std_get)                 |
+| GET /tryLocateTx             | [`try_locate_tx`](/api_v2/try_locate_tx_get)                               |
+| GET /tryLocateResultTx       | [`try_locate_result_tx`](/api_v2/try_locate_result_tx_get)                 |
+| GET /tryLocateSourceTx       | [`try_locate_source_tx`](/api_v2/try_locate_source_tx_get)                 |
+
+### Configuration — `client.v2.configuration`
+
+| API                 | Method                                                        |
+| ------------------- | ------------------------------------------------------------- |
+| GET /getConfigParam | [`get_config_param`](/api_v2/get_config_param_get)             |
+| GET /getConfigAll   | [`get_config_all`](/api_v2/get_config_all_get)                 |
+| GET /getLibraries   | [`get_libraries`](/api_v2/get_libraries_get)                   |
+
+### Run Method — `client.v2.runmethod`
+
+| API                  | Method                                                          |
+| -------------------- | --------------------------------------------------------------- |
+| POST /runGetMethod   | [`run_get_method`](/api_v2/run_get_method_post)                 |
+| POST /runGetMethodStd | [`run_get_method_std`](/api_v2/run_get_method_std_post)        |
+
+### Send — `client.v2.send`
+
+| API                    | Method                                                              |
+| ---------------------- | ------------------------------------------------------------------- |
+| POST /sendBoc          | [`send_boc`](/api_v2/send_boc_post)                                 |
+| POST /sendBocReturnHash | [`send_boc_return_hash`](/api_v2/send_boc_return_hash_post)        |
+| POST /estimateFee      | [`estimate_fee`](/api_v2/estimate_fee_post)                         |
+
+### Utils — `client.v2.utils`
+
+| API                 | Method                                                        |
+| ------------------- | ------------------------------------------------------------- |
+| GET /detectAddress  | [`detect_address`](/api_v2/detect_address_get)                 |
+| GET /detectHash     | [`detect_hash`](/api_v2/detect_hash_get)                       |
+| GET /packAddress    | [`pack_address`](/api_v2/pack_address_get)                     |
+| GET /unpackAddress  | [`unpack_address`](/api_v2/unpack_address_get)                 |
+
+### RPC — `client.v2.rpc`
+
+| API            | Method                                          |
+| -------------- | ----------------------------------------------- |
+| POST /jsonRPC  | [`json_rpc`](/api_v2/json_rpc_post)              |
 
 Retries for `429` and server errors are enabled by default with exponential backoff. See [Guide](/guide#retries) for retry policy, rate limiting, and session management.
 

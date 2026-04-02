@@ -2,22 +2,3 @@
 title: "Get Config All"
 openapi: "GET /api/v2/getConfigAll"
 ---
-
-## SDK Usage
-
-```python
-import asyncio
-
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
-
-
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        result = await client.v2.configuration.get_config_all()
-        print(result.model_dump_json(indent=4))
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```

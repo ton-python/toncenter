@@ -9,19 +9,19 @@ Pass these parameters when creating `ToncenterRestClient`:
 
 | Parameter      | Default    | Description                                               |
 | -------------- | ---------- | --------------------------------------------------------- |
-| `api_key`      | `""`       | API key (`str`), `ApiKey`, or `list[ApiKey]` for [rotation](/guide#key-rotation). Optional for REST. |
-| `network`      | `Network.MAINNET` | `Network.MAINNET` or `Network.TESTNET`.                   |
-| `base_url`     | Optional   | Custom base URL (overrides `network`).                    |
+| `api_key`      | Optional   | API key or list of keys for [rotation](/guide#key-rotation). |
+| `network`      | Mainnet    | Mainnet or Testnet.                                       |
+| `base_url`     | Optional   | Custom base URL (overrides network selection).            |
 | `timeout`      | 10 seconds | Request timeout.                                          |
-| `session`      | Optional   | External `aiohttp.ClientSession`.                         |
+| `session`      | Optional   | External HTTP session to share across clients.            |
 | `headers`      | Optional   | Extra HTTP headers sent with every request.               |
 | `cookies`      | Optional   | Extra cookies sent with every request.                    |
-| `rps_limit`    | `0` (off)  | Client-side rate limit (requests per second).             |
-| `rps_period`   | `1.0`      | Rate-limiter window in seconds.                           |
-| `retry_policy` | Enabled    | Retry policy, or `None` to disable.                       |
+| `rps_limit`    | Optional   | Client-side rate limit (requests per second).             |
+| `rps_period`   | Optional   | Rate-limiter window in seconds.                           |
+| `retry_policy` | Enabled    | Retry policy. Disable by passing None.                    |
 
 <Note>
-  The `rps_limit` parameter throttles requests locally on the client side. The server enforces its own rate limits independently — see [API Key](/index#api-key).
+  Without an API key the SDK auto-limits to 1 RPS / 1.2 s on the client side to match the server-side throttle. With a key, client-side limiting is off unless set explicitly. The server enforces its own rate limits independently — see [API Key](/index#api-key).
 </Note>
 
 ## Sessions
@@ -153,7 +153,7 @@ ws = ToncenterWebSocket(["key-1", "key-2"], Network.MAINNET)
 If the server rejects a connection with `connection limit reached`, the SDK rotates to the next key, recreates the session, and reconnects. With a single key, `ToncenterConnectionLimitError` is raised immediately.
 
 <Note>
-  Keys on the same plan share a combined server-side RPS limit — rotation helps when keys have independent limits (different plans). The `rps_limit` constructor parameter applies when `api_key` is a plain string; it is ignored when `ApiKey` or `list[ApiKey]` is used.
+  Keys on the same plan share a combined server-side RPS limit — rotation helps when keys have independent limits (different plans).
 </Note>
 
 ## Utilities
@@ -186,10 +186,10 @@ raw_to_userfriendly(raw, is_test_only=True, is_bounceable=True)
 
 | Parameter       | Default  | Description                             |
 | --------------- | -------- | --------------------------------------- |
-| `address`       | Required | Raw address in `workchain:hex` form.    |
-| `is_bounceable` | `False`  | Bounceable flag (`0x11` when `True`, `0x51` when `False`). |
-| `is_url_safe`   | `True`   | Use URL-safe base64 encoding.           |
-| `is_test_only`  | `False`  | Mark as test-only address.              |
+| `address`       | Required | Raw address in workchain:hex form.      |
+| `is_bounceable` | False    | Bounceable flag.                        |
+| `is_url_safe`   | True     | URL-safe base64 encoding.               |
+| `is_test_only`  | False    | Test-only address flag.                 |
 
 #### userfriendly_to_raw
 
@@ -220,7 +220,7 @@ to_nano(100, decimals=6)    # 100_000_000 (USDT)
 
 | Parameter  | Default  | Description                                    |
 | ---------- | -------- | ---------------------------------------------- |
-| `value`    | Required | Amount as `int`, `float`, `str`, or `Decimal`. |
+| `value`    | Required | Amount (number or string).                      |
 | `decimals` | 9        | Decimal places (9 for TON).                    |
 
 #### to_amount
@@ -247,7 +247,7 @@ All SDK exceptions inherit from `ToncenterError`. Catch it to handle any error f
 from toncenter.exceptions import ToncenterError
 ```
 
-### Client errors (4xx)
+### Client errors
 
 | Code  | Exception                            | Description                                              |
 | ----- | ------------------------------------ | -------------------------------------------------------- |
@@ -260,7 +260,7 @@ from toncenter.exceptions import ToncenterError
 | `422` | `ToncenterUnprocessableError`        | Parameters failed validation.                            |
 | `429` | `ToncenterTooManyRequestsError`      | Rate limit exceeded. Back off and retry.                 |
 
-### Server errors (5xx)
+### Server errors
 
 | Code  | Exception                        | Description                                     |
 | ----- | -------------------------------- | ----------------------------------------------- |

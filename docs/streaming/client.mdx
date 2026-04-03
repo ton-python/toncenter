@@ -9,10 +9,10 @@ description: Constructor parameters, start, and stop methods for SSE and WebSock
   <Tab title="SSE">
     | Parameter           | Default    | Description                                      |
     | ------------------- | ---------- | ------------------------------------------------ |
-    | `api_key`           | Required   | API key (`str`) or list of keys (`list[str]`) for [rotation](/guide#key-rotation). |
-    | `network`           | Required   | `Network.MAINNET` or `Network.TESTNET`.          |
+    | `api_key`           | Required   | API key or list of keys for [rotation](/guide#key-rotation). |
+    | `network`           | Required   | Mainnet or Testnet.                              |
     | `base_url`          | Optional   | Override the default URL.                        |
-    | `session`           | Optional   | External `aiohttp.ClientSession`.                |
+    | `session`           | Optional   | External HTTP session.                           |
     | `headers`           | Optional   | Extra HTTP headers.                              |
     | `reconnect_policy`  | Optional   | See [Connection](/streaming/connection).          |
     | `on_state_change`   | Optional   | See [Connection](/streaming/connection).          |
@@ -21,10 +21,10 @@ description: Constructor parameters, start, and stop methods for SSE and WebSock
   <Tab title="WebSocket">
     | Parameter           | Default    | Description                                        |
     | ------------------- | ---------- | -------------------------------------------------- |
-    | `api_key`           | Required   | API key (`str`) or list of keys (`list[str]`) for [rotation](/guide#key-rotation). |
-    | `network`           | Required   | `Network.MAINNET` or `Network.TESTNET`.            |
+    | `api_key`           | Required   | API key or list of keys for [rotation](/guide#key-rotation). |
+    | `network`           | Required   | Mainnet or Testnet.                                |
     | `base_url`          | Optional   | Override the default URL.                          |
-    | `session`           | Optional   | External `aiohttp.ClientSession`.                  |
+    | `session`           | Optional   | External HTTP session.                             |
     | `headers`           | Optional   | Extra HTTP headers.                                |
     | `reconnect_policy`  | Optional   | See [Connection](/streaming/connection).            |
     | `on_state_change`   | Optional   | See [Connection](/streaming/connection).            |
@@ -68,8 +68,8 @@ Builds the subscription from registered handlers and dispatches notifications. B
 | --------------------------- | -------- | ------------------------------------------------- |
 | `addresses`                 | Optional | Addresses to watch (in any form).                 |
 | `trace_external_hash_norms` | Optional | Trace hashes (required when `on_traces` is used). |
-| `include_address_book`      | `False`  | Populate `address_book` in notifications.         |
-| `include_metadata`          | `False`  | Populate `metadata` in notifications.             |
+| `include_address_book`      | False    | Include DNS-resolved names in notifications.      |
+| `include_metadata`          | False    | Include token metadata in notifications.          |
 | `supported_action_types`    | Optional | Advertise supported action types.                 |
 
 Only one `start()` per instance — a second call raises `RuntimeError`.

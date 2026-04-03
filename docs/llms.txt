@@ -12,7 +12,7 @@ The SDK has three transports:
 - **REST V3** — indexed PostgreSQL database. Pagination, filters, time ranges. Best for: historical queries, actions/traces, Jetton/NFT analytics, batch lookups.
 - **Streaming** — real-time subscriptions via SSE (simpler, single POST) or WebSocket (bidirectional, dynamic subscribe/unsubscribe). Both transports multiplex all subscriptions over a single connection.
 
-Client: `ToncenterRestClient` (async context manager) exposes `client.v2` and `client.v3` resource groups. Streaming: `ToncenterSSE` and `ToncenterWebSocket` with decorator-based handler registration (`@client.on_transactions()`, `@client.on_actions()`, etc.) and finality filtering. Automatic retries with exponential backoff for 429/500/502/503/504 (542 excluded). Client-side rate limiter via `rps_limit`. Pass `ApiKey` objects with per-key rate limits (`api_key=[ApiKey("k1", rps_limit=10), ApiKey("k2", rps_limit=25)]`) for key rotation on 429. Streaming accepts `list[str]` for key rotation on connection limit.
+Client: `ToncenterRestClient` (async context manager) exposes `client.v2` and `client.v3` resource groups. Streaming: `ToncenterSSE` and `ToncenterWebSocket` with decorator-based handler registration (`@client.on_transactions()`, `@client.on_actions()`, etc.) and finality filtering. Automatic retries with exponential backoff for 429/500/502/503/504 (542 excluded). Without an API key, the SDK auto-limits to 1 RPS / 1.2 s client-side; with a key, rate limiting is off unless set explicitly via `rps_limit`. Pass `ApiKey` objects with per-key rate limits (`api_key=[ApiKey("k1", rps_limit=10), ApiKey("k2", rps_limit=25)]`) for key rotation on 429. Streaming accepts `list[str]` for key rotation on connection limit.
 
 Import paths:
 
@@ -33,7 +33,7 @@ from toncenter.exceptions import ToncenterError
 
 Direct liteserver queries — real-time account state, blocks, transactions, contract execution.
 
-- [API V2 Overview](https://toncenter.ness.su/api_v2/overview.md): Resource groups, SDK usage, endpoints.
+- [API V2 Overview](https://toncenter.ness.su/api_v2/overview.md): Method reference, resource groups, endpoints.
 - [Get Address Information](https://toncenter.ness.su/api_v2/get_address_information_get.md): Full account state including balance, code, and data.
 - [Get Extended Address Information](https://toncenter.ness.su/api_v2/get_extended_address_information_get.md): Extended account state with last transaction info.
 - [Get Wallet Information](https://toncenter.ness.su/api_v2/get_wallet_information_get.md): Wallet-specific state — type, seqno, balance.
@@ -73,7 +73,7 @@ Direct liteserver queries — real-time account state, blocks, transactions, con
 
 Indexed database queries — historical data, traces, Jettons, NFTs, batch lookups.
 
-- [API V3 Overview](https://toncenter.ness.su/api_v3/overview.md): Resource groups, SDK usage, endpoints.
+- [API V3 Overview](https://toncenter.ness.su/api_v3/overview.md): Method reference, resource groups, endpoints.
 - [Get Account States](https://toncenter.ness.su/api_v3/account_states_get.md): Historical account states with filters.
 - [Get Address Book](https://toncenter.ness.su/api_v3/address_book_get.md): Address book entries for known contracts.
 - [Get Metadata](https://toncenter.ness.su/api_v3/metadata_get.md): On-chain metadata for accounts.

@@ -12,12 +12,12 @@ description: Connection state, reconnect policy, and dynamic subscription manage
 | `SUBSCRIBED`   | Connected, receiving notifications. |
 | `RECONNECTING` | Re-establishing after a drop.       |
 
-| Property          | Type              | Description                                |
-| ----------------- | ----------------- | ------------------------------------------ |
-| `state`           | `ConnectionState` | Current connection state.                  |
-| `is_subscribed`   | `bool`            | `True` when receiving notifications.       |
-| `is_connecting`   | `bool`            | `True` while opening the connection.       |
-| `is_reconnecting` | `bool`            | `True` while re-establishing after a drop. |
+| Property          | Description                                |
+| ----------------- | ------------------------------------------ |
+| `state`           | Current connection state.                  |
+| `is_subscribed`   | True when receiving notifications.         |
+| `is_connecting`   | True while opening the connection.         |
+| `is_reconnecting` | True while re-establishing after a drop.   |
 
 <Tabs>
   <Tab title="SSE">
@@ -88,7 +88,7 @@ Automatic reconnection on transient failures (5xx, 429, streaming transport erro
 
 | Parameter        | Default | Description                            |
 | ---------------- | ------- | -------------------------------------- |
-| `max_reconnects` | 10      | Maximum attempts (`-1` for unlimited). |
+| `max_reconnects` | 10      | Maximum attempts (-1 for unlimited).   |
 | `delay`          | 2.0     | Initial delay in seconds.              |
 | `max_delay`      | 30.0    | Upper bound for backoff delay.         |
 | `backoff_factor` | 2.0     | Multiplier applied on each attempt.    |
@@ -122,9 +122,9 @@ await ws.dynamic_subscribe(
 | `addresses`                 | Optional             | Addresses to watch (in any form).        |
 | `trace_external_hash_norms` | Optional             | Trace hashes to watch.                   |
 | `types`                     | Optional             | Event types to receive.                  |
-| `min_finality`              | `Finality.FINALIZED` | Minimum finality level.                  |
-| `include_address_book`      | `False`              | Include DNS-resolved names.              |
-| `include_metadata`          | `False`              | Include token metadata.                  |
+| `min_finality`              | Finalized  | Minimum finality level.                            |
+| `include_address_book`      | False                | Include DNS-resolved names.              |
+| `include_metadata`          | False                | Include token metadata.                  |
 | `action_types`              | Optional             | Filter actions by type.                  |
 | `supported_action_types`    | Optional             | Advertise client-supported action types. |
 

@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "palm",
   "name": "TON Center",
   "description": "Python SDK for TON Center — REST API and Streaming for TON blockchain.",
   "logo": {
@@ -59,8 +59,8 @@
     },
     "links": [
       {
-        "label": "AI Plugin",
-        "href": "https://github.com/nessshon/toncenter/tree/main/skills/toncenter"
+        "type": "github",
+        "href": "https://github.com/nessshon/toncenter"
       }
     ]
   },

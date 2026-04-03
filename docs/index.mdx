@@ -89,8 +89,8 @@ The SDK exposes two REST API versions. They query the same blockchain but serve 
 | **Backend** | Direct liteserver queries via tonlib | Indexed PostgreSQL database |
 | **Latency** | Real-time (latest block) | Near real-time (indexer delay) |
 | **Best for** | Current state, sending transactions, get-methods | Historical data, search, filters, pagination |
-| **Pagination** | No (fixed result sets) | Yes (`limit`, `offset`, `sort`) |
-| **Jettons/NFTs** | `get_token_data` (single item) | Full query API with filters |
+| **Pagination** | No (fixed result sets) | Yes (limit, offset, sort) |
+| **Jettons/NFTs** | Single item via get-method | Full query API with filters |
 | **Metadata** | Not available | Token metadata, address book, DNS records |
 | **Traces/Actions** | Not available | Full trace trees and parsed actions |
 

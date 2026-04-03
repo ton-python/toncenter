@@ -1,14 +1,10 @@
 ---
 name: toncenter
 description: >
-  Work with TON blockchain via the toncenter Python SDK — query accounts,
-  transactions, jettons, NFTs, run smart contract methods, send messages,
-  and subscribe to real-time events. Use this skill whenever the user mentions
-  TON, toncenter, TON blockchain, wallet balance, jetton transfers, NFT collections,
-  smart contract get-methods, or wants to interact with TON in any way. Also use
-  when the user works with code that imports from toncenter.rest, toncenter.streaming,
-  or toncenter.types, or asks about TON API endpoints, even if they don't explicitly
-  mention "toncenter".
+  Use when the user mentions TON, toncenter, TON blockchain, or works with
+  code importing from toncenter.rest, toncenter.streaming, or toncenter.types.
+  Covers wallet queries, jettons, NFTs, smart contract methods, streaming,
+  and TON API endpoints.
 ---
 
 Python SDK for querying TON blockchain via TON Center API. Covers REST (v2/v3) and streaming (SSE/WebSocket). Read the relevant reference file, then either execute via runner or generate SDK code.
@@ -114,7 +110,7 @@ SDK retries `429` (5 attempts, 0.3s base) and `500, 502, 503, 504` (3 attempts, 
 
 ## Error Handling
 
-- No API key → works at ~1 RPS; inform user a key from @toncenter unlocks higher limits
+- No API key → SDK auto-limits to 1 RPS / 1.2s client-side; inform user a key from @toncenter unlocks higher limits
 - 429 → SDK retries automatically with key rotation if multiple keys provided; if persistent, suggest upgrading plan
 - 401 → invalid API key, ask user to check
 - 404 → explain meaning (address not found, transaction not found, etc.)

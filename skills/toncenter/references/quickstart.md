@@ -18,7 +18,7 @@ Environment variables (used by the runner script; all optional for REST):
 | `TONCENTER_RPS_LIMIT` | Rate limit: requests per period | `1` |
 | `TONCENTER_RPS_PERIOD` | Rate limit period in seconds | `1.2` |
 
-Note: `ToncenterRestClient` defaults are `rps_limit=0` (disabled) and `rps_period=1.0`. The runner uses its own defaults (1 RPS / 1.2s) to stay within the keyless API limit.
+Note: `ToncenterRestClient` defaults `rps_limit` and `rps_period` to `None` (auto). Without an API key, auto-applies 1 RPS / 1.2 s to match the server-side keyless throttle. With a key, rate limiting is off unless explicitly set. The runner uses its own explicit defaults (1 RPS / 1.2 s).
 
 API key is optional for REST (~1 RPS without key). Required for streaming. Get one from @toncenter Telegram bot.
 

@@ -36,8 +36,8 @@ class ToncenterRestClient(BaseClient):
         session: aiohttp.ClientSession | None = None,
         headers: dict[str, str] | None = None,
         cookies: dict[str, str] | None = None,
-        rps_limit: int = 0,
-        rps_period: float = 1.0,
+        rps_limit: int | None = None,
+        rps_period: float | None = None,
         retry_policy: RetryPolicy | None = DEFAULT_RETRY_POLICY,
     ) -> None:
         """Initialize the TON Center client.
@@ -54,10 +54,15 @@ class ToncenterRestClient(BaseClient):
             is responsible for managing its lifecycle.
         :param headers: Additional HTTP headers sent with every request.
         :param cookies: Additional cookies sent with every request.
-        :param rps_limit: Maximum requests per second (``0`` disables limiting).
+        :param rps_limit: Maximum requests per second.
             Used only when ``api_key`` is a plain string.
+            ``None`` (default) — auto: ``1`` RPS without a key,
+            disabled with a key. ``0`` — explicitly disabled.
         :param rps_period: Rate-limiter window in seconds.
             Used only when ``api_key`` is a plain string.
+            ``None`` (default) — ``1.2`` s when auto-limiting
+            without a key, ``1.0`` s when ``rps_limit`` is set
+            explicitly.
         :param retry_policy: Retry policy, or ``None`` to disable retries.
         """
         if isinstance(api_key, list):
@@ -73,7 +78,12 @@ class ToncenterRestClient(BaseClient):
         else:
             self._key_rotator = None
             initial_key = api_key
-            self._rate_limiter = RateLimiter(rps=rps_limit, period=rps_period) if rps_limit > 0 else None
+            if rps_limit is None:
+                self._rate_limiter = RateLimiter(rps=1, period=rps_period or 1.2) if not api_key else None
+            elif rps_limit > 0:
+                self._rate_limiter = RateLimiter(rps=rps_limit, period=rps_period or 1.0)
+            else:
+                self._rate_limiter = None
 
         super().__init__(
             api_key=initial_key,

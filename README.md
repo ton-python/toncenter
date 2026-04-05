@@ -45,6 +45,33 @@ pip install toncenter
 [Documentation](https://toncenter.ness.su/) — API reference, guides, and streaming examples.  
 [llms.txt](https://toncenter.ness.su/llms.txt) — machine-readable docs for AI tools.
 
+## Examples
+
+**REST API v2**
+
+- [Get account info](https://github.com/nessshon/toncenter/blob/main/examples/rest_v2/get_account_info.py)
+- [Get account transactions](https://github.com/nessshon/toncenter/blob/main/examples/rest_v2/get_account_transactions.py)
+- [Run get-method](https://github.com/nessshon/toncenter/blob/main/examples/rest_v2/run_get_method.py)
+- [Detect address](https://github.com/nessshon/toncenter/blob/main/examples/rest_v2/detect_address.py)
+- [Send message](https://github.com/nessshon/toncenter/blob/main/examples/rest_v2/send_message.py)
+- [Estimate fee](https://github.com/nessshon/toncenter/blob/main/examples/rest_v2/estimate_fee.py)
+
+**REST API v3**
+
+- [Get account states](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/get_account_states.py)
+- [Get jetton wallets](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/get_jetton_wallets.py)
+- [Get jetton transfers](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/get_jetton_transfers.py)
+- [Get actions](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/get_actions.py)
+- [Get NFT items](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/get_nft_items.py)
+- [Get transactions](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/get_transactions.py)
+- [Get traces](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/get_traces.py)
+- [Resolve DNS](https://github.com/nessshon/toncenter/blob/main/examples/rest_v3/resolve_dns.py)
+
+**Streaming** (SSE & WebSocket)
+
+- [SSE streaming](https://github.com/nessshon/toncenter/blob/main/examples/streaming_sse.py)
+- [WebSocket streaming](https://github.com/nessshon/toncenter/blob/main/examples/streaming_websocket.py)
+
 ## License
 
 This repository is distributed under the [MIT License](https://github.com/nessshon/toncenter/blob/main/LICENSE).

@@ -19,7 +19,8 @@ In Claude Code:
 Or test locally:
 
 ```bash
-claude --plugin-dir /path/to/toncenter
+git clone https://github.com/nessshon/toncenter.git
+claude --plugin-dir ./toncenter
 ```
 
 ## Configuration

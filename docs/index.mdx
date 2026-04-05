@@ -1,43 +1,9 @@
 ---
-title: Overview
-description: Python SDK for the TON Center API — read blockchain data, query smart contracts, send transactions, and subscribe to real-time events.
+title: Getting Started
+description: Python SDK for TON Center
 ---
 
-<CardGroup cols={2}>
-  <Card title="API V2" icon="bolt" href="/api_v2/overview">
-    Direct liteserver for balances, sending transactions, contract queries.
-  </Card>
-  <Card title="API V3" icon="database" href="/api_v3/overview">
-    Indexed database for traces, Jettons, NFTs, and historical queries.
-  </Card>
-  <Card title="Streaming" icon="satellite-dish" href="/streaming/overview">
-    Real-time blockchain events over SSE and WebSocket.
-  </Card>
-  <Card title="Claude Code Plugin" icon="wand-magic-sparkles" href="https://github.com/nessshon/toncenter/tree/main/skills/toncenter">
-    Install the AI plugin to query TON blockchain via Claude Code.
-  </Card>
-</CardGroup>
-
-## Quick start
-
-```python
-import asyncio
-
-from toncenter.rest import ToncenterRestClient
-from toncenter.types import Network
-
-
-async def main() -> None:
-    async with ToncenterRestClient(network=Network.MAINNET) as client:
-        info = await client.v2.accounts.get_address_information(
-            "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
-        )
-        print(info.balance)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
+Read blockchain data, query smart contracts, send transactions, and subscribe to real-time events.
 
 ## Installation
 
@@ -45,57 +11,51 @@ if __name__ == "__main__":
 pip install toncenter
 ```
 
-Requires Python 3.10+. Dependencies: `aiohttp` 3.9+, `pydantic` 2.4+.
+| Requirement | Version |
+| ----------- | ------- |
+| Python      | 3.10+   |
+| aiohttp     | 3.9+    |
+| pydantic    | 2.4+    |
 
-**Claude Code Plugin**
+## Quick Start
 
-Install the [AI plugin](https://github.com/nessshon/toncenter/tree/main/skills/toncenter) to query TON blockchain through natural language:
+```python
+import asyncio
 
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+from toncenter.utils import to_amount
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        info = await client.v2.accounts.get_address_information(
+            "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
+        )
+        print(f"Balance: {to_amount(int(info.balance))} TON")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
-/plugin marketplace add nessshon/claude-plugins
-/plugin install toncenter@nessshon-plugins
-```
 
-## Networks
+<Card title="More Examples" icon="github" href="https://github.com/nessshon/toncenter/tree/main/examples">
+  REST v2, REST v3, SSE, and WebSocket examples.
+</Card>
 
-| Network | Enum value        | Base URL                        |
-| ------- | ----------------- | ------------------------------- |
-| Mainnet | `Network.MAINNET` | `https://toncenter.com`         |
-| Testnet | `Network.TESTNET` | `https://testnet.toncenter.com` |
+## Explore
 
-## API Key
-
-An API key is **optional for REST** — requests without a key are throttled to **~1 RPS**. It is **required for streaming** (SSE/WebSocket). A key unlocks higher rate limits for production use. Get a key from the [@toncenter](https://t.me/toncenter) Telegram bot.
-
-| Plan       | RPS | Keys / network | Price           |
-| ---------- | --- | -------------- | --------------- |
-| Free       | 10  | 1              | Free            |
-| Plus       | 25  | 3              | 2.5 TON/mo      |
-| Advanced   | 100 | 10             | 25 TON/mo       |
-| Enterprise | --  | --             | Contact support |
-
-<Note>
-  Multiple keys on the same plan share a combined RPS limit — for example, three Plus keys total 25 RPS, not 25 each. The SDK supports [key rotation](/guide#key-rotation) with per-key rate limits for REST and automatic reconnection on connection limit for streaming.
-</Note>
-
-For general support contact [@toncenter_help_bot](https://t.me/toncenter_help_bot). Enterprise inquiries: [@toncenter_support](https://t.me/toncenter_support).
-
-## API V2 or V3
-
-The SDK exposes two REST API versions. They query the same blockchain but serve different purposes.
-
-| | API V2 | API V3 |
-| ------------ | ---------------------------------------------- | ------------------------------------------------- |
-| **Backend** | Direct liteserver queries via tonlib | Indexed PostgreSQL database |
-| **Latency** | Real-time (latest block) | Near real-time (indexer delay) |
-| **Best for** | Current state, sending transactions, get-methods | Historical data, search, filters, pagination |
-| **Pagination** | No (fixed result sets) | Yes (limit, offset, sort) |
-| **Jettons/NFTs** | Single item via get-method | Full query API with filters |
-| **Metadata** | Not available | Token metadata, address book, DNS records |
-| **Traces/Actions** | Not available | Full trace trees and parsed actions |
-
-**Use V2 when** you need the latest account state, want to send a transaction, run a smart contract get-method, or work with blocks and shards.
-
-**Use V3 when** you need historical transactions, Jetton/NFT analytics, address book lookups, action traces, or paginated batch queries.
-
-Both versions share the same client and session — switch freely between `client.v2` and `client.v3` within the same request flow.
+<CardGroup cols={2}>
+  <Card title="REST API" icon="bolt" href="/rest/overview">
+    Query accounts, transactions, Jettons, NFTs via V2 liteserver and V3 indexed database.
+  </Card>
+  <Card title="Streaming" icon="satellite-dish" href="/streaming/overview">
+    Real-time blockchain events over SSE and WebSocket.
+  </Card>
+  <Card title="AI Plugin" icon="wand-magic-sparkles" href="/claude-plugin">
+    Query TON blockchain through natural language in Claude Code.
+  </Card>
+  <Card title="Utilities" icon="wrench" href="/utilities">
+    Address conversion and amount formatting helpers.
+  </Card>
+</CardGroup>

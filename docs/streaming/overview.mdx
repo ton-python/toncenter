@@ -1,9 +1,13 @@
 ---
 title: Overview
-description: Real-time blockchain events over SSE and WebSocket. Decorator-based handler API — both transports multiplex all subscriptions over a single connection.
+description: SSE and WebSocket subscriptions with automatic reconnection
 ---
 
-For the raw wire protocol, see the [Streaming API v2 specification](https://gist.github.com/dungeon-master-666/98db8d73e9cd9a1b7802bc06ded5b155).
+Subscribe to real-time blockchain events over SSE or WebSocket. Both transports use a decorator-based handler API and multiplex all subscriptions over a single connection.
+
+<Info>
+  API key is **required** — unauthenticated connections are rejected. Get a key from the [@toncenter](https://t.me/toncenter) bot.
+</Info>
 
 | Transport            | Description                                                 |
 | -------------------- | ----------------------------------------------------------- |
@@ -27,84 +31,139 @@ For the raw wire protocol, see the [Streaming API v2 specification](https://gist
   </Tab>
 </Tabs>
 
-## SDK Usage
+## Quick Example
 
-<Tabs>
-  <Tab title="SSE">
-    ```python
-    import asyncio
+```python
+import asyncio
 
-    from toncenter.types import Network
-    from toncenter.streaming import Finality, ToncenterSSE, TransactionsNotification
-    from toncenter.exceptions import ToncenterConnectionLostError
+from toncenter.types import Network
+from toncenter.streaming import Finality, ToncenterSSE, TransactionsNotification
+from toncenter.exceptions import ToncenterConnectionLostError
 
-    sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET)
+sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET)
 
 
-    @sse.on_transactions(min_finality=Finality.FINALIZED)
-    async def on_tx(n: TransactionsNotification) -> None:
-        for tx in n.transactions:
-            print(tx.get("hash"))
+@sse.on_transactions(min_finality=Finality.FINALIZED)
+async def on_tx(n: TransactionsNotification) -> None:
+    for tx in n.transactions:
+        print(tx.get("hash"))
 
 
-    async def main() -> None:
-        try:
-            await sse.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
-        except ToncenterConnectionLostError as e:
-            print(f"Connection lost after {e.attempts} reconnect attempts")
-        finally:
-            await sse.stop()
+async def main() -> None:
+    try:
+        await sse.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+    except ToncenterConnectionLostError as e:
+        print(f"Connection lost after {e.attempts} reconnect attempts")
+    finally:
+        await sse.stop()
 
 
-    if __name__ == "__main__":
-        asyncio.run(main())
-    ```
-  </Tab>
-  <Tab title="WebSocket">
-    ```python
-    import asyncio
+if __name__ == "__main__":
+    asyncio.run(main())
+```
 
-    from toncenter.types import Network
-    from toncenter.streaming import Finality, ToncenterWebSocket, TransactionsNotification
-    from toncenter.exceptions import ToncenterConnectionLostError
+## Event Models
 
-    ws = ToncenterWebSocket("YOUR_API_KEY", Network.MAINNET)
+All models are Pydantic `BaseModel` subclasses from `toncenter.streaming`.
 
+<Accordion title="TransactionsNotification">
+| Field                      | Type                      | Description                               |
+| -------------------------- | ------------------------- | ----------------------------------------- |
+| `type`                     | `Literal["transactions"]` | Always `"transactions"`.                  |
+| `finality`                 | `str`                     | `"pending"`, `"confirmed"`, `"finalized"`.|
+| `trace_external_hash_norm` | `str`                     | Links related notifications for a trace.  |
+| `transactions`             | `list[dict]`              | Transaction objects (LT descending).      |
+| `address_book`             | `dict \| None`            | Address -> name mapping.                  |
+| `metadata`                 | `dict \| None`            | Token metadata.                           |
+</Accordion>
 
-    @ws.on_transactions(min_finality=Finality.FINALIZED)
-    async def on_tx(n: TransactionsNotification) -> None:
-        for tx in n.transactions:
-            print(tx.get("hash"))
+<Accordion title="ActionsNotification">
+| Field                      | Type                    | Description                               |
+| -------------------------- | ----------------------- | ----------------------------------------- |
+| `type`                     | `Literal["actions"]`    | Always `"actions"`.                        |
+| `finality`                 | `str`                   | `"pending"`, `"confirmed"`, `"finalized"`.|
+| `trace_external_hash_norm` | `str`                   | Links related notifications for a trace.  |
+| `actions`                  | `list[dict]`            | Classified action objects.                |
+| `address_book`             | `dict \| None`          | Address -> name mapping.                  |
+| `metadata`                 | `dict \| None`          | Token metadata.                           |
+</Accordion>
 
+<Accordion title="TraceNotification">
+| Field                      | Type                 | Description                         |
+| -------------------------- | -------------------- | ----------------------------------- |
+| `type`                     | `Literal["trace"]`   | Always `"trace"`.                   |
+| `finality`                 | `str`                | Finality level.                     |
+| `trace_external_hash_norm` | `str`                | Trace identifier.                   |
+| `trace`                    | `dict \| None`       | Trace tree structure.               |
+| `transactions`             | `dict \| None`       | Hash -> transaction object map.     |
+| `actions`                  | `list[dict] \| None` | Classified actions for this trace.  |
+| `address_book`             | `dict \| None`       | Address -> name mapping.            |
+| `metadata`                 | `dict \| None`       | Token metadata.                     |
+</Accordion>
 
-    async def main() -> None:
-        try:
-            await ws.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
-        except ToncenterConnectionLostError as e:
-            print(f"Connection lost after {e.attempts} reconnect attempts")
-        finally:
-            await ws.stop()
+<Accordion title="AccountStateNotification">
+| Field      | Type                              | Description                          |
+| ---------- | --------------------------------- | ------------------------------------ |
+| `type`     | `Literal["account_state_change"]` | Always `"account_state_change"`.     |
+| `finality` | `str`                             | `"confirmed"` or `"finalized"` only. |
+| `account`  | `str`                             | Address in raw format.               |
+| `state`    | `AccountState \| None`            | Account state snapshot.              |
 
+`AccountState` fields: `hash`, `balance`, `account_status`, `data_hash`, `code_hash`.
+</Accordion>
 
-    if __name__ == "__main__":
-        asyncio.run(main())
-    ```
-  </Tab>
-</Tabs>
+<Accordion title="JettonsNotification">
+| Field          | Type                        | Description                          |
+| -------------- | --------------------------- | ------------------------------------ |
+| `type`         | `Literal["jettons_change"]` | Always `"jettons_change"`.           |
+| `finality`     | `str`                       | `"confirmed"` or `"finalized"` only. |
+| `jetton`       | `JettonWallet \| None`      | Jetton wallet snapshot.              |
+| `address_book` | `dict \| None`              | Address -> name mapping.             |
+| `metadata`     | `dict \| None`              | Token metadata.                      |
 
-| Page                                | Content                                        |
-| ----------------------------------- | ---------------------------------------------- |
-| [Client](/streaming/client)         | Constructor parameters, `start`, `stop`.       |
-| [Handlers](/streaming/handlers)     | Decorator API and event registration.          |
-| [Events](/streaming/events)         | Finality, notification models, action types.   |
-| [Connection](/streaming/connection) | State, reconnect policy, dynamic subscription. |
+`JettonWallet` fields: `address`, `balance`, `owner`, `jetton`, `last_transaction_lt`.
+</Accordion>
 
-See [Guide](/guide#retries) for retry policy and session management.
+<Accordion title="TraceInvalidatedNotification">
+| Field                      | Type                           | Description                    |
+| -------------------------- | ------------------------------ | ------------------------------ |
+| `type`                     | `Literal["trace_invalidated"]` | Always `"trace_invalidated"`.  |
+| `trace_external_hash_norm` | `str`                          | Hash of the invalidated trace. |
+
+Fires when a previously delivered pending or confirmed trace becomes invalid. Discard cached data for that `trace_external_hash_norm`. No invalidation after finalized.
+</Accordion>
 
 <Note>
-  An API key is **required** for streaming — unlike REST, unauthenticated connections are rejected. Free plans allow up to **2 concurrent streaming connections**; paid plans provide higher limits.
+  No invalidation for `account_state_change` or `jettons_change`. Use `Finality.FINALIZED` for irreversible balance data.
 </Note>
 
-## Errors
+## Action Types
 
-Streaming-specific exceptions: `ToncenterConnectionLimitError` (connection limit reached — auto-rotates with multiple keys, fatal with single key), `ToncenterStreamingError` (transport error), and `ToncenterConnectionLostError` (reconnect limit exhausted). See [Connection](/streaming/connection#errors) for details and [Guide](/guide#errors) for the full exception hierarchy.
+<Accordion title="All ActionType values (22)">
+| Enum member                           | Wire value                 |
+| ------------------------------------- | -------------------------- |
+| `ActionType.TON_TRANSFER`             | `ton_transfer`             |
+| `ActionType.JETTON_TRANSFER`          | `jetton_transfer`          |
+| `ActionType.JETTON_SWAP`              | `jetton_swap`              |
+| `ActionType.JETTON_BURN`              | `jetton_burn`              |
+| `ActionType.JETTON_MINT`              | `jetton_mint`              |
+| `ActionType.NFT_MINT`                 | `nft_mint`                 |
+| `ActionType.CALL_CONTRACT`            | `call_contract`            |
+| `ActionType.CONTRACT_DEPLOY`          | `contract_deploy`          |
+| `ActionType.STAKE_DEPOSIT`            | `stake_deposit`            |
+| `ActionType.STAKE_WITHDRAWAL`         | `stake_withdrawal`         |
+| `ActionType.STAKE_WITHDRAWAL_REQUEST` | `stake_withdrawal_request` |
+| `ActionType.DEX_DEPOSIT_LIQUIDITY`    | `dex_deposit_liquidity`    |
+| `ActionType.DEX_WITHDRAW_LIQUIDITY`   | `dex_withdraw_liquidity`   |
+| `ActionType.ELECTION_DEPOSIT`         | `election_deposit`         |
+| `ActionType.ELECTION_RECOVER`         | `election_recover`         |
+| `ActionType.AUCTION_BID`              | `auction_bid`              |
+| `ActionType.CHANGE_DNS`               | `change_dns`               |
+| `ActionType.DELETE_DNS`               | `delete_dns`               |
+| `ActionType.RENEW_DNS`                | `renew_dns`                |
+| `ActionType.TICK_TOCK`                | `tick_tock`                |
+| `ActionType.SUBSCRIBE`                | `subscribe`                |
+| `ActionType.UNSUBSCRIBE`              | `unsubscribe`              |
+</Accordion>
+
+For the raw wire protocol, see the [Streaming API v2 specification](https://gist.github.com/dungeon-master-666/98db8d73e9cd9a1b7802bc06ded5b155).

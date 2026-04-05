@@ -1,0 +1,47 @@
+---
+title: Errors
+description: Exception hierarchy and HTTP error codes
+---
+
+All SDK exceptions inherit from `ToncenterError`. Catch it to handle any error from the library.
+
+```python
+from toncenter.exceptions import ToncenterError
+```
+
+## Client Errors
+
+| Code  | Exception                            | Description                                              |
+| ----- | ------------------------------------ | -------------------------------------------------------- |
+| `400` | `ToncenterBadRequestError`           | Check query parameters, request body, and path arguments.|
+| `401` | `ToncenterUnauthorizedError`         | Invalid API key. Obtain one via @toncenter bot.          |
+| `403` | `ToncenterForbiddenError`            | API key was issued for a different network.              |
+| `404` | `ToncenterNotFoundError`             | Resource does not exist.                                 |
+| `405` | `ToncenterMethodNotAllowedError`     | Use GET or POST.                                         |
+| `409` | `ToncenterConflictError`             | Resource does not match the expected type.               |
+| `422` | `ToncenterUnprocessableError`        | Parameters failed validation.                            |
+| `429` | `ToncenterTooManyRequestsError`      | Rate limit exceeded. Back off and retry.                 |
+
+## Server Errors
+
+| Code  | Exception                        | Description                                     |
+| ----- | -------------------------------- | ----------------------------------------------- |
+| `500` | `ToncenterInternalServerError`   | Internal server error.                          |
+| `504` | `ToncenterGatewayTimeoutError`   | Liteserver timeout. Retry the request.          |
+| `542` | `ToncenterLiteServerError`       | Liteserver error or unsupported TVM stack type. |
+
+<Note>
+  V2 API may return all listed codes. V3 API typically returns 401, 404, 409, 422, and 500.
+</Note>
+
+## Other Exceptions
+
+| Exception                        | When                                                                       |
+| -------------------------------- | -------------------------------------------------------------------------- |
+| `ToncenterConnectionError`       | DNS failure, TCP timeout, or refused connection — before any HTTP response.|
+| `ToncenterValidationError`       | Response body did not match the expected Pydantic model.                   |
+| `ToncenterSessionError`          | Request made before client session was initialized.                        |
+| `ToncenterConnectionLimitError`  | Streaming connection limit reached. Auto-rotates with multiple keys; fatal with single key. |
+| `ToncenterStreamingError`        | Transport-level error during streaming.                                    |
+| `ToncenterConnectionLostError`   | Reconnect limit exhausted during streaming.                                |
+| `ToncenterRetryError`            | All retry attempts exhausted.                                              |

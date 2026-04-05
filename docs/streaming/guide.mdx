@@ -1,0 +1,326 @@
+---
+title: Guide
+description: Client setup, handlers, finality, and reconnection
+---
+
+## Client
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    from toncenter.streaming import ToncenterSSE
+    from toncenter.types import Network
+
+    sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET)
+    ```
+
+    | Parameter           | Default    | Description                                      |
+    | ------------------- | ---------- | ------------------------------------------------ |
+    | `api_key`           | Required   | API key or list of keys for [rotation](#key-rotation). |
+    | `network`           | Required   | Mainnet or Testnet.                              |
+    | `base_url`          | Optional   | Override the default URL.                        |
+    | `session`           | Optional   | External HTTP session.                           |
+    | `headers`           | Optional   | Extra HTTP headers.                              |
+    | `reconnect_policy`  | Optional   | See [Reconnection](#reconnection).               |
+    | `on_state_change`   | Optional   | See [Connection State](#connection-state).        |
+    | `heartbeat_timeout` | 30 seconds | Seconds before considering the connection dead.  |
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    from toncenter.streaming import ToncenterWebSocket
+    from toncenter.types import Network
+
+    ws = ToncenterWebSocket("YOUR_API_KEY", Network.MAINNET)
+    ```
+
+    | Parameter           | Default    | Description                                        |
+    | ------------------- | ---------- | -------------------------------------------------- |
+    | `api_key`           | Required   | API key or list of keys for [rotation](#key-rotation). |
+    | `network`           | Required   | Mainnet or Testnet.                                |
+    | `base_url`          | Optional   | Override the default URL.                          |
+    | `session`           | Optional   | External HTTP session.                             |
+    | `headers`           | Optional   | Extra HTTP headers.                                |
+    | `reconnect_policy`  | Optional   | See [Reconnection](#reconnection).                  |
+    | `on_state_change`   | Optional   | See [Connection State](#connection-state).          |
+    | `ping_interval`     | 15 seconds | Seconds between keepalive pings.                   |
+    | `subscribe_timeout` | 30 seconds | Seconds to wait for subscribe acknowledgement.     |
+  </Tab>
+</Tabs>
+
+## Session
+
+**start** — builds the subscription from registered handlers and dispatches notifications. Blocks until `stop()` is called or a fatal error occurs.
+
+```python
+try:
+    await sse.start(
+        addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"],
+        include_address_book=True,
+        include_metadata=True,
+    )
+finally:
+    await sse.stop()
+```
+
+| Parameter                   | Default  | Description                                       |
+| --------------------------- | -------- | ------------------------------------------------- |
+| `addresses`                 | Optional | Addresses to watch (in any form).                 |
+| `trace_external_hash_norms` | Optional | Trace hashes (required when `on_traces` is used). |
+| `include_address_book`      | False    | Include DNS-resolved names in notifications.      |
+| `include_metadata`          | False    | Include token metadata in notifications.          |
+| `supported_action_types`    | Optional | Advertise supported action types.                 |
+
+Only one `start()` per instance — a second call raises `RuntimeError`.
+
+**stop** — signals the dispatch loop to exit, closes the session, and resets state.
+
+```python
+await sse.stop()
+```
+
+## Handlers
+
+Register event handlers with decorators. Multiple handlers on the same event type run sequentially in registration order.
+
+```python
+from toncenter.streaming import (
+    ActionsNotification,
+    ActionType,
+    Finality,
+    TransactionsNotification,
+)
+
+
+@sse.on_transactions(min_finality=Finality.PENDING)
+async def on_tx(n: TransactionsNotification) -> None:
+    for tx in n.transactions:
+        print(tx.get("hash"))
+
+
+@sse.on_actions(
+    min_finality=Finality.FINALIZED,
+    action_types=[ActionType.JETTON_TRANSFER, ActionType.TON_TRANSFER],
+)
+async def on_action(n: ActionsNotification) -> None:
+    for a in n.actions:
+        print(a.get("type"))
+```
+
+Three decorator forms are supported:
+
+```python
+@sse.on_transactions                                       # bare
+@sse.on_transactions(min_finality=Finality.CONFIRMED)      # with parameters
+sse.on_transactions(my_callback, min_finality=...)         # programmatic
+```
+
+| Decorator              | Event type             | Extra parameters             |
+| ---------------------- | ---------------------- | ---------------------------- |
+| `on_transactions()`    | transactions           | min_finality                 |
+| `on_actions()`         | actions                | min_finality, action_types   |
+| `on_traces()`          | trace                  | min_finality                 |
+| `on_account_states()`  | account_state_change   | min_finality                 |
+| `on_jettons()`         | jettons_change         | min_finality                 |
+| `on_trace_invalidated()` | trace_invalidated    | --                           |
+
+**on_trace_invalidated** — fires when a previously delivered pending or confirmed trace becomes invalid. Discard cached data for that trace.
+
+```python
+from toncenter.streaming import TraceInvalidatedNotification
+
+
+@sse.on_trace_invalidated
+async def on_invalidated(n: TraceInvalidatedNotification) -> None:
+    print(f"Trace invalidated: {n.trace_external_hash_norm}")
+```
+
+<Note>
+  An exception inside a handler halts dispatch for that notification (fail-fast).
+</Note>
+
+## Filtering
+
+The streaming API delivers all transactions for the subscribed addresses. To filter by specific criteria (opcode, amount, source, etc.), apply the logic inside the handler:
+
+```python
+JETTON_TRANSFER = "0x0f8a7ea5"
+JETTON_TRANSFER_NOTIFICATION = "0x7362d09c"
+
+
+@sse.on_transactions(min_finality=Finality.FINALIZED)
+async def on_jetton_activity(n: TransactionsNotification) -> None:
+    for tx in n.transactions:
+        in_msg = tx.get("in_msg", {})
+        opcode = in_msg.get("opcode")
+        if opcode in (JETTON_TRANSFER, JETTON_TRANSFER_NOTIFICATION):
+            print(f"Jetton activity (opcode {opcode}): {tx.get('hash')}")
+```
+
+<Note>
+  Opcodes are hex strings (e.g. `"0x7362d09c"`). See [Action Types](/streaming/overview#action-types) for the full `ActionType` enum.
+</Note>
+
+## Finality
+
+Every trace-based notification carries a `finality` field. The lifecycle is monotonic per trace: `pending` → `confirmed` → `finalized`. At any point before `finalized`, a `trace_invalidated` event may signal rollback.
+
+| Level                | Latency    | Guarantee                                     |
+| -------------------- | ---------- | --------------------------------------------- |
+| `Finality.PENDING`   | ~30-100 ms | Speculative / emulated. May be rolled back.   |
+| `Finality.CONFIRMED` | Seconds    | In a signed shard block. Small rollback risk.  |
+| `Finality.FINALIZED` | Seconds    | Committed in masterchain. Irreversible.        |
+
+`min_finality` sets the minimum level a handler accepts. Default: `Finality.FINALIZED`.
+
+| min_finality | Pending   | Confirmed | Finalized |
+| ------------ | --------- | --------- | --------- |
+| Pending      | Delivered | Delivered | Delivered |
+| Confirmed    | Skipped   | Delivered | Delivered |
+| Finalized    | Skipped   | Skipped   | Delivered |
+
+Convenience properties: `.is_pending`, `.is_confirmed`, `.is_finalized`.
+
+## Connection State
+
+| State          | Meaning                             |
+| -------------- | ----------------------------------- |
+| `IDLE`         | Not connected.                      |
+| `CONNECTING`   | Opening the connection.             |
+| `SUBSCRIBED`   | Connected, receiving notifications. |
+| `RECONNECTING` | Re-establishing after a drop.       |
+
+Properties: `state`, `is_subscribed`, `is_connecting`, `is_reconnecting`.
+
+```python
+await sse.wait_subscribed(timeout=10.0)
+```
+
+Monitor transitions via `on_state_change` callback (sync or async):
+
+```python
+from toncenter.streaming import ConnectionState
+
+def on_state(state: ConnectionState) -> None:
+    print(state.value)
+
+sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET, on_state_change=on_state)
+```
+
+## Reconnection
+
+Automatic reconnection on transient failures (5xx, 429, streaming transport errors, heartbeat timeout). All other client errors (400, 401, 403, 404, 405, 409, 422) are fatal and stop immediately.
+
+```python
+from toncenter.types import ReconnectPolicy
+
+policy = ReconnectPolicy(
+    max_reconnects=10,
+    delay=2.0,
+    max_delay=30.0,
+    backoff_factor=2.0,
+)
+sse = ToncenterSSE("YOUR_API_KEY", Network.MAINNET, reconnect_policy=policy)
+```
+
+| Parameter        | Default | Description                            |
+| ---------------- | ------- | -------------------------------------- |
+| `max_reconnects` | 10      | Maximum attempts (-1 for unlimited).   |
+| `delay`          | 2.0     | Initial delay in seconds.              |
+| `max_delay`      | 30.0    | Upper bound for backoff delay.         |
+| `backoff_factor` | 2.0     | Multiplier applied on each attempt.    |
+
+<Warning>
+  Always call `stop()` in a `finally` block. Without a clean disconnect the server may hold the session open, blocking new connections until it times out.
+</Warning>
+
+## Key Rotation
+
+Pass a list of key strings to rotate on connection limit errors. No rate limiters — streaming is connection-based.
+
+<Tabs>
+  <Tab title="SSE">
+    ```python
+    sse = ToncenterSSE(["key-1", "key-2"], Network.MAINNET)
+    # If key-1 hits connection limit → rotates to key-2 automatically
+    ```
+  </Tab>
+  <Tab title="WebSocket">
+    ```python
+    ws = ToncenterWebSocket(["key-1", "key-2"], Network.MAINNET)
+    # If key-1 hits connection limit → rotates to key-2 automatically
+    ```
+  </Tab>
+</Tabs>
+
+If the server rejects a connection with `connection limit reached`, the SDK rotates to the next key, recreates the session, and reconnects. With a single key, `ToncenterConnectionLimitError` is raised immediately.
+
+<Note>
+  Keys on the same plan share a combined connection limit — rotation helps when keys have independent limits (different plans).
+</Note>
+
+## Dynamic Subscription
+
+<Note>
+  WebSocket only. SSE does not support dynamic subscription changes.
+</Note>
+
+After `start()` establishes the initial connection, `ToncenterWebSocket` can modify subscriptions on the fly without reconnecting.
+
+**dynamic_subscribe** — replace the current subscription (snapshot semantics). All previously watched addresses/traces are replaced by the new set.
+
+```python
+await ws.dynamic_subscribe(
+    addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"],
+    min_finality=Finality.CONFIRMED,
+    include_metadata=True,
+)
+```
+
+| Parameter                   | Default   | Description                              |
+| --------------------------- | --------- | ---------------------------------------- |
+| `addresses`                 | Optional  | Addresses to watch (in any form).        |
+| `trace_external_hash_norms` | Optional  | Trace hashes to watch.                   |
+| `types`                     | Optional  | Event types to receive.                  |
+| `min_finality`              | Finalized | Minimum finality level.                  |
+| `include_address_book`      | False     | Include DNS-resolved names.              |
+| `include_metadata`          | False     | Include token metadata.                  |
+| `action_types`              | Optional  | Filter actions by type.                  |
+| `supported_action_types`    | Optional  | Advertise client-supported action types. |
+
+**dynamic_unsubscribe** — remove addresses or trace hashes from the current subscription.
+
+```python
+await ws.dynamic_unsubscribe(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+```
+
+| Parameter                   | Default  | Description                    |
+| --------------------------- | -------- | ------------------------------ |
+| `addresses`                 | Optional | Addresses to stop watching.    |
+| `trace_external_hash_norms` | Optional | Trace hashes to stop watching. |
+
+Both methods raise `RuntimeError` if called without an active WebSocket connection, and `ToncenterStreamingError` if the server rejects the request.
+
+## Errors
+
+See [Errors](/errors) for the full exception hierarchy. Streaming-specific exceptions:
+
+| Exception                       | When                                                 |
+| ------------------------------- | ---------------------------------------------------- |
+| `ToncenterConnectionLimitError` | Connection limit reached. With multiple keys, rotates automatically. With a single key, fails immediately. |
+| `ToncenterStreamingError`       | Transport-level error during streaming.               |
+| `ToncenterConnectionLostError`  | Reconnect limit exhausted. Exposes `.attempts` count. |
+
+All client errors except 429 are fatal — no reconnect is attempted (400, 401, 403, 404, 405, 409, 422).
+
+With a single key, catch the error manually:
+
+```python
+from toncenter.exceptions import ToncenterConnectionLimitError
+
+try:
+    await sse.start(addresses=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"])
+except ToncenterConnectionLimitError:
+    print("Connection limit reached — close other connections or upgrade plan")
+finally:
+    await sse.stop()
+```

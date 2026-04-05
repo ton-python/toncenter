@@ -1,0 +1,73 @@
+---
+title: Utilities
+description: Address conversion and amount formatting
+---
+
+```python
+from toncenter.utils import raw_to_userfriendly, userfriendly_to_raw, to_nano, to_amount
+```
+
+## Address Conversion
+
+**raw_to_userfriendly** — convert a raw address (`workchain:hex`) to user-friendly base64 format.
+
+```python
+raw = "0:83ae019a23a8162beaa5cb0ebdc56668b2eac6c6ba51808812915b206a152dc5"
+
+raw_to_userfriendly(raw)
+# UQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxZR0
+
+raw_to_userfriendly(raw, is_bounceable=True)
+# EQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxcmx
+
+raw_to_userfriendly(raw, is_test_only=True)
+# 0QCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxS_-
+
+raw_to_userfriendly(raw, is_test_only=True, is_bounceable=True)
+# kQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxXI7
+```
+
+| Parameter       | Default  | Description                             |
+| --------------- | -------- | --------------------------------------- |
+| `address`       | Required | Raw address in workchain:hex form.      |
+| `is_bounceable` | False    | Bounceable flag.                        |
+| `is_url_safe`   | True     | URL-safe base64 encoding.               |
+| `is_test_only`  | False    | Test-only address flag.                 |
+
+**userfriendly_to_raw** — convert a user-friendly base64 address back to raw format.
+
+```python
+userfriendly_to_raw("EQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxcmx")
+# 0:83ae019a23a8162beaa5cb0ebdc56668b2eac6c6ba51808812915b206a152dc5
+```
+
+Accepts both standard and URL-safe base64. Raises `ValueError` on invalid input.
+
+## Amount Conversion
+
+**to_nano** — convert a human-readable amount to the smallest unit (nanotons for TON).
+
+```python
+to_nano(1.5)                # 1_500_000_000
+to_nano("0.001")            # 1_000_000
+to_nano(100, decimals=6)    # 100_000_000 (USDT)
+```
+
+| Parameter  | Default  | Description                                    |
+| ---------- | -------- | ---------------------------------------------- |
+| `value`    | Required | Amount (number or string).                      |
+| `decimals` | 9        | Decimal places (9 for TON).                    |
+
+**to_amount** — convert the smallest unit back to a human-readable `Decimal`.
+
+```python
+to_amount(1_500_000_000)               # Decimal("1.5")
+to_amount(1_500_000_000, precision=2)  # Decimal("1.50")
+to_amount(100_000_000, decimals=6)     # Decimal("100")
+```
+
+| Parameter   | Default  | Description                       |
+| ----------- | -------- | --------------------------------- |
+| `value`     | Required | Amount in smallest units.         |
+| `decimals`  | 9        | Decimal places (9 for TON).       |
+| `precision` | Optional | Round result to N decimal places. |

@@ -1,0 +1,65 @@
+---
+title: Overview
+description: Networks, V2 vs V3, and quick example
+---
+
+Query TON blockchain data through the REST API. The SDK exposes two API versions via a single client — V2 for direct liteserver access and V3 for indexed data.
+
+<Info>
+  API key is optional — without a key, requests are throttled to ~1 RPS. Get a key from the [@toncenter](https://t.me/toncenter) bot.
+</Info>
+
+## Quick Example
+
+```python
+import asyncio
+
+from toncenter.rest import ToncenterRestClient
+from toncenter.types import Network
+from toncenter.utils import to_amount
+
+
+async def main() -> None:
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        # V2 — current account state from liteserver
+        info = await client.v2.accounts.get_address_information(
+            "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
+        )
+        print(f"Balance: {to_amount(int(info.balance))} TON")
+
+        # V3 — indexed jetton wallets
+        jettons = await client.v3.jettons.get_jetton_wallets(
+            owner_address=["EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"]
+        )
+        for jw in jettons.jetton_wallets or []:
+            print(f"Jetton: {jw.jetton} — {jw.balance}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Networks
+
+| Network | Enum value        | Base URL                        |
+| ------- | ----------------- | ------------------------------- |
+| Mainnet | `Network.MAINNET` | `https://toncenter.com`         |
+| Testnet | `Network.TESTNET` | `https://testnet.toncenter.com` |
+
+## V2 or V3
+
+They query the same blockchain but serve different purposes.
+
+| | API V2 | API V3 |
+| ------------ | ---------------------------------------------- | ------------------------------------------------- |
+| **Backend** | Direct liteserver queries via tonlib | Indexed PostgreSQL database |
+| **Latency** | Real-time (latest block) | Near real-time (indexer delay) |
+| **Best for** | Current state, sending transactions, get-methods | Historical data, search, filters, pagination |
+| **Pagination** | No (fixed result sets) | Yes (limit, offset, sort) |
+| **Jettons/NFTs** | Single item via get-method | Full query API with filters |
+| **Traces/Actions** | Not available | Full trace trees and parsed actions |
+| **Metadata** | Not available | Token metadata, address book, DNS records |
+
+**Use V2 when** you need the latest account state, want to send a transaction, run a smart contract get-method, or work with blocks and shards.
+
+**Use V3 when** you need historical transactions, Jetton/NFT analytics, address book lookups, action traces, or paginated batch queries.

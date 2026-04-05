@@ -35,6 +35,7 @@
       "languages": ["curl"]
     }
   },
+  "openapi": ["openapi/v2.yaml", "openapi/v3.yaml"],
   "metadata": {
     "og:site_name": "Python SDK for TON Center",
     "og:description": "Python SDK for TON Center — REST API and Streaming for TON blockchain.",
@@ -49,7 +50,7 @@
     "thumbsRating": true
   },
   "contextual": {
-    "options": ["copy", "claude","mcp"]
+    "options": ["copy", "claude", "mcp"]
   },
   "navbar": {
     "primary": {
@@ -72,38 +73,44 @@
   "navigation": {
     "pages": [
       "index",
-      "guide",
+      "claude-plugin",
+      "utilities",
+      "errors",
       {
-        "group": "API V2",
+        "group": "REST API",
         "expanded": false,
         "pages": [
-          "api_v2/overview",
-          { "group": "Accounts", "pages": ["api_v2/get_address_information_get", "api_v2/get_extended_address_information_get", "api_v2/get_wallet_information_get", "api_v2/get_address_balance_get", "api_v2/get_address_state_get", "api_v2/get_token_data_get"] },
-          { "group": "Blocks", "pages": ["api_v2/get_masterchain_info_get", "api_v2/get_masterchain_block_signatures_get", "api_v2/get_shard_block_proof_get", "api_v2/get_consensus_block_get", "api_v2/lookup_block_get", "api_v2/get_shards_get", "api_v2/get_block_header_get", "api_v2/get_out_msg_queue_size_get"] },
-          { "group": "Transactions", "pages": ["api_v2/get_block_transactions_get", "api_v2/get_block_transactions_ext_get", "api_v2/get_transactions_get", "api_v2/get_transactions_std_get", "api_v2/try_locate_tx_get", "api_v2/try_locate_result_tx_get", "api_v2/try_locate_source_tx_get"] },
-          { "group": "Configuration", "pages": ["api_v2/get_config_param_get", "api_v2/get_config_all_get", "api_v2/get_libraries_get"] },
-          { "group": "Run Method", "pages": ["api_v2/run_get_method_post", "api_v2/run_get_method_std_post"] },
-          { "group": "Send", "pages": ["api_v2/send_boc_post", "api_v2/send_boc_return_hash_post", "api_v2/estimate_fee_post"] },
-          { "group": "Utils", "pages": ["api_v2/detect_address_get", "api_v2/detect_hash_get", "api_v2/pack_address_get", "api_v2/unpack_address_get"] },
-          { "group": "RPC", "pages": ["api_v2/json_rpc_post"] }
-        ]
-      },
-      {
-        "group": "API V3",
-        "expanded": false,
-        "pages": [
-          "api_v3/overview",
-          { "group": "Accounts", "pages": ["api_v3/account_states_get", "api_v3/address_book_get", "api_v3/metadata_get", "api_v3/wallet_states_get"] },
-          { "group": "Actions", "pages": ["api_v3/actions_get", "api_v3/pending_actions_get", "api_v3/pending_traces_get", "api_v3/traces_get"] },
-          { "group": "Blockchain", "pages": ["api_v3/masterchain_info_get", "api_v3/blocks_get", "api_v3/masterchain_block_shards_get", "api_v3/masterchain_block_shard_state_get", "api_v3/transactions_get", "api_v3/transactions_by_masterchain_block_get", "api_v3/transactions_by_message_get", "api_v3/adjacent_transactions_get", "api_v3/messages_get", "api_v3/pending_transactions_get"] },
-          { "group": "Jettons", "pages": ["api_v3/jetton_masters_get", "api_v3/jetton_wallets_get", "api_v3/jetton_transfers_get", "api_v3/jetton_burns_get"] },
-          { "group": "NFTs", "pages": ["api_v3/nft_collections_get", "api_v3/nft_items_get", "api_v3/nft_sales_get", "api_v3/nft_transfers_get"] },
-          { "group": "DNS", "pages": ["api_v3/dns_records_get"] },
-          { "group": "Multisig", "pages": ["api_v3/multisig_wallets_get", "api_v3/multisig_orders_get"] },
-          { "group": "Vesting", "pages": ["api_v3/vesting_get"] },
-          { "group": "Stats", "pages": ["api_v3/top_accounts_by_balance_get"] },
-          { "group": "Utils", "pages": ["api_v3/decode_get", "api_v3/decode_post"] },
-          { "group": "API v2", "pages": ["api_v3/address_information_get", "api_v3/wallet_information_get", "api_v3/estimate_fee_post", "api_v3/message_post", "api_v3/run_get_method_post"] }
+          "rest/overview",
+          "rest/guide",
+          {
+            "group": "API V2",
+            "pages": [
+              { "group": "Accounts", "pages": ["api_v2/get_address_information_get", "api_v2/get_extended_address_information_get", "api_v2/get_wallet_information_get", "api_v2/get_address_balance_get", "api_v2/get_address_state_get", "api_v2/get_token_data_get"] },
+              { "group": "Blocks", "pages": ["api_v2/get_masterchain_info_get", "api_v2/get_masterchain_block_signatures_get", "api_v2/get_shard_block_proof_get", "api_v2/get_consensus_block_get", "api_v2/lookup_block_get", "api_v2/get_shards_get", "api_v2/get_block_header_get", "api_v2/get_out_msg_queue_size_get"] },
+              { "group": "Transactions", "pages": ["api_v2/get_block_transactions_get", "api_v2/get_block_transactions_ext_get", "api_v2/get_transactions_get", "api_v2/get_transactions_std_get", "api_v2/try_locate_tx_get", "api_v2/try_locate_result_tx_get", "api_v2/try_locate_source_tx_get"] },
+              { "group": "Configuration", "pages": ["api_v2/get_config_param_get", "api_v2/get_config_all_get", "api_v2/get_libraries_get"] },
+              { "group": "Run Method", "pages": ["api_v2/run_get_method_post", "api_v2/run_get_method_std_post"] },
+              { "group": "Send", "pages": ["api_v2/send_boc_post", "api_v2/send_boc_return_hash_post", "api_v2/estimate_fee_post"] },
+              { "group": "Utils", "pages": ["api_v2/detect_address_get", "api_v2/detect_hash_get", "api_v2/pack_address_get", "api_v2/unpack_address_get"] },
+              { "group": "RPC", "pages": ["api_v2/json_rpc_post"] }
+            ]
+          },
+          {
+            "group": "API V3",
+            "pages": [
+              { "group": "Accounts", "pages": ["api_v3/account_states_get", "api_v3/address_book_get", "api_v3/metadata_get", "api_v3/wallet_states_get"] },
+              { "group": "Actions", "pages": ["api_v3/actions_get", "api_v3/pending_actions_get", "api_v3/pending_traces_get", "api_v3/traces_get"] },
+              { "group": "Blockchain", "pages": ["api_v3/masterchain_info_get", "api_v3/blocks_get", "api_v3/masterchain_block_shards_get", "api_v3/masterchain_block_shard_state_get", "api_v3/transactions_get", "api_v3/transactions_by_masterchain_block_get", "api_v3/transactions_by_message_get", "api_v3/adjacent_transactions_get", "api_v3/messages_get", "api_v3/pending_transactions_get"] },
+              { "group": "Jettons", "pages": ["api_v3/jetton_masters_get", "api_v3/jetton_wallets_get", "api_v3/jetton_transfers_get", "api_v3/jetton_burns_get"] },
+              { "group": "NFTs", "pages": ["api_v3/nft_collections_get", "api_v3/nft_items_get", "api_v3/nft_sales_get", "api_v3/nft_transfers_get"] },
+              { "group": "DNS", "pages": ["api_v3/dns_records_get"] },
+              { "group": "Multisig", "pages": ["api_v3/multisig_wallets_get", "api_v3/multisig_orders_get"] },
+              { "group": "Vesting", "pages": ["api_v3/vesting_get"] },
+              { "group": "Stats", "pages": ["api_v3/top_accounts_by_balance_get"] },
+              { "group": "Utils", "pages": ["api_v3/decode_get", "api_v3/decode_post"] },
+              { "group": "API v2", "pages": ["api_v3/address_information_get", "api_v3/wallet_information_get", "api_v3/estimate_fee_post", "api_v3/message_post", "api_v3/run_get_method_post"] }
+            ]
+          }
         ]
       },
       {
@@ -111,10 +118,7 @@
         "expanded": false,
         "pages": [
           "streaming/overview",
-          "streaming/client",
-          "streaming/handlers",
-          "streaming/events",
-          "streaming/connection"
+          "streaming/guide"
         ]
       }
     ]

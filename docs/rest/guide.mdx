@@ -1,0 +1,135 @@
+---
+title: Guide
+description: Client setup, sessions, retries, and key rotation
+---
+
+## Client
+
+Pass these parameters when creating `ToncenterRestClient`:
+
+| Parameter      | Default    | Description                                               |
+| -------------- | ---------- | --------------------------------------------------------- |
+| `api_key`      | Optional   | API key or list of keys for [rotation](#key-rotation).    |
+| `network`      | Mainnet    | Mainnet or Testnet.                                       |
+| `base_url`     | Optional   | Custom base URL (overrides network selection).            |
+| `timeout`      | 10 seconds | Request timeout.                                          |
+| `session`      | Optional   | External HTTP session to share across clients.            |
+| `headers`      | Optional   | Extra HTTP headers sent with every request.               |
+| `cookies`      | Optional   | Extra cookies sent with every request.                    |
+| `rps_limit`    | Optional   | Client-side rate limit (requests per second).             |
+| `rps_period`   | Optional   | Rate-limiter window in seconds.                           |
+| `retry_policy` | Enabled    | Retry policy. Disable by passing None.                    |
+
+<Note>
+  Without an API key the SDK auto-limits to 1 RPS / 1.2 s on the client side to match the server-side throttle. With a key, client-side limiting is off unless set explicitly.
+</Note>
+
+## Session
+
+<Tabs>
+  <Tab title="Context manager">
+    ```python
+    from toncenter.rest import ToncenterRestClient
+    from toncenter.types import Network
+
+    async with ToncenterRestClient(network=Network.MAINNET) as client:
+        balance = await client.v2.accounts.get_address_balance("EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2")
+    ```
+  </Tab>
+  <Tab title="Manual">
+    ```python
+    from toncenter.rest import ToncenterRestClient
+    from toncenter.types import Network
+
+    client = ToncenterRestClient(network=Network.MAINNET)
+    await client.create_session()
+    try:
+        balance = await client.v2.accounts.get_address_balance("EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2")
+    finally:
+        await client.close_session()
+    ```
+  </Tab>
+  <Tab title="External">
+    ```python
+    import aiohttp
+
+    from toncenter.rest import ToncenterRestClient
+    from toncenter.types import Network
+
+    async with aiohttp.ClientSession() as session:
+        async with ToncenterRestClient(
+            network=Network.MAINNET,
+            session=session,
+        ) as client:
+            balance = await client.v2.accounts.get_address_balance("EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2")
+    ```
+
+    The client does not close an external session — you manage its lifecycle yourself.
+  </Tab>
+</Tabs>
+
+## Retries
+
+Rate-limited (`429`) and server-error responses are retried automatically with exponential backoff.
+
+| Status codes         | Max retries | Base delay | Max delay | Backoff |
+| -------------------- | ----------- | ---------- | --------- | ------- |
+| 429                  | 5           | 0.3 s      | 3 s       | 2x      |
+| 500, 502, 503, 504   | 3           | 0.5 s      | 5 s       | 2x      |
+
+Custom policy:
+
+```python
+from toncenter.types import RetryPolicy, RetryRule
+
+client = ToncenterRestClient(
+    network=Network.MAINNET,
+    retry_policy=RetryPolicy(rules=(
+        RetryRule(
+            statuses=frozenset({429}),
+            max_retries=10,
+            base_delay=0.5,
+            max_delay=10.0,
+            backoff_factor=2.0,
+        ),
+    )),
+)
+```
+
+| Field           | Default    | Description                           |
+| --------------- | ---------- | ------------------------------------- |
+| `statuses`      | Required   | HTTP status codes that trigger retry. |
+| `max_retries`   | 3          | Maximum retry attempts.               |
+| `base_delay`    | 1 second   | Initial delay.                        |
+| `max_delay`     | 30 seconds | Upper bound after backoff.            |
+| `backoff_factor`| 2.0        | Multiplier per attempt.               |
+
+The defaults above apply when creating a custom `RetryRule`. The SDK's built-in policy uses tuned values shown in the table above.
+
+<Info>
+  Pass `retry_policy=None` to disable retries entirely.
+</Info>
+
+## Key Rotation
+
+Pass a list of `ApiKey` objects to rotate between keys on rate-limit errors (`429`). Each key carries its own client-side rate limit.
+
+```python
+from toncenter.types import ApiKey
+
+client = ToncenterRestClient(
+    api_key=[
+        ApiKey("free-key", rps_limit=10),
+        ApiKey("plus-key", rps_limit=25),
+    ],
+    network=Network.MAINNET,
+)
+```
+
+A single `ApiKey` also works — rate limit is taken from the object instead of the constructor `rps_limit` parameter:
+
+```python
+client = ToncenterRestClient(api_key=ApiKey("my-key", rps_limit=10))
+```
+
+On `429`, the SDK exhausts all retry attempts for the current key (with backoff), then rotates to the next key and retries with a fresh cycle. Each key uses its own `RateLimiter`.

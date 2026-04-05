@@ -1,0 +1,50 @@
+---
+title: AI Plugin
+description: Claude Code plugin for TON Center
+---
+
+Query TON blockchain through natural language in [Claude Code](https://claude.ai/code). Execute API calls directly or generate SDK code.
+
+## Installation
+
+In Claude Code:
+
+```
+/plugin marketplace add nessshon/claude-plugins
+/plugin install toncenter@nessshon-plugins
+```
+
+Or install locally:
+
+```bash
+git clone https://github.com/nessshon/toncenter.git
+claude --plugin-dir ./toncenter
+```
+
+## Configuration
+
+Create `.env` in the project root:
+
+| Variable               | Description                         | Default  |
+| ---------------------- | ----------------------------------- | -------- |
+| `TONCENTER_API_KEY`    | API key from @toncenter bot         | Optional |
+| `TONCENTER_NETWORK`    | mainnet or testnet                  | mainnet  |
+| `TONCENTER_BASE_URL`   | Custom base URL (overrides network) | auto     |
+| `TONCENTER_RPS_LIMIT`  | Max requests per period             | 1        |
+| `TONCENTER_RPS_PERIOD` | Rate limit period in seconds        | 1.2      |
+
+## Usage Examples
+
+```
+"What is the balance of ness.ton?"
+"Show latest transactions for ness.ton"
+"Show jetton balances for ness.ton as a table"
+```
+
+<Tip>
+  Simple data queries are executed directly. For apps or streaming — the plugin generates SDK code.
+</Tip>
+
+<Card title="Plugin Source" icon="github" href="https://github.com/nessshon/toncenter/tree/main/skills/toncenter">
+  Skill definition, reference files, and CLI runner.
+</Card>

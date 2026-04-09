@@ -11,6 +11,7 @@
 ![Downloads](https://pepy.tech/badge/toncenter)
 ![Downloads](https://pepy.tech/badge/toncenter/month)
 ![Downloads](https://pepy.tech/badge/toncenter/week)
+[![Context7](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcontext7.com%2Fapi%2Fv2%2Flibs%2Fsearch%3FlibraryName%3Dnessshon%2Ftoncenter%26query%3Dtoncenter&query=%24.results%5B0%5D.benchmarkScore&label=Context7&suffix=%2F100&color=blue)](https://context7.com/nessshon/toncenter)
 
 ### Python SDK for [TON Center](https://toncenter.com)
 
